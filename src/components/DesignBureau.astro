@@ -1,63 +1,47 @@
 ---
-// Секция 9 — Авторское проектирование с бюро (дома 300+ м² под свой участок).
+// Секция 9 — Авторское проектирование с бюро (дома 300+ м² под участок).
 import { projects } from "../data/projects";
 const photo = projects[1].image; // временно: кадр из каталога
 ---
 
-<section id="bureau" class="relative overflow-hidden bg-ink py-20 sm:py-28">
-  <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
-    <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
+<section id="bureau" class="grain relative overflow-hidden bg-ink-2 py-24 sm:py-32">
+  <div class="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+    <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-[6fr_5fr] lg:gap-20">
       <!-- Фото -->
-      <div class="relative overflow-hidden rounded-[28px] border border-white/10">
+      <figure class="rise relative overflow-hidden rounded-[28px] border border-white/10">
         <img
           src={photo}
           alt="Дом по индивидуальному проекту с консольной террасой в лесу"
           loading="lazy"
           decoding="async"
-          class="aspect-[4/3] w-full object-cover"
+          class="aspect-[5/4] w-full object-cover"
         />
-        <div class="absolute inset-0 scrim-bottom"></div>
-        <p
-          class="absolute bottom-5 left-5 rounded-full border border-white/15 bg-ink/40 px-4 py-1.5 text-sm text-on-ink backdrop-blur-md"
-        >
+        <figcaption class="glass hairline-top absolute bottom-5 left-5 rounded-full px-4 py-2 text-sm text-on-ink">
           Индивидуальный проект · 300+ м²
-        </p>
-      </div>
+        </figcaption>
+      </figure>
 
       <!-- Текст -->
-      <div>
-        <p class="text-xs font-medium uppercase tracking-[0.18em] text-accent-soft">
-          Авторское проектирование
-        </p>
-        <h2
-          class="mt-3 font-[var(--font-display)] text-3xl font-semibold tracking-display text-on-ink text-balance sm:text-4xl"
-        >
-          Дом под ваш участок и сценарий жизни
+      <div class="rise rise-2">
+        <p class="eyebrow text-accent-soft">Авторское проектирование</p>
+        <h2 class="display-lg mt-5 text-on-ink">
+          Дом под ваш участок<br />и сценарий жизни
         </h2>
-        <p class="mt-4 text-on-ink/75">
-          Для домов от 300 м² проектируем с собственным архитектурным бюро.
-          Сначала изучаем участок, виды, инсоляцию и ваш уклад — потом рисуем дом,
-          а не подгоняем готовый проект под рельеф.
+        <p class="mt-5 max-w-md text-[15px] leading-relaxed text-on-ink/70">
+          Для домов от 300 м² проектируем с собственным бюро. Сначала изучаем
+          участок, виды, инсоляцию и ваш уклад — потом рисуем дом, а не
+          подгоняем готовый проект под рельеф.
         </p>
-        <ul class="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <ul class="mt-8 border-t border-white/10">
           {
             [
               "Посадка дома по сторонам света и видам",
-              "Планировки под ваш состав семьи",
+              "Планировки под состав семьи",
               "Расчёт конструктива и инженерии",
               "Подбор материалов и фасадных решений",
             ].map((it) => (
-              <li class="flex gap-3 text-sm text-on-ink/85">
-                <svg
-                  class="mt-0.5 h-4 w-4 shrink-0 text-accent"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  aria-hidden="true"
-                >
-                  <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
+              <li class="flex items-baseline gap-4 border-b border-white/10 py-3.5 text-[15px] text-on-ink/85">
+                <span class="h-1 w-1 shrink-0 translate-y-1.5 rounded-full bg-accent" />
                 {it}
               </li>
             ))

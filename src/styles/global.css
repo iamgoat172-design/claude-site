@@ -261,11 +261,28 @@ body {
 .reveal-4 { transition-delay: 0.38s; }
 .reveal-5 { transition-delay: 0.49s; }
 
+/* Появление при скролле (для секций ниже первого экрана) */
+.rise {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.8s var(--ease-out-soft),
+    transform 0.8s var(--ease-out-soft);
+}
+.rise.in {
+  opacity: 1;
+  transform: none;
+}
+.rise-2 { transition-delay: 0.1s; }
+.rise-3 { transition-delay: 0.2s; }
+.rise-4 { transition-delay: 0.3s; }
+
 /* Скрыть скроллбары у горизонтальных рельсов */
 .no-scrollbar { scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
+  .rise { opacity: 1; transform: none; transition: none; }
   .underline-draw { background-size: 100% 2px; transition: none; }
 }

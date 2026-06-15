@@ -1,30 +1,38 @@
 ---
-// Секция 2 — Доверие. Стеклянная полоса с цифрами-доказательствами.
-const items = [
-  { big: "25 лет", small: "на рынке загородного строительства" },
-  { big: "600+", small: "домов построено и сдано" },
-  { big: "Свой лес", small: "и производство в Вологодской области" },
-  { big: "Договор", small: "фиксированная смета и гарантия" },
+// Секция 2 — Доверие. Редакционная «манифест-полоса»: заявление + факты на хайрлайнах.
+const facts = [
+  ["25", "лет строим загородные дома"],
+  ["600+", "домов сдано под ключ"],
+  ["1", "свой лес и производство"],
+  ["100%", "договор и гарантия"],
 ];
 ---
 
-<section id="trust" class="relative z-20 bg-paper">
-  <div class="mx-auto -mt-14 max-w-7xl px-4 sm:px-6">
-    <div
-      class="glass-light hairline-top grid grid-cols-2 gap-px overflow-hidden rounded-[24px] lg:grid-cols-4"
-    >
+<section id="trust" class="grain relative overflow-hidden bg-ink-2 py-20 sm:py-28">
+  <div class="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-[6fr_6fr] lg:items-end lg:gap-20">
+      <p class="display-lg rise text-on-ink">
+        Уровень — это не слова,<br />
+        а <span class="text-accent-soft">25 лет и 600 домов.</span>
+      </p>
+      <p class="rise rise-2 max-w-md text-[15px] leading-relaxed text-on-ink/65">
+        Мы не продаём «статус». Мы показываем лес, из которого режем брус,
+        производство, договор с фиксированной сметой и дома, в которых уже
+        живут. Остальное — на участке.
+      </p>
+    </div>
+
+    <dl class="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 lg:grid-cols-4">
       {
-        items.map((it) => (
-          <div class="bg-white/40 px-6 py-7 text-center sm:py-9">
-            <p class="font-[var(--font-display)] text-2xl text-ink sm:text-3xl">
-              {it.big}
-            </p>
-            <p class="mx-auto mt-2 max-w-[14rem] text-sm leading-snug text-muted">
-              {it.small}
-            </p>
+        facts.map(([big, small], i) => (
+          <div class={`rise rise-${Math.min(i + 1, 4)} bg-white/[0.02] px-6 py-8`}>
+            <dt class="tnum font-[var(--font-display)] text-4xl text-on-ink sm:text-5xl">
+              {big}
+            </dt>
+            <dd class="mt-3 text-sm leading-snug text-on-ink/55">{small}</dd>
           </div>
         ))
       }
-    </div>
+    </dl>
   </div>
 </section>

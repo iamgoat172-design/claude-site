@@ -2,16 +2,16 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="bg-ink-2 py-10 text-on-ink/60">
+<footer class="border-t border-white/10 bg-ink py-12 text-on-ink/55">
   <div
-    class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 text-sm sm:flex-row sm:px-6"
+    class="mx-auto flex max-w-[1400px] flex-col items-center justify-between gap-5 px-5 text-[13px] sm:flex-row sm:px-8 lg:px-12"
   >
     <div class="flex items-center gap-2.5">
-      <span
-        class="grid h-8 w-8 place-items-center rounded-lg border border-white/15 font-[var(--font-display)] text-xs text-accent"
-        >ВЗ</span
-      >
-      <span>Вологодское Зодчество · {year}</span>
+      <span class="h-1.5 w-1.5 rounded-full bg-accent"></span>
+      <span class="uppercase tracking-[0.2em] text-on-ink/80">
+        Вологодское&nbsp;Зодчество
+      </span>
+      <span class="text-on-ink/40">· {year}</span>
     </div>
     <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
       <a href="tel:+74991135763" class="transition-colors hover:text-accent">8 (499) 113-57-63</a>
