@@ -1,74 +1,74 @@
 ---
-// Секция 6 — Стоимость: из чего складывается цена + ипотека.
+// Секция 6 — Стоимость: факторы (как смета) + панель ипотеки.
 const factors = [
   ["Площадь и этажность", "Базовый объём работ и материалов"],
   ["Материал стен", "Клееный брус или тёплая керамика"],
-  ["Фундамент", "Зависит от геологии и рельефа участка"],
-  ["Комплектация", "Тёплый контур, White Box или под ключ"],
+  ["Фундамент", "По геологии и рельефу участка"],
+  ["Комплектация", "Тёплый контур · White Box · под ключ"],
   ["Инженерия", "Отопление, вода, электрика, вентиляция"],
   ["Логистика", "Удалённость участка и доступ техники"],
 ];
 ---
 
-<section id="price" class="relative overflow-hidden bg-ink py-24 sm:py-32">
+<section id="price" class="relative overflow-hidden bg-ink-2 py-20 sm:py-28">
   <div class="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-    <div class="grid grid-cols-1 gap-14 lg:grid-cols-[7fr_5fr] lg:gap-20">
-      <!-- Факторы -->
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <p class="eyebrow text-accent-soft">Стоимость</p>
-        <h2 class="display-lg mt-5 text-on-ink">Из чего<br />складывается цена</h2>
-        <p class="mt-5 max-w-md text-[15px] leading-relaxed text-on-ink/65">
-          Считаем по вашему проекту и участку — без «средней температуры».
-          Смету фиксируем в договоре: финальная сумма не меняется по ходу стройки.
-        </p>
-
-        <dl class="mt-10 border-t border-white/10">
-          {
-            factors.map(([t, d], i) => (
-              <div class="rise flex items-baseline justify-between gap-6 border-b border-white/10 py-5">
-                <dt class="flex items-baseline gap-4">
-                  <span class="tnum text-xs text-accent-soft">{`0${i + 1}`}</span>
-                  <span class="text-lg text-on-ink">{t}</span>
-                </dt>
-                <dd class="max-w-[14rem] text-right text-sm text-on-ink/55">{d}</dd>
-              </div>
-            ))
-          }
-        </dl>
+        <h2 class="display-lg mt-5 text-on-ink">Из чего складывается&nbsp;цена</h2>
       </div>
+      <p class="max-w-sm text-[15px] leading-relaxed text-on-ink/65">
+        Считаем по вашему проекту и участку — без «средней температуры». Смету
+        фиксируем в договоре: сумма не меняется по ходу стройки.
+      </p>
+    </div>
+
+    <div class="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-[7fr_5fr] lg:gap-16">
+      <!-- Факторы как смета -->
+      <dl class="border-t border-white/12">
+        {
+          factors.map(([t, d], i) => (
+            <div class="rise group flex items-baseline justify-between gap-6 border-b border-white/10 py-5 transition-colors duration-300 hover:bg-white/[0.015]">
+              <dt class="flex items-baseline gap-5">
+                <span class="tnum text-sm text-accent-soft">{`0${i + 1}`}</span>
+                <span class="text-lg text-on-ink sm:text-xl">{t}</span>
+              </dt>
+              <dd class="max-w-[15rem] text-right text-sm text-on-ink/55">{d}</dd>
+            </div>
+          ))
+        }
+      </dl>
 
       <!-- Ипотека -->
-      <div class="lg:pt-20">
-        <div class="glass hairline-top rounded-[28px] p-8 sm:p-10">
-          <h3 class="font-[var(--font-display)] text-2xl text-on-ink">
-            Ипотека и рассрочка
-          </h3>
-          <p class="mt-4 text-[15px] leading-relaxed text-on-ink/70">
-            Работаем с банками по ипотеке на строительство частного дома — с
-            господдержкой и семейной программой. Поможем собрать документы и
-            подобрать условия под бюджет.
-          </p>
-          <ul class="mt-7 space-y-4 border-t border-white/10 pt-6">
-            {
-              [
-                "Аккредитованы в крупных банках",
-                "Поэтапная оплата по договору",
-                "Рассрочка на время строительства",
-              ].map((it) => (
-                <li class="flex items-baseline gap-3 text-sm text-on-ink/85">
-                  <span class="h-1.5 w-1.5 shrink-0 translate-y-1 rounded-full bg-accent" />
-                  {it}
-                </li>
-              ))
-            }
-          </ul>
-          <a
-            href="#lead"
-            class="mt-8 inline-flex w-full items-center justify-center rounded-full bg-accent px-6 py-4 text-base font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]"
-          >
-            Рассчитать стоимость дома
-          </a>
-        </div>
+      <div class="glass hairline-top self-start rounded-[28px] p-8 sm:p-9">
+        <h3 class="font-[var(--font-display)] text-2xl text-on-ink">
+          Ипотека и рассрочка
+        </h3>
+        <p class="mt-4 text-[15px] leading-relaxed text-on-ink/70">
+          Работаем с банками по ипотеке на строительство частного дома — с
+          господдержкой и семейной программой. Поможем собрать документы и
+          подобрать условия под бюджет.
+        </p>
+        <ul class="mt-6 space-y-3.5 border-t border-white/10 pt-6">
+          {
+            [
+              "Аккредитованы в крупных банках",
+              "Поэтапная оплата по договору",
+              "Рассрочка на время строительства",
+            ].map((it) => (
+              <li class="flex items-baseline gap-3 text-sm text-on-ink/85">
+                <span class="h-1.5 w-1.5 shrink-0 translate-y-1 rounded-full bg-accent" />
+                {it}
+              </li>
+            ))
+          }
+        </ul>
+        <a
+          href="#lead"
+          class="mt-7 inline-flex w-full items-center justify-center rounded-full bg-accent px-6 py-3.5 text-base font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]"
+        >
+          Рассчитать стоимость дома
+        </a>
       </div>
     </div>
   </div>
