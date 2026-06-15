@@ -1,0 +1,61 @@
+---
+// Секция 7 — Построенные дома. Фото-галерея реальных объектов.
+// ⚠️ Сейчас — сгенерированные кадры-заглушки. Заменить на реальные фото объектов.
+import { projects } from "../data/projects";
+
+// Берём фото из каталога как временную галерею + повторно компонуем.
+const gallery = [
+  { src: projects[0].image, area: 268, place: "Истринский р-н, МО", span: "lg:row-span-2" },
+  { src: projects[3].image, area: 289, place: "Всеволожский р-н, ЛО", span: "" },
+  { src: projects[1].image, area: 305, place: "Одинцовский р-н, МО", span: "" },
+  { src: projects[4].image, area: 334, place: "Дмитровский р-н, МО", span: "lg:col-span-2" },
+  { src: projects[5].image, area: 262, place: "Выборгский р-н, ЛО", span: "" },
+  { src: projects[2].image, area: 254, place: "Пушкинский р-н, МО", span: "" },
+];
+---
+
+<section id="built" class="relative overflow-hidden bg-ink py-20 sm:py-28">
+  <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div class="max-w-2xl">
+        <p class="text-xs font-medium uppercase tracking-[0.18em] text-accent-soft">
+          Построенные дома
+        </p>
+        <h2
+          class="mt-3 font-[var(--font-display)] text-3xl font-semibold tracking-display text-on-ink text-balance sm:text-4xl"
+        >
+          Реальные объекты с участков
+        </h2>
+      </div>
+      <a
+        href="#lead"
+        class="glass inline-flex items-center rounded-full px-6 py-3 text-sm font-medium text-on-ink transition-transform duration-300 hover:scale-[1.02]"
+      >
+        Запросить тур по объекту
+      </a>
+    </div>
+
+    <div class="mt-10 grid auto-rows-[220px] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        gallery.map((g) => (
+          <figure
+            class={`lift group relative overflow-hidden rounded-[20px] border border-white/10 ${g.span}`}
+          >
+            <img
+              src={g.src}
+              alt={`Построенный дом ${g.area} м², ${g.place}`}
+              loading="lazy"
+              decoding="async"
+              class="h-full w-full object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
+            />
+            <div class="absolute inset-0 scrim-bottom" />
+            <figcaption class="absolute bottom-0 left-0 p-5">
+              <p class="font-[var(--font-display)] text-on-ink">{g.area} м²</p>
+              <p class="mt-0.5 text-sm text-on-ink/70">{g.place}</p>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,75 @@
+---
+// Секция 9 — Авторское проектирование с бюро (дома 300+ м² под свой участок).
+import { projects } from "../data/projects";
+const photo = projects[1].image; // временно: кадр из каталога
+---
+
+<section id="bureau" class="relative overflow-hidden bg-ink py-20 sm:py-28">
+  <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <!-- Фото -->
+      <div class="relative overflow-hidden rounded-[28px] border border-white/10">
+        <img
+          src={photo}
+          alt="Дом по индивидуальному проекту с консольной террасой в лесу"
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full object-cover"
+        />
+        <div class="absolute inset-0 scrim-bottom"></div>
+        <p
+          class="absolute bottom-5 left-5 rounded-full border border-white/15 bg-ink/40 px-4 py-1.5 text-sm text-on-ink backdrop-blur-md"
+        >
+          Индивидуальный проект · 300+ м²
+        </p>
+      </div>
+
+      <!-- Текст -->
+      <div>
+        <p class="text-xs font-medium uppercase tracking-[0.18em] text-accent-soft">
+          Авторское проектирование
+        </p>
+        <h2
+          class="mt-3 font-[var(--font-display)] text-3xl font-semibold tracking-display text-on-ink text-balance sm:text-4xl"
+        >
+          Дом под ваш участок и сценарий жизни
+        </h2>
+        <p class="mt-4 text-on-ink/75">
+          Для домов от 300 м² проектируем с собственным архитектурным бюро.
+          Сначала изучаем участок, виды, инсоляцию и ваш уклад — потом рисуем дом,
+          а не подгоняем готовый проект под рельеф.
+        </p>
+        <ul class="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {
+            [
+              "Посадка дома по сторонам света и видам",
+              "Планировки под ваш состав семьи",
+              "Расчёт конструктива и инженерии",
+              "Подбор материалов и фасадных решений",
+            ].map((it) => (
+              <li class="flex gap-3 text-sm text-on-ink/85">
+                <svg
+                  class="mt-0.5 h-4 w-4 shrink-0 text-accent"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  aria-hidden="true"
+                >
+                  <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                {it}
+              </li>
+            ))
+          }
+        </ul>
+        <a
+          href="#lead"
+          class="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-base font-semibold text-paper transition-transform duration-300 hover:scale-[1.03]"
+        >
+          Обсудить индивидуальный проект
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -21,8 +21,8 @@ export interface Project {
   alt: string;
 }
 
-// Hero — кинематографичный кадр 21:9 (вилла из клееного бруса, сумерки).
-export const HERO_IMAGE = `${IMG_BASE}/hf_20260615_120714_ccbc9c8f-a2c1-4186-87a9-bd84e8b6c410_min.webp`;
+// Hero — дом из клееного бруса с тёплым светом в окнах, зимний лес.
+export const HERO_IMAGE = `${IMG_BASE}/hf_20260615_120730_a3de91c4-540d-4433-b467-a83769597f80_min.webp`;
 
 export const materials: Record<
   Material,
@@ -64,13 +64,13 @@ export const projects: Project[] = [
   },
   {
     code: "ВЗ-258",
-    name: "Зимний Шале",
+    name: "Лесная Вилла",
     material: "timber",
     area: 254,
     floors: 2,
     price: "по запросу",
-    image: `${IMG_BASE}/hf_20260615_120730_a3de91c4-540d-4433-b467-a83769597f80_min.webp`,
-    alt: "Шале из клееного бруса с тёплым светом в окнах зимним утром",
+    image: `${IMG_BASE}/hf_20260615_120714_ccbc9c8f-a2c1-4186-87a9-bd84e8b6c410_min.webp`,
+    alt: "Дом из клееного бруса с плоской кровлей и панорамным остеклением в лесу",
   },
   // — Тёплая керамика —
   {

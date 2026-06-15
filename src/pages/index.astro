@@ -2,31 +2,33 @@
 import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
+import TrustStrip from "../components/TrustStrip.astro";
 import Catalog from "../components/Catalog.astro";
+import Included from "../components/Included.astro";
+import Stages from "../components/Stages.astro";
+import Pricing from "../components/Pricing.astro";
+import Built from "../components/Built.astro";
+import Reviews from "../components/Reviews.astro";
+import DesignBureau from "../components/DesignBureau.astro";
+import Geography from "../components/Geography.astro";
+import LeadForm from "../components/LeadForm.astro";
+import Footer from "../components/Footer.astro";
 ---
 
 <Base>
   <Header />
   <main>
     <Hero />
+    <TrustStrip />
     <Catalog />
-
-    <!-- Заглушка-якорь для CTA (полная форма заявки — Шаг 3) -->
-    <section id="lead" class="bg-paper py-24 text-center">
-      <div class="mx-auto max-w-xl px-6">
-        <p class="text-xs font-medium uppercase tracking-[0.18em] text-accent">
-          Шаг 3
-        </p>
-        <h2
-          class="mt-3 font-[var(--font-display)] text-2xl tracking-display text-ink"
-        >
-          Здесь будут остальные секции и форма заявки
-        </h2>
-        <p class="mt-3 text-muted">
-          Доверие · Что входит · Этапы · Стоимость · Построенные дома · Отзывы ·
-          Авторское проектирование · География · Форма + контакты.
-        </p>
-      </div>
-    </section>
+    <Included />
+    <Stages />
+    <Pricing />
+    <Built />
+    <Reviews />
+    <DesignBureau />
+    <Geography />
+    <LeadForm />
   </main>
+  <Footer />
 </Base>
