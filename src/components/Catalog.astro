@@ -1,0 +1,222 @@
+---
+import { projects, materials, type Material } from "../data/projects";
+
+const order: Material[] = ["timber", "ceramic"];
+const byMaterial = (m: Material) => projects.filter((p) => p.material === m);
+---
+
+<section id="catalog" class="relative overflow-hidden bg-ink py-20 sm:py-28">
+  <!-- Тёплое акцентное свечение фона (дозированно) -->
+  <div
+    class="pointer-events-none absolute -top-40 left-1/2 -z-0 h-[520px] w-[820px] -translate-x-1/2 rounded-full opacity-[0.14] blur-[120px]"
+    style="background: radial-gradient(closest-side, #B0885A, transparent)"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
+    <!-- Заголовок секции -->
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="text-xs font-medium uppercase tracking-[0.18em] text-accent-soft">
+        Каталог проектов
+      </p>
+      <h2
+        class="mt-3 font-[var(--font-display)] text-3xl font-semibold tracking-display text-on-ink text-balance sm:text-4xl lg:text-5xl"
+      >
+        Два материала — один уровень
+      </h2>
+      <p class="mx-auto mt-4 max-w-xl text-on-ink/70">
+        Выберите технологию — проекты обновятся. Точные планировки и цены —
+        под ваш участок.
+      </p>
+    </div>
+
+    <!-- ТАБЫ -->
+    <div class="mt-10 flex justify-center">
+      <div
+        class="glass hairline-top relative flex gap-1 rounded-full p-1.5"
+        role="tablist"
+        aria-label="Материал дома"
+        data-tablist
+      >
+        <!-- Liquid-индикатор -->
+        <span
+          class="absolute left-1.5 top-1.5 -z-0 rounded-full bg-accent accent-glow transition-[transform,width] duration-[380ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+          style="height: calc(100% - 0.75rem)"
+          data-indicator
+          aria-hidden="true"
+        >
+        </span>
+        {
+          order.map((m, i) => (
+            <button
+              type="button"
+              role="tab"
+              id={`tab-${m}`}
+              aria-selected={i === 0 ? "true" : "false"}
+              aria-controls={`panel-${m}`}
+              tabindex={i === 0 ? "0" : "-1"}
+              data-tab={m}
+              class="relative z-10 rounded-full px-6 py-2.5 text-sm font-semibold text-on-ink/70 transition-colors duration-300 aria-selected:text-paper sm:px-8 sm:text-base"
+            >
+              {materials[m].label}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Подпись активного материала -->
+    <p
+      class="mt-5 text-center text-sm text-on-ink/55 transition-opacity duration-300"
+      data-material-note
+    >
+      {materials[order[0]].note}
+    </p>
+
+    <!-- ПАНЕЛИ С КАРТОЧКАМИ -->
+    <div class="relative mt-10">
+      {
+        order.map((m, i) => (
+          <div
+            id={`panel-${m}`}
+            role="tabpanel"
+            aria-labelledby={`tab-${m}`}
+            data-panel={m}
+            hidden={i !== 0}
+            class="grid grid-cols-1 gap-6 transition-all duration-[420ms] ease-[cubic-bezier(0.22,1,0.36,1)] data-[enter]:translate-y-0 data-[enter]:opacity-100 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {byMaterial(m).map((p) => (
+              <article class="lift group overflow-hidden rounded-[24px] border border-white/10 bg-ink-2">
+                <div class="relative aspect-[4/3] overflow-hidden">
+                  <img
+                    src={p.image}
+                    alt={p.alt}
+                    loading="lazy"
+                    decoding="async"
+                    width="800"
+                    height="600"
+                    class="h-full w-full object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
+                  />
+                  <div class="absolute inset-0 scrim-bottom" />
+                  <span class="absolute left-4 top-4 rounded-full border border-white/15 bg-ink/40 px-3 py-1 text-xs font-medium text-on-ink backdrop-blur-md">
+                    {p.code}
+                  </span>
+                </div>
+
+                <div class="flex items-end justify-between gap-3 p-5">
+                  <div>
+                    <h3 class="font-[var(--font-display)] text-lg text-on-ink">
+                      {p.name}
+                    </h3>
+                    <p class="mt-1 text-sm text-on-ink/60">
+                      {p.area} м² · {p.floors} этажа
+                    </p>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-sm font-semibold text-accent-soft">{p.price}</p>
+                    <a
+                      href="#lead"
+                      class="mt-1 inline-block text-xs text-on-ink/55 underline-offset-4 transition-colors hover:text-accent hover:underline"
+                    >
+                      Обсудить →
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import { materials } from "../data/projects";
+
+  const list = document.querySelector<HTMLElement>("[data-tablist]");
+  const indicator = document.querySelector<HTMLElement>("[data-indicator]");
+  const note = document.querySelector<HTMLElement>("[data-material-note]");
+  const tabs = Array.from(
+    document.querySelectorAll<HTMLButtonElement>("[data-tab]"),
+  );
+  const panels = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-panel]"),
+  );
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function moveIndicator(tab: HTMLButtonElement) {
+    if (!indicator) return;
+    indicator.style.width = `${tab.offsetWidth}px`;
+    indicator.style.transform = `translateX(${tab.offsetLeft - 6}px)`;
+  }
+
+  function activate(material: string, focus = true) {
+    tabs.forEach((t) => {
+      const selected = t.dataset.tab === material;
+      t.setAttribute("aria-selected", String(selected));
+      t.tabIndex = selected ? 0 : -1;
+      if (selected) {
+        moveIndicator(t);
+        if (focus) t.focus();
+      }
+    });
+
+    panels.forEach((panel) => {
+      const show = panel.dataset.panel === material;
+      if (show) {
+        panel.hidden = false;
+        // crossfade/slide вход
+        if (!reduce) {
+          panel.style.opacity = "0";
+          panel.style.transform = "translateY(12px)";
+          requestAnimationFrame(() => {
+            panel.style.opacity = "1";
+            panel.style.transform = "translateY(0)";
+          });
+        }
+      } else {
+        panel.hidden = true;
+      }
+    });
+
+    if (note) {
+      const m = material as keyof typeof materials;
+      note.style.opacity = "0";
+      window.setTimeout(() => {
+        note.textContent = materials[m].note;
+        note.style.opacity = "1";
+      }, reduce ? 0 : 180);
+    }
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => activate(tab.dataset.tab!, false));
+  });
+
+  // Клавиатура: ←/→, Home/End (паттерн role=tablist)
+  list?.addEventListener("keydown", (e) => {
+    const current = tabs.findIndex(
+      (t) => t.getAttribute("aria-selected") === "true",
+    );
+    let next = current;
+    if (e.key === "ArrowRight") next = (current + 1) % tabs.length;
+    else if (e.key === "ArrowLeft")
+      next = (current - 1 + tabs.length) % tabs.length;
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = tabs.length - 1;
+    else return;
+    e.preventDefault();
+    activate(tabs[next].dataset.tab!, true);
+  });
+
+  // Позиционируем индикатор при загрузке и ресайзе
+  const init = () => {
+    const active = tabs.find((t) => t.getAttribute("aria-selected") === "true");
+    if (active) moveIndicator(active);
+  };
+  window.addEventListener("load", init);
+  window.addEventListener("resize", init);
+  init();
+</script>

@@ -1,0 +1,63 @@
+---
+// Минималистичная «парящая» шапка на стекле.
+---
+
+<header
+  class="fixed inset-x-0 top-0 z-50 px-4 pt-4 transition-transform duration-500"
+  data-header
+>
+  <nav
+    class="glass hairline-top mx-auto flex max-w-7xl items-center justify-between gap-4 rounded-[18px] px-4 py-3 sm:px-6"
+    aria-label="Основная навигация"
+  >
+    <a href="#hero" class="flex items-center gap-2.5 text-on-ink">
+      <span
+        class="grid h-9 w-9 place-items-center rounded-xl border border-white/20 bg-white/5 font-[var(--font-display)] text-sm font-semibold text-accent"
+        >ВЗ</span
+      >
+      <span class="hidden font-[var(--font-display)] text-sm tracking-display sm:block"
+        >Вологодское&nbsp;Зодчество</span
+      >
+    </a>
+
+    <div class="hidden items-center gap-7 text-sm text-on-ink/80 lg:flex">
+      <a href="#catalog" class="transition-colors hover:text-accent">Проекты</a>
+      <a href="#included" class="transition-colors hover:text-accent">Что входит</a>
+      <a href="#stages" class="transition-colors hover:text-accent">Этапы</a>
+      <a href="#price" class="transition-colors hover:text-accent">Стоимость</a>
+      <a href="#built" class="transition-colors hover:text-accent">Построено</a>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a
+        href="tel:+74991135763"
+        class="hidden text-sm font-medium text-on-ink transition-colors hover:text-accent md:block"
+        >8 (499) 113-57-63</a
+      >
+      <a
+        href="#lead"
+        class="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.03] focus-visible:scale-[1.03]"
+        >Заявка</a
+      >
+    </div>
+  </nav>
+</header>
+
+<script>
+  // Прячем шапку при скролле вниз, показываем при скролле вверх.
+  const header = document.querySelector<HTMLElement>("[data-header]");
+  let last = 0;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (header && !reduce) {
+    window.addEventListener(
+      "scroll",
+      () => {
+        const y = window.scrollY;
+        if (y > last && y > 220) header.style.transform = "translateY(-120%)";
+        else header.style.transform = "translateY(0)";
+        last = y;
+      },
+      { passive: true },
+    );
+  }
+</script>
