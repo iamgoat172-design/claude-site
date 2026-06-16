@@ -1,28 +1,29 @@
 ---
-import { projects, materials, type Material } from "../data/projects";
+import { projects, materials, INTERIORS, type Material } from "../data/projects";
 
 const order: Material[] = ["timber", "ceramic"];
 const byMaterial = (m: Material) => projects.filter((p) => p.material === m);
 
-// Начальное состояние — брус
 const initial = byMaterial("timber");
 const initFeatured = initial[0];
 const initRail = initial.slice(1);
 
-// Данные для клиентского переключения
-const data = order.map((m) => ({
-  id: m,
-  label: materials[m].label,
-  note: materials[m].note,
-  items: byMaterial(m),
-}));
+// Полезная нагрузка для клиента
+const payload = {
+  groups: order.map((m) => ({
+    id: m,
+    label: materials[m].label,
+    note: materials[m].note,
+    codes: byMaterial(m).map((p) => p.code),
+  })),
+  projects: Object.fromEntries(
+    projects.map((p) => [p.code, { ...p, materialLabel: materials[p.material].label }]),
+  ),
+  interiors: INTERIORS,
+};
 ---
 
-<section
-  id="catalog"
-  class="grain relative overflow-hidden bg-ink py-20 sm:py-28"
->
-  <!-- Атмосферный размытый фон, перетекает при смене материала -->
+<section id="catalog" class="grain relative overflow-hidden bg-ink py-20 sm:py-28">
   <div class="absolute inset-0 z-0" aria-hidden="true">
     <img
       data-backdrop
@@ -35,18 +36,16 @@ const data = order.map((m) => ({
 
   <div class="relative z-10 mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
     <div class="grid grid-cols-1 gap-12 lg:grid-cols-[5fr_7fr] lg:gap-16">
-      <!-- Левая колонка: опенер + переключатель -->
+      <!-- Левая колонка -->
       <div class="flex flex-col lg:py-6">
         <p class="eyebrow text-accent-soft">Каталог проектов</p>
-        <h2 class="display-lg mt-5 text-on-ink">
-          Два материала,<br />одна школа.
-        </h2>
+        <h2 class="display-lg mt-5 text-on-ink">Два материала,<br />одна школа.</h2>
         <p class="mt-5 max-w-sm text-[15px] leading-relaxed text-on-ink/70">
-          Выберите технологию — проект и атмосфера сменятся. Точные планировки
-          и сметы считаем под ваш участок.
+          Выберите технологию — проект и атмосфера сменятся. Откройте карточку,
+          чтобы посмотреть интерьеры, характеристики и забрать смету.
         </p>
 
-        <!-- Переключатель: жидкое стекло -->
+        <!-- Переключатель -->
         <div class="mt-9">
           <div
             class="glass relative inline-flex gap-1 rounded-full p-1.5"
@@ -55,7 +54,7 @@ const data = order.map((m) => ({
             data-tablist
           >
             <span
-              class="absolute left-1.5 top-1.5 z-0 rounded-full bg-accent accent-glow transition-[transform,width] duration-[420ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+              class="absolute left-1.5 top-1.5 z-0 rounded-full bg-accent accent-glow transition-[transform,width] duration-[450ms] ease-[cubic-bezier(0.34,1.56,0.4,1)]"
               style="height: calc(100% - 0.75rem)"
               data-indicator
               aria-hidden="true"
@@ -68,7 +67,6 @@ const data = order.map((m) => ({
                   role="tab"
                   id={`tab-${m}`}
                   aria-selected={i === 0 ? "true" : "false"}
-                  aria-controls="catalog-stage"
                   tabindex={i === 0 ? "0" : "-1"}
                   data-tab={m}
                   class="relative z-10 rounded-full px-5 py-2.5 text-sm font-semibold text-on-ink/65 transition-colors duration-300 aria-selected:text-paper sm:px-7"
@@ -78,33 +76,24 @@ const data = order.map((m) => ({
               ))
             }
           </div>
-          <p class="mt-4 text-sm text-on-ink/55" data-note>{materials[order[0]].note}</p>
+          <p class="mt-4 text-sm text-on-ink/55 transition-opacity duration-300" data-note>
+            {materials[order[0]].note}
+          </p>
         </div>
 
-        <!-- Рельс остальных проектов -->
-        <div
-          class="mt-auto hidden gap-4 pt-10 lg:flex"
-          data-rail
-        >
+        <!-- Рельс (десктоп) -->
+        <div class="mt-auto hidden gap-4 pt-10 lg:flex" data-rail>
           {
             initRail.map((p) => (
-              <button
-                type="button"
-                data-rail-card={p.code}
-                class="group w-1/2 text-left"
-              >
+              <button type="button" data-card={p.code} class="group w-1/2 text-left">
                 <span class="relative block aspect-[4/3] overflow-hidden rounded-2xl border border-white/10">
-                  <img
-                    src={p.image}
-                    alt={p.alt}
-                    loading="lazy"
-                    class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
+                  <img data-card-img src={p.image} alt={p.alt} loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   <span class="absolute inset-0 scrim-bottom" />
+                  <span class="absolute bottom-3 left-3 rounded-full bg-ink/45 px-2.5 py-1 text-[11px] text-on-ink/80 backdrop-blur-md" data-card-code>{p.code}</span>
                 </span>
                 <span class="mt-3 flex items-baseline justify-between">
-                  <span class="text-sm font-medium text-on-ink">{p.name}</span>
-                  <span class="tnum text-xs text-on-ink/50">{p.area} м²</span>
+                  <span class="text-sm font-medium text-on-ink" data-card-name>{p.name}</span>
+                  <span class="tnum text-xs text-on-ink/50" data-card-area>{p.area} м²</span>
                 </span>
               </button>
             ))
@@ -112,65 +101,49 @@ const data = order.map((m) => ({
         </div>
       </div>
 
-      <!-- Правая колонка: крупный проект (сцена) -->
-      <figure
-        id="catalog-stage"
-        role="tabpanel"
-        class="lift relative aspect-[4/3] overflow-hidden rounded-[28px] border border-white/10 lg:aspect-auto"
+      <!-- Сцена: крупный проект -->
+      <button
+        type="button"
         data-stage
+        data-card={initFeatured.code}
+        class="lift group relative block aspect-[4/3] w-full overflow-hidden rounded-[28px] border border-white/10 text-left transition-[opacity,transform] duration-500 lg:aspect-auto"
       >
-        <img
-          data-stage-img
-          src={initFeatured.image}
-          alt={initFeatured.alt}
-          loading="lazy"
-          class="h-full w-full object-cover transition-opacity duration-500"
-        />
+        <img data-stage-img src={initFeatured.image} alt={initFeatured.alt} loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
         <div class="absolute inset-0 scrim-bottom"></div>
 
-        <!-- Код в углу -->
-        <span
-          class="absolute left-6 top-6 rounded-full border border-white/15 bg-ink/40 px-3.5 py-1.5 text-xs tracking-wide text-on-ink backdrop-blur-md"
-          data-stage-code
-        >
+        <span class="absolute left-6 top-6 rounded-full border border-white/15 bg-ink/40 px-3.5 py-1.5 text-xs tracking-wide text-on-ink backdrop-blur-md" data-stage-code>
           {initFeatured.code}
         </span>
+        <span class="absolute right-6 top-6 flex items-center gap-2 rounded-full bg-accent/90 px-4 py-1.5 text-xs font-semibold text-paper opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          Открыть проект
+          <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
 
-        <!-- Плавающая стеклянная подпись -->
-        <figcaption
-          class="glass hairline-top absolute bottom-6 left-6 right-6 flex flex-wrap items-end justify-between gap-4 rounded-2xl p-5 sm:left-6 sm:right-auto sm:max-w-md"
-        >
-          <div>
-            <h3 class="font-[var(--font-display)] text-xl text-on-ink" data-stage-name>
-              {initFeatured.name}
-            </h3>
-            <p class="mt-1 text-sm text-on-ink/60" data-stage-meta>
-              {initFeatured.area} м² · {initFeatured.floors} этажа
-            </p>
-          </div>
-          <div class="text-right">
-            <p class="tnum text-sm font-semibold text-accent-soft" data-stage-price>
-              {initFeatured.price}
-            </p>
-            <a href="#lead" class="mt-1 inline-block text-xs text-on-ink/55 underline-offset-4 transition-colors hover:text-accent hover:underline">
-              Обсудить проект →
-            </a>
-          </div>
-        </figcaption>
-      </figure>
+        <span class="glass hairline-top absolute bottom-6 left-6 right-6 flex flex-wrap items-end justify-between gap-4 rounded-2xl p-5 sm:right-auto sm:max-w-md">
+          <span class="block">
+            <span class="block font-[var(--font-display)] text-xl text-on-ink" data-stage-name>{initFeatured.name}</span>
+            <span class="mt-1 block text-sm text-on-ink/60" data-stage-meta>{initFeatured.area} м² · {initFeatured.floors} этажа</span>
+          </span>
+          <span class="text-right">
+            <span class="tnum block text-sm font-semibold text-accent-soft" data-stage-price>{initFeatured.price}</span>
+            <span class="mt-1 block text-xs text-on-ink/55">Подробнее →</span>
+          </span>
+        </span>
+      </button>
 
-      <!-- Рельс для мобильных -->
+      <!-- Рельс (мобайл) -->
       <div class="-mt-4 flex gap-4 overflow-x-auto no-scrollbar lg:hidden" data-rail-mobile>
         {
           initRail.map((p) => (
-            <button type="button" data-rail-card={p.code} class="group min-w-[60%] shrink-0 text-left">
+            <button type="button" data-card={p.code} class="group min-w-[62%] shrink-0 text-left">
               <span class="relative block aspect-[4/3] overflow-hidden rounded-2xl border border-white/10">
-                <img src={p.image} alt={p.alt} loading="lazy" class="h-full w-full object-cover" />
+                <img data-card-img src={p.image} alt={p.alt} loading="lazy" class="h-full w-full object-cover" />
                 <span class="absolute inset-0 scrim-bottom" />
+                <span class="absolute bottom-3 left-3 rounded-full bg-ink/45 px-2.5 py-1 text-[11px] text-on-ink/80 backdrop-blur-md" data-card-code>{p.code}</span>
               </span>
               <span class="mt-2 flex items-baseline justify-between">
-                <span class="text-sm font-medium text-on-ink">{p.name}</span>
-                <span class="tnum text-xs text-on-ink/50">{p.area} м²</span>
+                <span class="text-sm font-medium text-on-ink" data-card-name>{p.name}</span>
+                <span class="tnum text-xs text-on-ink/50" data-card-area>{p.area} м²</span>
               </span>
             </button>
           ))
@@ -179,92 +152,190 @@ const data = order.map((m) => ({
     </div>
   </div>
 
-  <script type="application/json" data-catalog set:html={JSON.stringify(data)} />
+  <script type="application/json" data-catalog set:html={JSON.stringify(payload)} />
 </section>
 
+<!-- ПОП-АП ПРОЕКТА -->
+<div data-modal hidden class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+  <div data-modal-overlay class="absolute inset-0 bg-ink/85 opacity-0 backdrop-blur-md transition-opacity duration-300"></div>
+
+  <div
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+    class="glass hairline-top relative flex max-h-[92dvh] w-full max-w-5xl translate-y-4 flex-col overflow-hidden rounded-[28px] opacity-0 transition-all duration-300 sm:flex-row"
+    data-modal-dialog
+  >
+    <!-- Кнопка закрытия -->
+    <button
+      type="button"
+      data-modal-close
+      aria-label="Закрыть"
+      class="absolute right-4 top-4 z-20 grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-ink/50 text-on-ink backdrop-blur-md transition-colors hover:border-accent hover:text-accent"
+    >
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+    </button>
+
+    <!-- Галерея -->
+    <div class="relative shrink-0 bg-ink-2 sm:w-[55%]">
+      <div class="relative aspect-[4/3] sm:aspect-auto sm:h-full sm:min-h-[420px]">
+        <img data-modal-img src="" alt="" class="h-full w-full object-cover transition-opacity duration-300" />
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent"></div>
+
+        <!-- стрелки -->
+        <button type="button" data-modal-prev aria-label="Предыдущее фото" class="absolute left-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-ink/55 text-on-ink backdrop-blur-md transition-colors hover:text-accent">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" data-modal-next aria-label="Следующее фото" class="absolute right-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-ink/55 text-on-ink backdrop-blur-md transition-colors hover:text-accent">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <!-- счётчик -->
+        <span data-modal-counter class="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-ink/55 px-3 py-1 text-xs text-on-ink/85 backdrop-blur-md"></span>
+      </div>
+      <!-- миниатюры -->
+      <div data-modal-thumbs class="flex gap-2 overflow-x-auto no-scrollbar p-3"></div>
+    </div>
+
+    <!-- Информация -->
+    <div class="flex min-h-0 flex-1 flex-col overflow-y-auto p-7 sm:p-9">
+      <div class="flex items-center gap-3">
+        <span data-modal-code class="rounded-full border border-white/15 px-3 py-1 text-xs tracking-wide text-on-ink/80"></span>
+        <span data-modal-material class="text-xs uppercase tracking-[0.18em] text-accent-soft"></span>
+      </div>
+      <h3 id="modal-title" data-modal-name class="mt-4 font-[var(--font-display)] text-3xl text-on-ink"></h3>
+      <p data-modal-desc class="mt-4 text-[15px] leading-relaxed text-on-ink/70"></p>
+
+      <!-- Характеристики -->
+      <dl data-modal-specs class="mt-7 grid grid-cols-3 gap-px overflow-hidden rounded-2xl border border-white/10"></dl>
+
+      <!-- Цена + CTA -->
+      <div class="mt-auto pt-8">
+        <div class="flex items-baseline justify-between border-t border-white/10 pt-5">
+          <span class="text-sm text-on-ink/55">Стоимость</span>
+          <span data-modal-price class="tnum font-[var(--font-display)] text-xl text-accent-soft"></span>
+        </div>
+        <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <button type="button" data-modal-cta="smeta" class="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Скачать смету
+          </button>
+          <button type="button" data-modal-cta="presentation" class="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 px-6 py-3.5 text-sm font-semibold text-on-ink transition-colors duration-300 hover:border-accent hover:text-accent">
+            Получить презентацию
+          </button>
+        </div>
+        <p class="mt-3 text-xs text-on-ink/45">
+          Смету и презентацию по проекту пришлём после короткой заявки.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-  type P = { code: string; name: string; material: string; area: number; floors: number; price: string; image: string; alt: string };
-  type Group = { id: string; label: string; note: string; items: P[] };
+  type Spec = { label: string; value: string };
+  type P = { code: string; name: string; material: string; materialLabel: string; area: number; floors: number; price: string; image: string; alt: string; description: string; specs: Spec[] };
+  type Payload = { groups: { id: string; label: string; note: string; codes: string[] }[]; projects: Record<string, P>; interiors: { src: string; alt: string }[] };
 
   const root = document.querySelector<HTMLElement>("#catalog");
   if (root) {
-    const groups: Group[] = JSON.parse(
-      root.querySelector<HTMLElement>("[data-catalog]")!.textContent || "[]",
-    );
+    const data: Payload = JSON.parse(root.querySelector<HTMLElement>("[data-catalog]")!.textContent || "{}");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-tab]"));
     const indicator = root.querySelector<HTMLElement>("[data-indicator]")!;
     const note = root.querySelector<HTMLElement>("[data-note]")!;
     const backdrop = root.querySelector<HTMLImageElement>("[data-backdrop]")!;
+    const stage = root.querySelector<HTMLButtonElement>("[data-stage]")!;
     const stageImg = root.querySelector<HTMLImageElement>("[data-stage-img]")!;
-    const stageCode = root.querySelector<HTMLElement>("[data-stage-code]")!;
-    const stageName = root.querySelector<HTMLElement>("[data-stage-name]")!;
-    const stageMeta = root.querySelector<HTMLElement>("[data-stage-meta]")!;
-    const stagePrice = root.querySelector<HTMLElement>("[data-stage-price]")!;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    let featuredIdx = 0;
+    const setText = (sel: string, scope: HTMLElement, val: string) => {
+      const el = scope.querySelector<HTMLElement>(sel);
+      if (el) el.textContent = val;
+    };
+    const swapImg = (img: HTMLImageElement, src: string) => {
+      if (reduce) { img.src = src; return; }
+      img.style.opacity = "0";
+      const n = new Image();
+      n.onload = () => { img.src = src; img.style.opacity = ""; };
+      n.src = src;
+    };
 
     const moveIndicator = (tab: HTMLButtonElement) => {
       indicator.style.width = `${tab.offsetWidth}px`;
       indicator.style.transform = `translateX(${tab.offsetLeft - 6}px)`;
     };
 
-    const swapImg = (img: HTMLImageElement, src: string) => {
-      if (reduce) { img.src = src; return; }
-      img.style.opacity = "0";
-      const next = new Image();
-      next.onload = () => { img.src = src; img.style.opacity = ""; };
-      next.src = src;
+    // — Заполнение сцены и рельсов из группы —
+    const fillCard = (card: HTMLElement, p: P) => {
+      card.dataset.card = p.code;
+      const img = card.querySelector<HTMLImageElement>("[data-card-img]")!;
+      swapImg(img, p.image); img.alt = p.alt;
+      setText("[data-card-code]", card, p.code);
+      setText("[data-card-name]", card, p.name);
+      setText("[data-card-area]", card, `${p.area} м²`);
     };
 
-    const renderRails = (g: Group) => {
-      const rest = g.items.filter((_, i) => i !== featuredIdx);
+    const renderGroup = (groupId: string) => {
+      const g = data.groups.find((x) => x.id === groupId)!;
+      const items = g.codes.map((c) => data.projects[c]);
+      const featured = items[0];
+      const rest = items.slice(1);
+
+      // Сцена
+      stage.dataset.card = featured.code;
+      swapImg(stageImg, featured.image); stageImg.alt = featured.alt;
+      setText("[data-stage-code]", stage, featured.code);
+      setText("[data-stage-name]", stage, featured.name);
+      setText("[data-stage-meta]", stage, `${featured.area} м² · ${featured.floors} этажа`);
+      setText("[data-stage-price]", stage, featured.price);
+      swapImg(backdrop, featured.image);
+
+      // Рельсы
       root.querySelectorAll<HTMLElement>("[data-rail], [data-rail-mobile]").forEach((rail) => {
-        rail.querySelectorAll<HTMLButtonElement>("[data-rail-card]").forEach((card, i) => {
+        const cards = Array.from(rail.querySelectorAll<HTMLElement>("[data-card]"));
+        cards.forEach((card, i) => {
           const p = rest[i];
           if (!p) { card.style.display = "none"; return; }
           card.style.display = "";
-          card.dataset.railCard = p.code;
-          const img = card.querySelector("img")!;
-          swapImg(img, p.image);
-          img.alt = p.alt;
-          const spans = card.querySelectorAll("span span");
-          (spans[0] as HTMLElement).textContent = p.name;
-          (spans[1] as HTMLElement).textContent = `${p.area} м²`;
-          card.onclick = () => setFeatured(g, g.items.indexOf(p));
+          fillCard(card, p);
         });
       });
     };
 
-    const setFeatured = (g: Group, idx: number) => {
-      featuredIdx = idx;
-      const p = g.items[idx];
-      swapImg(stageImg, p.image);
-      swapImg(backdrop, p.image);
-      stageImg.alt = p.alt;
-      stageCode.textContent = p.code;
-      stageName.textContent = p.name;
-      stageMeta.textContent = `${p.area} м² · ${p.floors} этажа`;
-      stagePrice.textContent = p.price;
-      renderRails(g);
+    const animateSwitch = (groupId: string) => {
+      const stageWrap = stage;
+      const rails = Array.from(root.querySelectorAll<HTMLElement>("[data-rail], [data-rail-mobile]"));
+      if (reduce) { renderGroup(groupId); return; }
+      stageWrap.style.opacity = "0";
+      stageWrap.style.transform = "translateY(14px)";
+      rails.forEach((r) => { r.style.opacity = "0"; r.style.transform = "translateY(14px)"; });
+      setTimeout(() => {
+        renderGroup(groupId);
+        requestAnimationFrame(() => {
+          stageWrap.style.opacity = ""; stageWrap.style.transform = "";
+          rails.forEach((r) => { r.style.opacity = ""; r.style.transform = ""; });
+        });
+      }, 220);
     };
 
-    const activate = (material: string, focus = false) => {
-      const g = groups.find((x) => x.id === material)!;
+    root.querySelectorAll<HTMLElement>("[data-rail], [data-rail-mobile]").forEach((r) => {
+      r.style.transition = "opacity .35s cubic-bezier(0.22,1,0.36,1), transform .35s cubic-bezier(0.22,1,0.36,1)";
+    });
+
+    const activate = (groupId: string, focus = false) => {
       tabs.forEach((t) => {
-        const sel = t.dataset.tab === material;
+        const sel = t.dataset.tab === groupId;
         t.setAttribute("aria-selected", String(sel));
         t.tabIndex = sel ? 0 : -1;
         if (sel) { moveIndicator(t); if (focus) t.focus(); }
       });
+      const g = data.groups.find((x) => x.id === groupId)!;
       note.style.opacity = "0";
       setTimeout(() => { note.textContent = g.note; note.style.opacity = "1"; }, reduce ? 0 : 160);
-      featuredIdx = 0;
-      setFeatured(g, 0);
+      animateSwitch(groupId);
     };
 
     tabs.forEach((tab) => tab.addEventListener("click", () => activate(tab.dataset.tab!)));
-
     root.querySelector("[data-tablist]")!.addEventListener("keydown", (e) => {
       const ev = e as KeyboardEvent;
       const cur = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true");
@@ -278,17 +349,130 @@ const data = order.map((m) => ({
       activate(tabs[next].dataset.tab!, true);
     });
 
-    // Привязка кликов начальных карточек рельса + позиция индикатора
-    const initGroup = groups[0];
-    root.querySelectorAll<HTMLButtonElement>("[data-rail-card]").forEach((card) => {
-      const code = card.dataset.railCard!;
-      const idx = initGroup.items.findIndex((p) => p.code === code);
-      card.onclick = () => setFeatured(initGroup, idx);
+    // ====================== ПОП-АП ======================
+    const modal = document.querySelector<HTMLElement>("[data-modal]")!;
+    const dialog = modal.querySelector<HTMLElement>("[data-modal-dialog]")!;
+    const overlay = modal.querySelector<HTMLElement>("[data-modal-overlay]")!;
+    const mImg = modal.querySelector<HTMLImageElement>("[data-modal-img]")!;
+    const mThumbs = modal.querySelector<HTMLElement>("[data-modal-thumbs]")!;
+    const mCounter = modal.querySelector<HTMLElement>("[data-modal-counter]")!;
+    const mSpecs = modal.querySelector<HTMLElement>("[data-modal-specs]")!;
+    let gallery: { src: string; alt: string }[] = [];
+    let gi = 0;
+    let lastFocused: HTMLElement | null = null;
+    let currentCode = "";
+
+    const showSlide = (i: number) => {
+      gi = (i + gallery.length) % gallery.length;
+      swapImg(mImg, gallery[gi].src);
+      mImg.alt = gallery[gi].alt;
+      mCounter.textContent = `${gi + 1} / ${gallery.length}`;
+      mThumbs.querySelectorAll<HTMLElement>("[data-thumb]").forEach((t, idx) => {
+        t.classList.toggle("ring-2", idx === gi);
+        t.classList.toggle("ring-accent", idx === gi);
+        t.style.opacity = idx === gi ? "1" : "0.55";
+      });
+    };
+
+    const openModal = (code: string) => {
+      const p = data.projects[code];
+      if (!p) return;
+      currentCode = code;
+      lastFocused = document.activeElement as HTMLElement;
+
+      gallery = [{ src: p.image, alt: p.alt }, ...data.interiors];
+      gi = 0;
+
+      setText("[data-modal-code]", modal, p.code);
+      setText("[data-modal-material]", modal, p.materialLabel);
+      setText("[data-modal-name]", modal, p.name);
+      setText("[data-modal-desc]", modal, p.description);
+      setText("[data-modal-price]", modal, p.price);
+
+      mSpecs.innerHTML = p.specs.map((s) =>
+        `<div class="bg-white/[0.03] px-4 py-4"><dt class="text-xs text-on-ink/45">${s.label}</dt><dd class="mt-1 font-[var(--font-display)] text-base text-on-ink">${s.value}</dd></div>`
+      ).join("");
+
+      mThumbs.innerHTML = gallery.map((g, idx) =>
+        `<button type="button" data-thumb="${idx}" class="relative h-16 w-24 shrink-0 overflow-hidden rounded-lg border border-white/10 transition-opacity"><img src="${g.src}" alt="" loading="lazy" class="h-full w-full object-cover"></button>`
+      ).join("");
+      mThumbs.querySelectorAll<HTMLButtonElement>("[data-thumb]").forEach((t) =>
+        t.addEventListener("click", () => showSlide(Number(t.dataset.thumb))),
+      );
+
+      showSlide(0);
+
+      modal.hidden = false;
+      document.body.style.overflow = "hidden";
+      requestAnimationFrame(() => {
+        overlay.style.opacity = "1";
+        dialog.style.opacity = "1";
+        dialog.style.transform = "translateY(0)";
+      });
+      modal.querySelector<HTMLButtonElement>("[data-modal-close]")!.focus();
+    };
+
+    const closeModal = () => {
+      overlay.style.opacity = "0";
+      dialog.style.opacity = "0";
+      dialog.style.transform = "translateY(16px)";
+      const done = () => { modal.hidden = true; document.body.style.overflow = ""; lastFocused?.focus(); };
+      if (reduce) done(); else setTimeout(done, 280);
+    };
+
+    // Открытие по карточкам и сцене (делегирование)
+    root.addEventListener("click", (e) => {
+      const card = (e.target as HTMLElement).closest<HTMLElement>("[data-card]");
+      if (card) openModal(card.dataset.card!);
     });
+
+    modal.querySelector("[data-modal-close]")!.addEventListener("click", closeModal);
+    overlay.addEventListener("click", closeModal);
+    modal.querySelector("[data-modal-prev]")!.addEventListener("click", () => showSlide(gi - 1));
+    modal.querySelector("[data-modal-next]")!.addEventListener("click", () => showSlide(gi + 1));
+
+    document.addEventListener("keydown", (e) => {
+      if (modal.hidden) return;
+      if (e.key === "Escape") closeModal();
+      else if (e.key === "ArrowLeft") showSlide(gi - 1);
+      else if (e.key === "ArrowRight") showSlide(gi + 1);
+      else if (e.key === "Tab") {
+        const f = dialog.querySelectorAll<HTMLElement>('button, a[href], [tabindex]:not([tabindex="-1"])');
+        if (!f.length) return;
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+
+    // CTA внутри поп-апа → форма заявки с пред-заполнением
+    modal.querySelectorAll<HTMLButtonElement>("[data-modal-cta]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const kind = btn.dataset.modalCta;
+        const p = data.projects[currentCode];
+        const requestText = kind === "smeta"
+          ? `Смета по проекту ${p.code} «${p.name}»`
+          : `Презентация по проекту ${p.code} «${p.name}»`;
+        // пред-заполняем форму
+        const material = document.querySelector<HTMLSelectElement>("#lf-material");
+        if (material) {
+          const opt = Array.from(material.options).find((o) => o.value === p.materialLabel);
+          if (opt) material.value = opt.value;
+        }
+        const reqInput = document.querySelector<HTMLInputElement>("#lf-request");
+        const reqNote = document.querySelector<HTMLElement>("#lf-request-note");
+        if (reqInput) reqInput.value = requestText;
+        if (reqNote) { reqNote.textContent = requestText; reqNote.hidden = false; }
+        closeModal();
+        document.querySelector("#lead")?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+        setTimeout(() => document.querySelector<HTMLInputElement>("#lf-name")?.focus(), reduce ? 0 : 600);
+      });
+    });
+
+    // init
     const init = () => { const a = tabs.find((t) => t.getAttribute("aria-selected") === "true"); if (a) moveIndicator(a); };
     window.addEventListener("load", init);
     window.addEventListener("resize", init);
     init();
-    note.style.transition = "opacity 0.3s ease";
   }
 </script>
