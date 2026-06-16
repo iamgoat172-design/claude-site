@@ -90,17 +90,24 @@ const payload = {
       </div>
 
       <!-- Список проектов -->
-      <div class="flex flex-col gap-2.5 lg:max-h-[640px] lg:overflow-y-auto lg:pr-1 no-scrollbar" data-list role="listbox" aria-label="Проекты">
+      <div class="no-scrollbar flex flex-col gap-3 lg:max-h-[680px] lg:overflow-y-auto lg:pr-1" data-list role="listbox" aria-label="Проекты">
         {
           initList.map((p, i) => (
-            <button type="button" data-select={p.code} role="option" aria-selected={i === 0 ? "true" : "false"} class="group flex items-center gap-4 rounded-2xl border p-3 text-left transition-all duration-300 aria-selected:border-accent/60 aria-selected:bg-accent/10 border-white/10 bg-white/[0.02] hover:border-white/25">
-              <span class="relative block h-[68px] w-24 shrink-0 overflow-hidden rounded-xl"><img src={p.image} alt={p.alt} loading="lazy" class="h-full w-full object-cover" /></span>
-              <span class="min-w-0 flex-1">
-                <span class="flex items-center justify-between gap-2"><span class="text-[11px] tracking-wide text-on-ink/45">{p.code}</span><span class="tnum text-xs text-on-ink/55">{p.area} м²</span></span>
-                <span class="mt-1 block truncate font-[var(--font-display)] text-base text-on-ink">{p.name}</span>
-                <span class="mt-0.5 block truncate text-xs text-on-ink/45">{p.summary}</span>
+            <button type="button" data-select={p.code} role="option" aria-selected={i === 0 ? "true" : "false"} class="group relative block aspect-[16/10] w-full shrink-0 overflow-hidden rounded-[20px] border text-left transition-all duration-300 aria-selected:border-accent/70 border-white/10 hover:border-white/30">
+              <img src={p.image} alt={p.alt} loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 group-aria-selected:scale-[1.03]" />
+              <span class="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent"></span>
+              <span class="absolute left-3 top-3 flex items-center gap-2">
+                <span class="rounded-full border border-white/20 bg-ink/40 px-2.5 py-1 text-[10px] tracking-wide text-on-ink backdrop-blur-md">{p.code}</span>
+                {p.tag && <span class="rounded-full bg-accent/90 px-2.5 py-1 text-[10px] font-semibold text-paper">{p.tag}</span>}
               </span>
-              <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-white/15 text-accent opacity-0 transition-opacity group-aria-selected:opacity-100" aria-hidden="true"><svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full bg-accent text-paper opacity-0 transition-opacity duration-300 group-aria-selected:opacity-100" aria-hidden="true"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="absolute inset-x-0 bottom-0 p-4">
+                <span class="flex items-center justify-between gap-2">
+                  <span class="font-[var(--font-display)] text-lg text-on-ink">{p.name}</span>
+                  <span class="tnum text-xs text-on-ink/70">{p.area} м²</span>
+                </span>
+                <span class="mt-1 block text-xs text-accent-soft">{p.hook}</span>
+              </span>
             </button>
           ))
         }
@@ -374,33 +381,35 @@ const payload = {
       const n = new Image(); n.onload = () => { img.src = src; img.style.opacity = ""; }; n.src = src;
     };
     const moveIndicator = (tab: HTMLButtonElement) => { indicator.style.width = `${tab.offsetWidth}px`; indicator.style.transform = `translateX(${tab.offsetLeft - 6}px)`; };
+    const canHover = window.matchMedia("(hover: hover)").matches;
 
-    const selectProject = (code: string) => {
+    // Применить кадр/инфо выбранного (без смены состояния выбора) — для предпросмотра
+    const applyFeatured = (code: string) => {
       const p = data.projects[code]; if (!p) return;
-      selected = code;
       swapImg(selImg, p.image); selImg.alt = p.alt; swapImg(backdrop, p.image);
       setText("[data-sel-code]", root, p.code);
       setText("[data-sel-name]", root, p.name);
       setText("[data-sel-meta]", root, `${p.area} м² · ${p.floors} этажа`);
       setText("[data-sel-summary]", root, p.summary);
       setText("[data-sel-price]", root, p.price);
+    };
+    const selectProject = (code: string) => {
+      selected = code;
+      applyFeatured(code);
       list.querySelectorAll<HTMLElement>("[data-select]").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.select === code)));
     };
 
+    const cardMarkup = (p: P, active: boolean) => `<button type="button" data-select="${p.code}" role="option" aria-selected="${active}" class="group relative block aspect-[16/10] w-full shrink-0 overflow-hidden rounded-[20px] border text-left transition-all duration-300 aria-selected:border-accent/70 border-white/10 hover:border-white/30">
+      <img src="${p.image}" alt="${p.alt}" loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 group-aria-selected:scale-[1.03]">
+      <span class="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent"></span>
+      <span class="absolute left-3 top-3 flex items-center gap-2"><span class="rounded-full border border-white/20 bg-ink/40 px-2.5 py-1 text-[10px] tracking-wide text-on-ink backdrop-blur-md">${p.code}</span>${p.tag ? `<span class="rounded-full bg-accent/90 px-2.5 py-1 text-[10px] font-semibold text-paper">${p.tag}</span>` : ""}</span>
+      <span class="absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full bg-accent text-paper opacity-0 transition-opacity duration-300 group-aria-selected:opacity-100" aria-hidden="true"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="absolute inset-x-0 bottom-0 p-4"><span class="flex items-center justify-between gap-2"><span class="font-[var(--font-display)] text-lg text-on-ink">${p.name}</span><span class="tnum text-xs text-on-ink/70">${p.area} м²</span></span><span class="mt-1 block text-xs text-accent-soft">${p.hook}</span></span>
+    </button>`;
+
     const buildList = (groupId: string) => {
       const g = data.groups.find((x) => x.id === groupId)!;
-      list.innerHTML = g.codes.map((c, i) => {
-        const p = data.projects[c];
-        return `<button type="button" data-select="${p.code}" role="option" aria-selected="${i === 0}" class="group flex items-center gap-4 rounded-2xl border p-3 text-left transition-all duration-300 aria-selected:border-accent/60 aria-selected:bg-accent/10 border-white/10 bg-white/[0.02] hover:border-white/25">
-          <span class="relative block h-[68px] w-24 shrink-0 overflow-hidden rounded-xl"><img src="${p.image}" alt="${p.alt}" loading="lazy" class="h-full w-full object-cover"></span>
-          <span class="min-w-0 flex-1">
-            <span class="flex items-center justify-between gap-2"><span class="text-[11px] tracking-wide text-on-ink/45">${p.code}</span><span class="tnum text-xs text-on-ink/55">${p.area} м²</span></span>
-            <span class="mt-1 block truncate font-[var(--font-display)] text-base text-on-ink">${p.name}</span>
-            <span class="mt-0.5 block truncate text-xs text-on-ink/45">${p.summary}</span>
-          </span>
-          <span class="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-white/15 text-accent opacity-0 transition-opacity group-aria-selected:opacity-100" aria-hidden="true"><svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </button>`;
-      }).join("");
+      list.innerHTML = g.codes.map((c, i) => cardMarkup(data.projects[c], i === 0)).join("");
     };
 
     const switchMaterial = (groupId: string, focus = false) => {
@@ -419,7 +428,17 @@ const payload = {
       else if (ev.key === "Home") next = 0; else if (ev.key === "End") next = tabs.length - 1; else return;
       ev.preventDefault(); switchMaterial(tabs[next].dataset.tab!, true);
     });
-    list.addEventListener("click", (e) => { const b = (e.target as HTMLElement).closest<HTMLElement>("[data-select]"); if (b) selectProject(b.dataset.select!); });
+    list.addEventListener("click", (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLElement>("[data-select]");
+      if (!b) return;
+      selectProject(b.dataset.select!);
+      if (!canHover) openModal(b.dataset.select!); // на тач — сразу карточка
+    });
+    // Живой предпросмотр выбранного дома при наведении на проекты
+    if (canHover) {
+      list.addEventListener("mouseover", (e) => { const b = (e.target as HTMLElement).closest<HTMLElement>("[data-select]"); if (b) applyFeatured(b.dataset.select!); });
+      list.addEventListener("mouseleave", () => applyFeatured(selected));
+    }
 
     // ====================== ПОП-АП ======================
     const modal = document.querySelector<HTMLElement>("[data-modal]")!;
