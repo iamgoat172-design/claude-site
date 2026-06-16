@@ -1,14 +1,18 @@
 ---
-import { projects, materials, INTERIORS, type Material } from "../data/projects";
+import { projects, materials, INTERIORS, DEFAULT_FEATURES, type Material } from "../data/projects";
 
 const order: Material[] = ["timber", "ceramic"];
 const byMaterial = (m: Material) => projects.filter((p) => p.material === m);
 
+const sub: Record<Material, string> = {
+  timber: "Тёплый, дышащий дом",
+  ceramic: "Монолит, тишина, тепло",
+};
+
 const initial = byMaterial("timber");
 const initFeatured = initial[0];
-const initRail = initial.slice(1);
+const initRest = initial.slice(1);
 
-// Полезная нагрузка для клиента
 const payload = {
   groups: order.map((m) => ({
     id: m,
@@ -20,108 +24,87 @@ const payload = {
     projects.map((p) => [p.code, { ...p, materialLabel: materials[p.material].label }]),
   ),
   interiors: INTERIORS,
+  defaultFeatures: DEFAULT_FEATURES,
 };
 ---
 
 <section id="catalog" class="grain relative overflow-hidden bg-ink py-20 sm:py-28">
   <div class="absolute inset-0 z-0" aria-hidden="true">
-    <img
-      data-backdrop
-      src={initFeatured.image}
-      alt=""
-      class="h-full w-full scale-110 object-cover opacity-20 blur-2xl transition-opacity duration-700"
-    />
-    <div class="absolute inset-0 bg-ink/70"></div>
+    <img data-backdrop src={initFeatured.image} alt="" class="h-full w-full scale-110 object-cover opacity-20 blur-2xl transition-opacity duration-700" />
+    <div class="absolute inset-0 bg-ink/72"></div>
   </div>
 
   <div class="relative z-10 mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-    <div class="grid grid-cols-1 gap-12 lg:grid-cols-[5fr_7fr] lg:gap-16">
-      <!-- Левая колонка -->
-      <div class="flex flex-col lg:py-6">
+    <!-- Заголовок -->
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div>
         <p class="eyebrow text-accent-soft">Каталог проектов</p>
-        <h2 class="display-lg mt-5 text-on-ink">Два материала,<br />одна школа.</h2>
-        <p class="mt-5 max-w-sm text-[15px] leading-relaxed text-on-ink/70">
-          Выберите технологию — проект и атмосфера сменятся. Откройте карточку,
-          чтобы посмотреть интерьеры, характеристики и забрать смету.
-        </p>
-
-        <!-- Переключатель -->
-        <div class="mt-9">
-          <div
-            class="glass relative inline-flex gap-1 rounded-full p-1.5"
-            role="tablist"
-            aria-label="Материал дома"
-            data-tablist
-          >
-            <span
-              class="absolute left-1.5 top-1.5 z-0 rounded-full bg-accent accent-glow transition-[transform,width] duration-[450ms] ease-[cubic-bezier(0.34,1.56,0.4,1)]"
-              style="height: calc(100% - 0.75rem)"
-              data-indicator
-              aria-hidden="true"
-            >
-            </span>
-            {
-              order.map((m, i) => (
-                <button
-                  type="button"
-                  role="tab"
-                  id={`tab-${m}`}
-                  aria-selected={i === 0 ? "true" : "false"}
-                  tabindex={i === 0 ? "0" : "-1"}
-                  data-tab={m}
-                  class="relative z-10 rounded-full px-5 py-2.5 text-sm font-semibold text-on-ink/65 transition-colors duration-300 aria-selected:text-paper sm:px-7"
-                >
-                  {materials[m].label}
-                </button>
-              ))
-            }
-          </div>
-          <p class="mt-4 text-sm text-on-ink/55 transition-opacity duration-300" data-note>
-            {materials[order[0]].note}
-          </p>
-        </div>
-
-        <!-- Рельс (десктоп) -->
-        <div class="mt-auto hidden gap-4 pt-10 lg:flex" data-rail>
-          {
-            initRail.map((p) => (
-              <button type="button" data-card={p.code} class="group w-1/2 text-left">
-                <span class="relative block aspect-[4/3] overflow-hidden rounded-2xl border border-white/10">
-                  <img data-card-img src={p.image} alt={p.alt} loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                  <span class="absolute inset-0 scrim-bottom" />
-                  <span class="absolute bottom-3 left-3 rounded-full bg-ink/45 px-2.5 py-1 text-[11px] text-on-ink/80 backdrop-blur-md" data-card-code>{p.code}</span>
-                </span>
-                <span class="mt-3 flex items-baseline justify-between">
-                  <span class="text-sm font-medium text-on-ink" data-card-name>{p.name}</span>
-                  <span class="tnum text-xs text-on-ink/50" data-card-area>{p.area} м²</span>
-                </span>
-              </button>
-            ))
-          }
-        </div>
+        <h2 class="display-lg mt-5 text-on-ink">Выберите материал<br />и проект</h2>
       </div>
+      <p class="max-w-sm text-[15px] leading-relaxed text-on-ink/65" data-note>
+        {materials[order[0]].note}. Откройте карточку — внутри визуализации,
+        интерьеры, планировки и характеристики.
+      </p>
+    </div>
 
-      <!-- Сцена: крупный проект -->
+    <!-- Явный сегмент-переключатель материала -->
+    <div
+      class="glass relative mt-9 grid w-full max-w-2xl grid-cols-2 gap-1.5 rounded-2xl p-1.5"
+      role="tablist"
+      aria-label="Материал дома"
+      data-tablist
+    >
+      <span
+        class="pointer-events-none absolute left-1.5 top-1.5 z-0 rounded-xl bg-accent accent-glow transition-[transform,width] duration-[450ms] ease-[cubic-bezier(0.34,1.56,0.4,1)]"
+        style="height: calc(100% - 0.75rem)"
+        data-indicator
+        aria-hidden="true"
+      >
+      </span>
+      {
+        order.map((m, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${m}`}
+            aria-selected={i === 0 ? "true" : "false"}
+            tabindex={i === 0 ? "0" : "-1"}
+            data-tab={m}
+            class="group relative z-10 rounded-xl px-5 py-3 text-left transition-colors duration-300"
+          >
+            <span class="flex items-center gap-2">
+              <span class={`h-2 w-2 rounded-full ${m === "timber" ? "bg-[#c8a578]" : "bg-[#b9876a]"} ring-2 ring-white/20`} />
+              <span class="block font-[var(--font-display)] text-base text-on-ink/70 transition-colors group-aria-selected:text-paper sm:text-lg">
+                {materials[m].label}
+              </span>
+            </span>
+            <span class="mt-1 block pl-4 text-xs text-on-ink/45 transition-colors group-aria-selected:text-paper/70">
+              {sub[m]}
+            </span>
+          </button>
+        ))
+      }
+    </div>
+
+    <!-- Сцена + список -->
+    <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[8fr_4fr]">
+      <!-- Крупный проект -->
       <button
         type="button"
         data-stage
         data-card={initFeatured.code}
-        class="lift group relative block aspect-[4/3] w-full overflow-hidden rounded-[28px] border border-white/10 text-left transition-[opacity,transform] duration-500 lg:aspect-auto"
+        class="lift group relative block aspect-[16/11] w-full overflow-hidden rounded-[28px] border border-white/10 text-left"
       >
         <img data-stage-img src={initFeatured.image} alt={initFeatured.alt} loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
         <div class="absolute inset-0 scrim-bottom"></div>
-
-        <span class="absolute left-6 top-6 rounded-full border border-white/15 bg-ink/40 px-3.5 py-1.5 text-xs tracking-wide text-on-ink backdrop-blur-md" data-stage-code>
-          {initFeatured.code}
-        </span>
+        <span class="absolute left-6 top-6 rounded-full border border-white/15 bg-ink/40 px-3.5 py-1.5 text-xs tracking-wide text-on-ink backdrop-blur-md" data-stage-code>{initFeatured.code}</span>
         <span class="absolute right-6 top-6 flex items-center gap-2 rounded-full bg-accent/90 px-4 py-1.5 text-xs font-semibold text-paper opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           Открыть проект
           <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </span>
-
         <span class="glass hairline-top absolute bottom-6 left-6 right-6 flex flex-wrap items-end justify-between gap-4 rounded-2xl p-5 sm:right-auto sm:max-w-md">
           <span class="block">
-            <span class="block font-[var(--font-display)] text-xl text-on-ink" data-stage-name>{initFeatured.name}</span>
+            <span class="block font-[var(--font-display)] text-2xl text-on-ink" data-stage-name>{initFeatured.name}</span>
             <span class="mt-1 block text-sm text-on-ink/60" data-stage-meta>{initFeatured.area} м² · {initFeatured.floors} этажа</span>
           </span>
           <span class="text-right">
@@ -131,19 +114,23 @@ const payload = {
         </span>
       </button>
 
-      <!-- Рельс (мобайл) -->
-      <div class="-mt-4 flex gap-4 overflow-x-auto no-scrollbar lg:hidden" data-rail-mobile>
+      <!-- Список остальных проектов -->
+      <div class="flex flex-col gap-3" data-list>
         {
-          initRail.map((p) => (
-            <button type="button" data-card={p.code} class="group min-w-[62%] shrink-0 text-left">
-              <span class="relative block aspect-[4/3] overflow-hidden rounded-2xl border border-white/10">
-                <img data-card-img src={p.image} alt={p.alt} loading="lazy" class="h-full w-full object-cover" />
-                <span class="absolute inset-0 scrim-bottom" />
-                <span class="absolute bottom-3 left-3 rounded-full bg-ink/45 px-2.5 py-1 text-[11px] text-on-ink/80 backdrop-blur-md" data-card-code>{p.code}</span>
+          initRest.map((p) => (
+            <button type="button" data-card={p.code} class="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.02] p-3 text-left transition-colors duration-300 hover:border-accent/30 hover:bg-white/[0.04]">
+              <span class="relative block h-20 w-28 shrink-0 overflow-hidden rounded-xl">
+                <img data-card-img src={p.image} alt={p.alt} loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
               </span>
-              <span class="mt-2 flex items-baseline justify-between">
-                <span class="text-sm font-medium text-on-ink" data-card-name>{p.name}</span>
-                <span class="tnum text-xs text-on-ink/50" data-card-area>{p.area} м²</span>
+              <span class="min-w-0 flex-1">
+                <span class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] tracking-wide text-on-ink/45" data-card-code>{p.code}</span>
+                  <span class="tnum text-xs text-on-ink/55" data-card-area>{p.area} м²</span>
+                </span>
+                <span class="mt-1 block truncate font-[var(--font-display)] text-base text-on-ink" data-card-name>{p.name}</span>
+                <span class="mt-1 flex items-center gap-1 text-xs text-accent-soft">Открыть
+                  <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
               </span>
             </button>
           ))
@@ -156,63 +143,69 @@ const payload = {
 </section>
 
 <!-- ПОП-АП ПРОЕКТА -->
-<div data-modal hidden class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+<div data-modal hidden class="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6">
   <div data-modal-overlay class="absolute inset-0 bg-ink/85 opacity-0 backdrop-blur-md transition-opacity duration-300"></div>
 
   <div
     role="dialog"
     aria-modal="true"
     aria-labelledby="modal-title"
-    class="glass hairline-top relative flex max-h-[92dvh] w-full max-w-5xl translate-y-4 flex-col overflow-hidden rounded-[28px] opacity-0 transition-all duration-300 sm:flex-row"
+    class="glass hairline-top relative grid max-h-[94dvh] w-full max-w-6xl translate-y-4 grid-cols-1 overflow-hidden rounded-[28px] opacity-0 transition-all duration-300 lg:grid-cols-[1.05fr_1fr]"
     data-modal-dialog
   >
-    <!-- Кнопка закрытия -->
-    <button
-      type="button"
-      data-modal-close
-      aria-label="Закрыть"
-      class="absolute right-4 top-4 z-20 grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-ink/50 text-on-ink backdrop-blur-md transition-colors hover:border-accent hover:text-accent"
-    >
+    <button type="button" data-modal-close aria-label="Закрыть" class="absolute right-4 top-4 z-20 grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-ink/50 text-on-ink backdrop-blur-md transition-colors hover:border-accent hover:text-accent">
       <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
     </button>
 
     <!-- Галерея -->
-    <div class="relative shrink-0 bg-ink-2 sm:w-[55%]">
-      <div class="relative aspect-[4/3] sm:aspect-auto sm:h-full sm:min-h-[420px]">
+    <div class="flex flex-col bg-ink-2 lg:max-h-[94dvh]">
+      <div class="relative aspect-[4/3] shrink-0">
         <img data-modal-img src="" alt="" class="h-full w-full object-cover transition-opacity duration-300" />
-        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent"></div>
-
-        <!-- стрелки -->
         <button type="button" data-modal-prev aria-label="Предыдущее фото" class="absolute left-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-ink/55 text-on-ink backdrop-blur-md transition-colors hover:text-accent">
           <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <button type="button" data-modal-next aria-label="Следующее фото" class="absolute right-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-ink/55 text-on-ink backdrop-blur-md transition-colors hover:text-accent">
           <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-
-        <!-- счётчик -->
         <span data-modal-counter class="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-ink/55 px-3 py-1 text-xs text-on-ink/85 backdrop-blur-md"></span>
       </div>
-      <!-- миниатюры -->
       <div data-modal-thumbs class="flex gap-2 overflow-x-auto no-scrollbar p-3"></div>
     </div>
 
-    <!-- Информация -->
-    <div class="flex min-h-0 flex-1 flex-col overflow-y-auto p-7 sm:p-9">
+    <!-- Информация (скролл) -->
+    <div class="flex min-h-0 flex-col overflow-y-auto p-7 sm:p-9">
       <div class="flex items-center gap-3">
         <span data-modal-code class="rounded-full border border-white/15 px-3 py-1 text-xs tracking-wide text-on-ink/80"></span>
-        <span data-modal-material class="text-xs uppercase tracking-[0.18em] text-accent-soft"></span>
+        <span data-modal-material class="eyebrow text-accent-soft"></span>
       </div>
-      <h3 id="modal-title" data-modal-name class="mt-4 font-[var(--font-display)] text-3xl text-on-ink"></h3>
-      <p data-modal-desc class="mt-4 text-[15px] leading-relaxed text-on-ink/70"></p>
+      <h3 id="modal-title" data-modal-name class="mt-4 font-[var(--font-display)] text-3xl text-on-ink sm:text-4xl"></h3>
+
+      <div data-modal-desc class="mt-5 space-y-3 text-[15px] leading-relaxed text-on-ink/70"></div>
 
       <!-- Характеристики -->
-      <dl data-modal-specs class="mt-7 grid grid-cols-3 gap-px overflow-hidden rounded-2xl border border-white/10"></dl>
+      <h4 class="eyebrow mt-8 text-on-ink/40">Характеристики</h4>
+      <dl data-modal-specs class="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 sm:grid-cols-4"></dl>
+
+      <!-- Комплектация -->
+      <h4 class="eyebrow mt-8 text-on-ink/40">Что входит</h4>
+      <ul data-modal-features class="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-2"></ul>
+
+      <!-- Планировки -->
+      <div data-modal-plans-wrap class="mt-8">
+        <h4 class="eyebrow text-on-ink/40">Планировки</h4>
+        <div data-modal-plan-tabs class="mt-4 flex gap-2"></div>
+        <div class="mt-3 overflow-hidden rounded-2xl border border-white/10 bg-paper">
+          <img data-modal-plan-img src="" alt="" class="w-full object-contain" />
+        </div>
+      </div>
+      <p data-modal-plans-empty hidden class="mt-8 rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-sm text-on-ink/55">
+        Планировки по этому проекту пришлём по запросу — вместе со сметой.
+      </p>
 
       <!-- Цена + CTA -->
-      <div class="mt-auto pt-8">
-        <div class="flex items-baseline justify-between border-t border-white/10 pt-5">
-          <span class="text-sm text-on-ink/55">Стоимость</span>
+      <div class="mt-8 border-t border-white/10 pt-5">
+        <div class="flex items-baseline justify-between">
+          <span class="text-sm text-on-ink/55">Стоимость под ключ</span>
           <span data-modal-price class="tnum font-[var(--font-display)] text-xl text-accent-soft"></span>
         </div>
         <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -224,9 +217,7 @@ const payload = {
             Получить презентацию
           </button>
         </div>
-        <p class="mt-3 text-xs text-on-ink/45">
-          Смету и презентацию по проекту пришлём после короткой заявки.
-        </p>
+        <p class="mt-3 text-xs text-on-ink/45">Смету и презентацию по проекту пришлём после короткой заявки.</p>
       </div>
     </div>
   </div>
@@ -234,8 +225,9 @@ const payload = {
 
 <script>
   type Spec = { label: string; value: string };
-  type P = { code: string; name: string; material: string; materialLabel: string; area: number; floors: number; price: string; image: string; alt: string; description: string; specs: Spec[] };
-  type Payload = { groups: { id: string; label: string; note: string; codes: string[] }[]; projects: Record<string, P>; interiors: { src: string; alt: string }[] };
+  type Plan = { floor: string; src: string };
+  type P = { code: string; name: string; material: string; materialLabel: string; area: number; floors: number; price: string; image: string; alt: string; description: string; specs: Spec[]; longDescription?: string[]; features?: string[]; gallery?: { src: string; alt: string }[]; plans?: Plan[] };
+  type Payload = { groups: { id: string; label: string; note: string; codes: string[] }[]; projects: Record<string, P>; interiors: { src: string; alt: string }[]; defaultFeatures: string[] };
 
   const root = document.querySelector<HTMLElement>("#catalog");
   if (root) {
@@ -247,32 +239,19 @@ const payload = {
     const backdrop = root.querySelector<HTMLImageElement>("[data-backdrop]")!;
     const stage = root.querySelector<HTMLButtonElement>("[data-stage]")!;
     const stageImg = root.querySelector<HTMLImageElement>("[data-stage-img]")!;
+    const list = root.querySelector<HTMLElement>("[data-list]")!;
 
     const setText = (sel: string, scope: HTMLElement, val: string) => {
-      const el = scope.querySelector<HTMLElement>(sel);
-      if (el) el.textContent = val;
+      const el = scope.querySelector<HTMLElement>(sel); if (el) el.textContent = val;
     };
     const swapImg = (img: HTMLImageElement, src: string) => {
       if (reduce) { img.src = src; return; }
       img.style.opacity = "0";
-      const n = new Image();
-      n.onload = () => { img.src = src; img.style.opacity = ""; };
-      n.src = src;
+      const n = new Image(); n.onload = () => { img.src = src; img.style.opacity = ""; }; n.src = src;
     };
-
     const moveIndicator = (tab: HTMLButtonElement) => {
       indicator.style.width = `${tab.offsetWidth}px`;
       indicator.style.transform = `translateX(${tab.offsetLeft - 6}px)`;
-    };
-
-    // — Заполнение сцены и рельсов из группы —
-    const fillCard = (card: HTMLElement, p: P) => {
-      card.dataset.card = p.code;
-      const img = card.querySelector<HTMLImageElement>("[data-card-img]")!;
-      swapImg(img, p.image); img.alt = p.alt;
-      setText("[data-card-code]", card, p.code);
-      setText("[data-card-name]", card, p.name);
-      setText("[data-card-area]", card, `${p.area} м²`);
     };
 
     const renderGroup = (groupId: string) => {
@@ -281,7 +260,6 @@ const payload = {
       const featured = items[0];
       const rest = items.slice(1);
 
-      // Сцена
       stage.dataset.card = featured.code;
       swapImg(stageImg, featured.image); stageImg.alt = featured.alt;
       setText("[data-stage-code]", stage, featured.code);
@@ -290,37 +268,31 @@ const payload = {
       setText("[data-stage-price]", stage, featured.price);
       swapImg(backdrop, featured.image);
 
-      // Рельсы
-      root.querySelectorAll<HTMLElement>("[data-rail], [data-rail-mobile]").forEach((rail) => {
-        const cards = Array.from(rail.querySelectorAll<HTMLElement>("[data-card]"));
-        cards.forEach((card, i) => {
-          const p = rest[i];
-          if (!p) { card.style.display = "none"; return; }
-          card.style.display = "";
-          fillCard(card, p);
-        });
-      });
+      list.innerHTML = rest.map((p) => `
+        <button type="button" data-card="${p.code}" class="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.02] p-3 text-left transition-colors duration-300 hover:border-accent/30 hover:bg-white/[0.04]">
+          <span class="relative block h-20 w-28 shrink-0 overflow-hidden rounded-xl">
+            <img src="${p.image}" alt="${p.alt}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
+          </span>
+          <span class="min-w-0 flex-1">
+            <span class="flex items-center justify-between gap-2">
+              <span class="text-[11px] tracking-wide text-on-ink/45">${p.code}</span>
+              <span class="tnum text-xs text-on-ink/55">${p.area} м²</span>
+            </span>
+            <span class="mt-1 block truncate font-[var(--font-display)] text-base text-on-ink">${p.name}</span>
+            <span class="mt-1 flex items-center gap-1 text-xs text-accent-soft">Открыть →</span>
+          </span>
+        </button>`).join("");
     };
 
     const animateSwitch = (groupId: string) => {
-      const stageWrap = stage;
-      const rails = Array.from(root.querySelectorAll<HTMLElement>("[data-rail], [data-rail-mobile]"));
       if (reduce) { renderGroup(groupId); return; }
-      stageWrap.style.opacity = "0";
-      stageWrap.style.transform = "translateY(14px)";
-      rails.forEach((r) => { r.style.opacity = "0"; r.style.transform = "translateY(14px)"; });
+      [stage, list].forEach((el) => { el.style.opacity = "0"; el.style.transform = "translateY(14px)"; });
       setTimeout(() => {
         renderGroup(groupId);
-        requestAnimationFrame(() => {
-          stageWrap.style.opacity = ""; stageWrap.style.transform = "";
-          rails.forEach((r) => { r.style.opacity = ""; r.style.transform = ""; });
-        });
+        requestAnimationFrame(() => [stage, list].forEach((el) => { el.style.opacity = ""; el.style.transform = ""; }));
       }, 220);
     };
-
-    root.querySelectorAll<HTMLElement>("[data-rail], [data-rail-mobile]").forEach((r) => {
-      r.style.transition = "opacity .35s cubic-bezier(0.22,1,0.36,1), transform .35s cubic-bezier(0.22,1,0.36,1)";
-    });
+    [stage, list].forEach((el) => { el.style.transition = "opacity .35s cubic-bezier(0.22,1,0.36,1), transform .35s cubic-bezier(0.22,1,0.36,1)"; });
 
     const activate = (groupId: string, focus = false) => {
       tabs.forEach((t) => {
@@ -331,9 +303,10 @@ const payload = {
       });
       const g = data.groups.find((x) => x.id === groupId)!;
       note.style.opacity = "0";
-      setTimeout(() => { note.textContent = g.note; note.style.opacity = "1"; }, reduce ? 0 : 160);
+      setTimeout(() => { note.innerHTML = `${g.note}. Откройте карточку — внутри визуализации, интерьеры, планировки и характеристики.`; note.style.opacity = "1"; }, reduce ? 0 : 160);
       animateSwitch(groupId);
     };
+    note.style.transition = "opacity .3s ease";
 
     tabs.forEach((tab) => tab.addEventListener("click", () => activate(tab.dataset.tab!)));
     root.querySelector("[data-tablist]")!.addEventListener("keydown", (e) => {
@@ -342,11 +315,8 @@ const payload = {
       let next = cur;
       if (ev.key === "ArrowRight") next = (cur + 1) % tabs.length;
       else if (ev.key === "ArrowLeft") next = (cur - 1 + tabs.length) % tabs.length;
-      else if (ev.key === "Home") next = 0;
-      else if (ev.key === "End") next = tabs.length - 1;
-      else return;
-      ev.preventDefault();
-      activate(tabs[next].dataset.tab!, true);
+      else if (ev.key === "Home") next = 0; else if (ev.key === "End") next = tabs.length - 1; else return;
+      ev.preventDefault(); activate(tabs[next].dataset.tab!, true);
     });
 
     // ====================== ПОП-АП ======================
@@ -357,75 +327,87 @@ const payload = {
     const mThumbs = modal.querySelector<HTMLElement>("[data-modal-thumbs]")!;
     const mCounter = modal.querySelector<HTMLElement>("[data-modal-counter]")!;
     const mSpecs = modal.querySelector<HTMLElement>("[data-modal-specs]")!;
+    const mFeatures = modal.querySelector<HTMLElement>("[data-modal-features]")!;
+    const mDesc = modal.querySelector<HTMLElement>("[data-modal-desc]")!;
+    const plansWrap = modal.querySelector<HTMLElement>("[data-modal-plans-wrap]")!;
+    const plansEmpty = modal.querySelector<HTMLElement>("[data-modal-plans-empty]")!;
+    const planTabs = modal.querySelector<HTMLElement>("[data-modal-plan-tabs]")!;
+    const planImg = modal.querySelector<HTMLImageElement>("[data-modal-plan-img]")!;
+    const infoPane = dialog.querySelector<HTMLElement>(".overflow-y-auto")!;
     let gallery: { src: string; alt: string }[] = [];
-    let gi = 0;
-    let lastFocused: HTMLElement | null = null;
-    let currentCode = "";
+    let gi = 0, lastFocused: HTMLElement | null = null, currentCode = "";
 
     const showSlide = (i: number) => {
       gi = (i + gallery.length) % gallery.length;
-      swapImg(mImg, gallery[gi].src);
-      mImg.alt = gallery[gi].alt;
+      swapImg(mImg, gallery[gi].src); mImg.alt = gallery[gi].alt;
       mCounter.textContent = `${gi + 1} / ${gallery.length}`;
       mThumbs.querySelectorAll<HTMLElement>("[data-thumb]").forEach((t, idx) => {
-        t.classList.toggle("ring-2", idx === gi);
-        t.classList.toggle("ring-accent", idx === gi);
-        t.style.opacity = idx === gi ? "1" : "0.55";
+        t.classList.toggle("ring-2", idx === gi); t.classList.toggle("ring-accent", idx === gi);
+        t.style.opacity = idx === gi ? "1" : "0.5";
       });
     };
 
     const openModal = (code: string) => {
-      const p = data.projects[code];
-      if (!p) return;
-      currentCode = code;
-      lastFocused = document.activeElement as HTMLElement;
+      const p = data.projects[code]; if (!p) return;
+      currentCode = code; lastFocused = document.activeElement as HTMLElement;
 
-      gallery = [{ src: p.image, alt: p.alt }, ...data.interiors];
-      gi = 0;
+      const exts = p.gallery && p.gallery.length ? p.gallery : [{ src: p.image, alt: p.alt }];
+      gallery = [...exts, ...data.interiors]; gi = 0;
 
       setText("[data-modal-code]", modal, p.code);
       setText("[data-modal-material]", modal, p.materialLabel);
       setText("[data-modal-name]", modal, p.name);
-      setText("[data-modal-desc]", modal, p.description);
       setText("[data-modal-price]", modal, p.price);
 
+      const paras = p.longDescription && p.longDescription.length ? p.longDescription : [p.description];
+      mDesc.innerHTML = paras.map((t) => `<p>${t}</p>`).join("");
+
       mSpecs.innerHTML = p.specs.map((s) =>
-        `<div class="bg-white/[0.03] px-4 py-4"><dt class="text-xs text-on-ink/45">${s.label}</dt><dd class="mt-1 font-[var(--font-display)] text-base text-on-ink">${s.value}</dd></div>`
-      ).join("");
+        `<div class="bg-white/[0.03] px-4 py-4"><dt class="text-xs text-on-ink/45">${s.label}</dt><dd class="mt-1 font-[var(--font-display)] text-base text-on-ink">${s.value}</dd></div>`).join("");
+
+      const feats = p.features && p.features.length ? p.features : data.defaultFeatures;
+      mFeatures.innerHTML = feats.map((f) =>
+        `<li class="flex items-baseline gap-2.5 text-sm text-on-ink/80"><svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>${f}</li>`).join("");
+
+      // Планировки
+      if (p.plans && p.plans.length) {
+        plansWrap.hidden = false; plansEmpty.hidden = true;
+        planTabs.innerHTML = p.plans.map((pl, idx) =>
+          `<button type="button" data-plan="${idx}" class="rounded-full border px-4 py-2 text-sm transition-colors ${idx === 0 ? "border-accent bg-accent/15 text-accent-soft" : "border-white/15 text-on-ink/60 hover:text-on-ink"}">${pl.floor}</button>`).join("");
+        const setPlan = (idx: number) => {
+          planImg.src = p.plans![idx].src; planImg.alt = `Планировка — ${p.plans![idx].floor}`;
+          planTabs.querySelectorAll<HTMLElement>("[data-plan]").forEach((b, i2) => {
+            const on = i2 === idx;
+            b.className = `rounded-full border px-4 py-2 text-sm transition-colors ${on ? "border-accent bg-accent/15 text-accent-soft" : "border-white/15 text-on-ink/60 hover:text-on-ink"}`;
+          });
+        };
+        planTabs.querySelectorAll<HTMLButtonElement>("[data-plan]").forEach((b) => b.addEventListener("click", () => setPlan(Number(b.dataset.plan))));
+        setPlan(0);
+      } else {
+        plansWrap.hidden = true; plansEmpty.hidden = false;
+      }
 
       mThumbs.innerHTML = gallery.map((g, idx) =>
-        `<button type="button" data-thumb="${idx}" class="relative h-16 w-24 shrink-0 overflow-hidden rounded-lg border border-white/10 transition-opacity"><img src="${g.src}" alt="" loading="lazy" class="h-full w-full object-cover"></button>`
-      ).join("");
-      mThumbs.querySelectorAll<HTMLButtonElement>("[data-thumb]").forEach((t) =>
-        t.addEventListener("click", () => showSlide(Number(t.dataset.thumb))),
-      );
-
+        `<button type="button" data-thumb="${idx}" class="relative h-16 w-24 shrink-0 overflow-hidden rounded-lg border border-white/10 transition-opacity"><img src="${g.src}" alt="" loading="lazy" class="h-full w-full object-cover"></button>`).join("");
+      mThumbs.querySelectorAll<HTMLButtonElement>("[data-thumb]").forEach((t) => t.addEventListener("click", () => showSlide(Number(t.dataset.thumb))));
       showSlide(0);
+      infoPane.scrollTop = 0;
 
-      modal.hidden = false;
-      document.body.style.overflow = "hidden";
-      requestAnimationFrame(() => {
-        overlay.style.opacity = "1";
-        dialog.style.opacity = "1";
-        dialog.style.transform = "translateY(0)";
-      });
+      modal.hidden = false; document.body.style.overflow = "hidden";
+      requestAnimationFrame(() => { overlay.style.opacity = "1"; dialog.style.opacity = "1"; dialog.style.transform = "translateY(0)"; });
       modal.querySelector<HTMLButtonElement>("[data-modal-close]")!.focus();
     };
 
     const closeModal = () => {
-      overlay.style.opacity = "0";
-      dialog.style.opacity = "0";
-      dialog.style.transform = "translateY(16px)";
+      overlay.style.opacity = "0"; dialog.style.opacity = "0"; dialog.style.transform = "translateY(16px)";
       const done = () => { modal.hidden = true; document.body.style.overflow = ""; lastFocused?.focus(); };
       if (reduce) done(); else setTimeout(done, 280);
     };
 
-    // Открытие по карточкам и сцене (делегирование)
     root.addEventListener("click", (e) => {
       const card = (e.target as HTMLElement).closest<HTMLElement>("[data-card]");
       if (card) openModal(card.dataset.card!);
     });
-
     modal.querySelector("[data-modal-close]")!.addEventListener("click", closeModal);
     overlay.addEventListener("click", closeModal);
     modal.querySelector("[data-modal-prev]")!.addEventListener("click", () => showSlide(gi - 1));
@@ -445,20 +427,12 @@ const payload = {
       }
     });
 
-    // CTA внутри поп-апа → форма заявки с пред-заполнением
     modal.querySelectorAll<HTMLButtonElement>("[data-modal-cta]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const kind = btn.dataset.modalCta;
-        const p = data.projects[currentCode];
-        const requestText = kind === "smeta"
-          ? `Смета по проекту ${p.code} «${p.name}»`
-          : `Презентация по проекту ${p.code} «${p.name}»`;
-        // пред-заполняем форму
+        const kind = btn.dataset.modalCta; const p = data.projects[currentCode];
+        const requestText = kind === "smeta" ? `Смета по проекту ${p.code} «${p.name}»` : `Презентация по проекту ${p.code} «${p.name}»`;
         const material = document.querySelector<HTMLSelectElement>("#lf-material");
-        if (material) {
-          const opt = Array.from(material.options).find((o) => o.value === p.materialLabel);
-          if (opt) material.value = opt.value;
-        }
+        if (material) { const opt = Array.from(material.options).find((o) => o.value === p.materialLabel); if (opt) material.value = opt.value; }
         const reqInput = document.querySelector<HTMLInputElement>("#lf-request");
         const reqNote = document.querySelector<HTMLElement>("#lf-request-note");
         if (reqInput) reqInput.value = requestText;
@@ -469,10 +443,7 @@ const payload = {
       });
     });
 
-    // init
     const init = () => { const a = tabs.find((t) => t.getAttribute("aria-selected") === "true"); if (a) moveIndicator(a); };
-    window.addEventListener("load", init);
-    window.addEventListener("resize", init);
-    init();
+    window.addEventListener("load", init); window.addEventListener("resize", init); init();
   }
 </script>
