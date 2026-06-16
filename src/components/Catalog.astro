@@ -157,20 +157,24 @@ const payload = {
           </div>
         </div>
 
+        <!-- Что входит в стоимость (первый, визуальный, сгруппированный блок) -->
+        <section>
+          <div class="flex flex-wrap items-baseline justify-between gap-3">
+            <h4 class="eyebrow text-on-ink/40">Что входит в стоимость</h4>
+            <span class="rounded-full border border-accent/40 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-accent-soft">Комплектация «Под ключ»</span>
+          </div>
+          <p class="mt-4 max-w-2xl text-[15px] leading-relaxed text-on-ink/60">
+            Дом сдаём готовым к проживанию — от фундамента до чистовой отделки и
+            инженерии. Ниже базовый состав; точный — в смете под ваш участок и фиксируется в договоре.
+          </p>
+          <div data-modal-includes class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2"></div>
+        </section>
+
         <!-- О проекте -->
         <section>
           <h4 class="eyebrow text-on-ink/40">О проекте</h4>
           <div data-modal-desc class="mt-5 max-w-2xl space-y-4 text-base leading-relaxed text-on-ink/75 sm:text-lg"></div>
           <ul data-modal-feats class="mt-6 flex flex-wrap gap-2"></ul>
-        </section>
-
-        <!-- Что входит в стоимость (визуально, сгруппированно) -->
-        <section>
-          <div class="flex flex-wrap items-baseline justify-between gap-3">
-            <h4 class="eyebrow text-on-ink/40">Что входит в стоимость</h4>
-            <span class="text-xs text-on-ink/40">Фиксируется в договоре · детально — в смете</span>
-          </div>
-          <div data-modal-includes class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2"></div>
         </section>
 
         <!-- Характеристики -->
@@ -344,7 +348,7 @@ const payload = {
   type Plan = { floor: string; src: string };
   type Img = { src: string; alt: string };
   type P = { code: string; name: string; material: string; materialLabel: string; area: number; floors: number; price: string; image: string; alt: string; description: string; summary: string; specs: Spec[]; longDescription?: string[]; features?: string[]; gallery?: Img[]; plans?: Plan[] };
-  type Payload = { groups: { id: string; label: string; note: string; codes: string[] }[]; projects: Record<string, P>; interiors: Img[]; defaultFeatures: string[]; includes: { title: string; icon: string; items: string[] }[] };
+  type Payload = { groups: { id: string; label: string; note: string; codes: string[] }[]; projects: Record<string, P>; interiors: Img[]; defaultFeatures: string[]; includes: { title: string; sub: string; icon: string; items: string[] }[] };
 
   const root = document.querySelector<HTMLElement>("#catalog");
   if (root) {
@@ -458,9 +462,9 @@ const payload = {
 
       const feats = p.features && p.features.length ? p.features : data.defaultFeatures;
       mFeats.innerHTML = feats.map((f) => `<li class="rounded-full border border-white/12 bg-white/[0.03] px-3.5 py-1.5 text-xs text-on-ink/75">${f}</li>`).join("");
-      mIncludes.innerHTML = data.includes.map((g) => `<div class="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-        <div class="flex items-center gap-3"><span class="grid h-9 w-9 place-items-center rounded-lg border border-white/12 text-accent-soft"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${g.icon}</svg></span><span class="font-[var(--font-display)] text-base text-on-ink">${g.title}</span></div>
-        <ul class="mt-4 space-y-2">${g.items.map((it) => `<li class="flex items-baseline gap-2.5 text-sm text-on-ink/70"><span class="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent"></span>${it}</li>`).join("")}</ul>
+      mIncludes.innerHTML = data.includes.map((g) => `<div class="rounded-2xl border border-white/10 bg-white/[0.02] p-5 transition-colors duration-300 hover:border-accent/30 sm:p-6">
+        <div class="flex items-center gap-3.5"><span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-accent/30 bg-accent/[0.06] text-accent-soft"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${g.icon}</svg></span><span><span class="block font-[var(--font-display)] text-lg text-on-ink">${g.title}</span><span class="mt-0.5 block text-xs text-on-ink/45">${g.sub}</span></span></div>
+        <ul class="mt-5 space-y-2.5 border-t border-white/10 pt-5">${g.items.map((it) => `<li class="flex items-baseline gap-2.5 text-sm text-on-ink/75"><svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>${it}</li>`).join("")}</ul>
       </div>`).join("");
 
       // Визуализации — все внешние кадры (первый крупный, если их несколько)
