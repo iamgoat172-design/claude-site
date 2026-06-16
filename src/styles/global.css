@@ -281,6 +281,19 @@ body {
 .no-scrollbar { scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
+/* Ken Burns — медленный «дышащий» зум кадра (премиальное ambient-движение) */
+.kenburns {
+  animation: kb 20s ease-in-out infinite alternate;
+  transform-origin: 60% 40%;
+}
+@keyframes kb {
+  from { transform: scale(1.04); }
+  to { transform: scale(1.13) translate(-1.5%, -1%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kenburns { animation: none; transform: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
   .rise { opacity: 1; transform: none; transition: none; }

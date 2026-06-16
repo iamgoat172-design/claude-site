@@ -223,6 +223,36 @@ const payload = {
       <p class="mt-3 text-center text-xs text-on-ink/40">Листайте вниз — проекты сменяют друг друга</p>
     </div>
     )}
+
+    {variant === "collection" && (
+    <div class="mt-8" data-collection>
+      <div class="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] border border-white/10 sm:aspect-[16/10] lg:aspect-[16/8]">
+        <img data-img-a src={initSel.image} alt={initSel.alt} class="kenburns absolute inset-0 h-full w-full object-cover" style="opacity:1" />
+        <img data-img-b src="" alt="" class="kenburns absolute inset-0 h-full w-full object-cover" style="opacity:0" />
+        <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-ink/70 via-transparent to-transparent"></div>
+
+        <div class="absolute inset-x-0 bottom-0 p-6 sm:p-10 lg:max-w-2xl">
+          <p class="eyebrow text-on-ink/55"><span data-counter>01 / 05</span> · Коллекция</p>
+          <h3 class="display-xl mt-3 text-on-ink" data-sel-name>{initSel.name}</h3>
+          <span class="mt-4 block h-px w-16 bg-accent"></span>
+          <p class="mt-4 text-lg text-on-ink/75" data-sel-essence>{initSel.hook}</p>
+          <div class="mt-6 flex flex-wrap items-end gap-x-8 gap-y-3" data-sel-meta-wrap></div>
+          <div class="mt-8 flex flex-wrap items-center gap-6">
+            <span class="tnum font-[var(--font-display)] text-2xl text-accent-soft" data-sel-price>{initSel.price}</span>
+            <button type="button" data-open class="group inline-flex items-center gap-2 text-sm font-semibold text-on-ink">
+              Смотреть проект <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </button>
+            <button type="button" data-calc class="text-sm text-on-ink/55 underline-offset-4 transition-colors hover:text-accent hover:underline">Запросить смету</button>
+          </div>
+        </div>
+        <div class="absolute inset-x-0 bottom-0 h-px bg-white/10"><div class="h-full bg-accent transition-[width] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]" data-progress style="width:20%"></div></div>
+      </div>
+
+      <!-- Типографский индекс коллекции -->
+      <div class="mt-8 border-t border-white/10" data-list role="listbox" aria-label="Проекты"></div>
+    </div>
+    )}
   </div>
 
   <script type="application/json" data-catalog set:html={JSON.stringify(payload)} />
@@ -500,7 +530,26 @@ const payload = {
     const isShowcase = !!root.querySelector("[data-stage]");
     const isCoverflow = !!root.querySelector("[data-coverflow]");
     const isSpread = !!root.querySelector("[data-spread]");
+    const isCollection = !!root.querySelector("[data-collection]");
     const counterEl = root.querySelector<HTMLElement>("[data-counter]");
+    const progressEl = root.querySelector<HTMLElement>("[data-progress]");
+    const metaWrap = root.querySelector<HTMLElement>("[data-sel-meta-wrap]");
+    const imgA = root.querySelector<HTMLImageElement>("[data-img-a]");
+    const imgB = root.querySelector<HTMLImageElement>("[data-img-b]");
+    let topA = true;
+    const crossfade = (src: string) => {
+      if (!imgA || !imgB) return;
+      if (reduce) { (topA ? imgA : imgB).src = src; return; }
+      const incoming = topA ? imgB : imgA, outgoing = topA ? imgA : imgB;
+      const pre = new Image();
+      pre.onload = () => {
+        incoming.src = src;
+        incoming.classList.remove("kenburns"); void incoming.offsetWidth; incoming.classList.add("kenburns");
+        incoming.style.opacity = "1"; outgoing.style.opacity = "0";
+        topA = !topA;
+      };
+      pre.src = src;
+    };
     const dotsEl = root.querySelector<HTMLElement>("[data-dots]");
     const selTag = root.querySelector<HTMLElement>("[data-sel-tag]");
     let codesNow: string[] = data.groups[0].codes;
@@ -508,6 +557,14 @@ const payload = {
     // Применить кадр/инфо выбранного (без смены состояния выбора) — для предпросмотра
     const applyFeatured = (code: string) => {
       const p = data.projects[code]; if (!p) return;
+      if (isCollection) {
+        crossfade(p.image);
+        setText("[data-sel-name]", root, p.name);
+        setText("[data-sel-essence]", root, p.hook);
+        setText("[data-sel-price]", root, p.price);
+        if (metaWrap) metaWrap.innerHTML = [["Площадь", `${p.area} м²`], ["Этажей", String(p.floors)], ["Материал", p.materialLabel]].map(([l, v]) => `<span class="flex flex-col gap-1 border-l border-white/15 pl-4"><span class="text-[11px] uppercase tracking-[0.16em] text-on-ink/40">${l}</span><span class="tnum font-[var(--font-display)] text-lg text-on-ink">${v}</span></span>`).join("");
+        return;
+      }
       swapImg(selImg, p.image); selImg.alt = p.alt; swapImg(backdrop, p.image);
       setText("[data-sel-code]", root, p.code);
       setText("[data-sel-name]", root, p.name);
@@ -520,6 +577,7 @@ const payload = {
     const updateNav = (code: string) => {
       const idx = codesNow.indexOf(code); if (idx < 0) return;
       if (counterEl) counterEl.textContent = `${String(idx + 1).padStart(2, "0")} / ${String(codesNow.length).padStart(2, "0")}`;
+      if (progressEl) progressEl.style.width = `${((idx + 1) / codesNow.length) * 100}%`;
       if (dotsEl) dotsEl.querySelectorAll<HTMLElement>("[data-dot]").forEach((d, i) => {
         const on = i === idx;
         d.className = `h-1.5 rounded-full transition-all duration-300 ${on ? "w-6 bg-accent" : "w-1.5 bg-white/25 hover:bg-white/50"}`;
@@ -586,7 +644,14 @@ const payload = {
         </div>
       </div>
     </section>`;
-    const cardMarkup = (p: P, active: boolean) => (isCoverflow ? coverCard : isShowcase ? thumbCard : bigCard)(p, active);
+    const collectionRow = (p: P, active: boolean, i: number) => `<button type="button" data-select="${p.code}" role="option" aria-selected="${active}" class="group flex w-full items-center gap-4 border-b border-white/10 py-4 text-left transition-colors duration-300">
+      <span class="h-5 w-px shrink-0 bg-accent opacity-0 transition-opacity group-aria-selected:opacity-100"></span>
+      <span class="tnum text-xs text-on-ink/30 transition-colors group-aria-selected:text-accent-soft">${String(i + 1).padStart(2, "0")}</span>
+      <span class="font-[var(--font-display)] text-lg text-on-ink/45 transition-colors group-aria-selected:text-on-ink group-hover:text-on-ink/80 sm:text-xl">${p.name}</span>
+      <span class="ml-auto text-xs text-on-ink/35">${p.hook}</span>
+      <span class="tnum hidden text-xs text-on-ink/30 sm:block">${p.area} м²</span>
+    </button>`;
+    const cardMarkup = (p: P, active: boolean, i = 0) => (isCollection ? collectionRow(p, active, i) : (isCoverflow ? coverCard : isShowcase ? thumbCard : bigCard)(p, active));
 
     let spreadIO: IntersectionObserver | null = null;
     const observeSpreads = () => {
@@ -599,7 +664,7 @@ const payload = {
       const g = data.groups.find((x) => x.id === groupId)!;
       codesNow = g.codes;
       if (isSpread) { list.innerHTML = g.codes.map((c, i) => spreadCard(data.projects[c], i, g.codes.length)).join(""); observeSpreads(); return; }
-      list.innerHTML = g.codes.map((c, i) => cardMarkup(data.projects[c], i === 0)).join("");
+      list.innerHTML = g.codes.map((c, i) => cardMarkup(data.projects[c], i === 0, i)).join("");
       if (isCoverflow) layoutCover(0);
       if (dotsEl) dotsEl.innerHTML = g.codes.map(() => `<button type="button" data-dot class="h-1.5 w-1.5 rounded-full bg-white/25"></button>`).join("");
     };
@@ -626,6 +691,7 @@ const payload = {
       const code = b.dataset.select!;
       if (isSpread) return; // в развороте действуют кнопки внутри
       if (isCoverflow) { if (code === selected) openModal(code); else selectProject(code); return; }
+      if (isCollection) { selectProject(code); return; } // смена кадра; проект открывает CTA
       selectProject(code);
       if (!canHover) openModal(code); // на тач — сразу карточка
     });
@@ -635,8 +701,8 @@ const payload = {
       list.addEventListener("mouseleave", () => applyFeatured(selected));
     }
 
-    // Навигация showcase/coverflow: стрелки, точки, клавиатура
-    if (isShowcase || isCoverflow) {
+    // Навигация showcase/coverflow/collection: стрелки, точки, клавиатура
+    if (isShowcase || isCoverflow || isCollection) {
       const step = (dir: number) => { const i = codesNow.indexOf(selected); selectProject(codesNow[(i + dir + codesNow.length) % codesNow.length]); };
       root.querySelector("[data-prev]")?.addEventListener("click", () => step(-1));
       root.querySelector("[data-next]")?.addEventListener("click", () => step(1));
@@ -917,7 +983,7 @@ const payload = {
     const init = () => { const a = tabs.find((t) => t.getAttribute("aria-selected") === "true"); if (a) moveIndicator(a); };
     window.addEventListener("load", init); window.addEventListener("resize", init); init();
     // Инициализация вариантов
-    if (isShowcase || isCoverflow) { buildList(data.groups[0].id); selectProject(selected); }
+    if (isShowcase || isCoverflow || isCollection) { buildList(data.groups[0].id); selectProject(selected); }
     if (isSpread) { buildList(data.groups[0].id); selected = codesNow[0]; }
   }
 </script>
