@@ -1,5 +1,5 @@
 ---
-import { projects, materials, INTERIORS, DEFAULT_FEATURES, DEFAULT_INCLUDES, type Material } from "../data/projects";
+import { projects, materials, INTERIORS, DEFAULT_FEATURES, INCLUDE_STAGES, type Material } from "../data/projects";
 
 const order: Material[] = ["timber", "ceramic"];
 const byMaterial = (m: Material) => projects.filter((p) => p.material === m);
@@ -17,7 +17,7 @@ const payload = {
   projects: Object.fromEntries(projects.map((p) => [p.code, { ...p, materialLabel: materials[p.material].label }])),
   interiors: INTERIORS,
   defaultFeatures: DEFAULT_FEATURES,
-  includes: DEFAULT_INCLUDES,
+  stages: INCLUDE_STAGES,
 };
 ---
 
@@ -74,7 +74,7 @@ const payload = {
               <p class="mt-2 text-sm text-on-ink/60" data-sel-meta>{initSel.area} м² · {initSel.floors} этажа</p>
             </div>
             <div class="text-right">
-              <p class="text-xs text-on-ink/45">Стоимость под ключ</p>
+              <p class="text-xs text-on-ink/45">Стоимость</p>
               <p class="tnum font-[var(--font-display)] text-2xl text-accent-soft" data-sel-price>{initSel.price}</p>
             </div>
           </div>
@@ -144,7 +144,7 @@ const payload = {
         <!-- Цена + summary + CTA -->
         <div class="flex flex-wrap items-end justify-between gap-6 border-b border-white/10 pb-9">
           <div>
-            <p class="text-xs text-on-ink/45">Стоимость под ключ</p>
+            <p class="text-xs text-on-ink/45">Стоимость</p>
             <p data-modal-price class="tnum mt-1 font-[var(--font-display)] text-3xl text-accent-soft"></p>
             <p data-modal-summary class="mt-2 text-sm text-on-ink/60"></p>
           </div>
@@ -157,17 +157,15 @@ const payload = {
           </div>
         </div>
 
-        <!-- Что входит в стоимость (первый, визуальный, сгруппированный блок) -->
+        <!-- Что входит в стоимость — этапы (табы) -->
         <section>
-          <div class="flex flex-wrap items-baseline justify-between gap-3">
-            <h4 class="eyebrow text-on-ink/40">Что входит в стоимость</h4>
-            <span class="rounded-full border border-accent/40 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-accent-soft">Комплектация «Под ключ»</span>
-          </div>
+          <h4 class="eyebrow text-on-ink/40">Что входит в стоимость</h4>
           <p class="mt-4 max-w-2xl text-[15px] leading-relaxed text-on-ink/60">
-            Дом сдаём готовым к проживанию — от фундамента до чистовой отделки и
-            инженерии. Ниже базовый состав; точный — в смете под ваш участок и фиксируется в договоре.
+            Полный цикл — от проекта до сборки на участке. Точный состав
+            фиксируется в смете и договоре.
           </p>
-          <div data-modal-includes class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2"></div>
+          <div data-stages-tabs class="no-scrollbar mt-6 flex gap-2 overflow-x-auto pb-1" role="tablist" aria-label="Этапы"></div>
+          <div data-stages-panel class="mt-5"></div>
         </section>
 
         <!-- О проекте -->
@@ -197,7 +195,13 @@ const payload = {
 
         <!-- Планировки -->
         <section data-modal-plans-wrap>
-          <h4 class="eyebrow text-on-ink/40">Планировки</h4>
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <h4 class="eyebrow text-on-ink/40">Планировки</h4>
+            <button type="button" data-plan-change class="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-on-ink transition-colors hover:border-accent hover:text-accent">
+              <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z" stroke-linejoin="round"/></svg>
+              Поменять планировку
+            </button>
+          </div>
           <div data-modal-plan-tabs class="mt-5 flex gap-2"></div>
           <div class="mt-3 overflow-hidden rounded-2xl border border-white/10 bg-paper">
             <img data-modal-plan-img src="" alt="" class="mx-auto w-full max-w-3xl object-contain" />
@@ -254,7 +258,7 @@ const payload = {
           <ul class="mt-5 space-y-3">
             {
               [
-                "Смету под ключ по проекту (PDF)",
+                "Смету по проекту (PDF)",
                 "Планировки этажей",
                 "Презентацию проекта",
                 "Консультацию архитектора",
@@ -348,7 +352,8 @@ const payload = {
   type Plan = { floor: string; src: string };
   type Img = { src: string; alt: string };
   type P = { code: string; name: string; material: string; materialLabel: string; area: number; floors: number; price: string; image: string; alt: string; description: string; summary: string; specs: Spec[]; longDescription?: string[]; features?: string[]; gallery?: Img[]; plans?: Plan[] };
-  type Payload = { groups: { id: string; label: string; note: string; codes: string[] }[]; projects: Record<string, P>; interiors: Img[]; defaultFeatures: string[]; includes: { title: string; sub: string; icon: string; items: string[] }[] };
+  type Stage = { label: string; icon: string; heading: string; items: { t: string; d: string }[]; badge?: string };
+  type Payload = { groups: { id: string; label: string; note: string; codes: string[] }[]; projects: Record<string, P>; interiors: Img[]; defaultFeatures: string[]; stages: Stage[] };
 
   const root = document.querySelector<HTMLElement>("#catalog");
   if (root) {
@@ -425,7 +430,8 @@ const payload = {
     const videoBg = modal.querySelector<HTMLImageElement>("[data-modal-video-bg]")!;
     const mSpecs = modal.querySelector<HTMLElement>("[data-modal-specs]")!;
     const mFeats = modal.querySelector<HTMLElement>("[data-modal-feats]")!;
-    const mIncludes = modal.querySelector<HTMLElement>("[data-modal-includes]")!;
+    const stagesTabs = modal.querySelector<HTMLElement>("[data-stages-tabs]")!;
+    const stagesPanel = modal.querySelector<HTMLElement>("[data-stages-panel]")!;
     const mDesc = modal.querySelector<HTMLElement>("[data-modal-desc]")!;
     const mVis = modal.querySelector<HTMLElement>("[data-modal-vis]")!;
     const mVisWrap = modal.querySelector<HTMLElement>("[data-modal-vis-wrap]")!;
@@ -438,6 +444,34 @@ const payload = {
     let lastFocused: HTMLElement | null = null;
 
     const imgCard = (g: Img, cls: string) => `<figure class="overflow-hidden rounded-2xl border border-white/10 ${cls}"><img src="${g.src}" alt="${g.alt}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.04]"></figure>`;
+
+    // Этапы «что входит» (табы)
+    const setStage = (i: number) => {
+      const s = data.stages[i];
+      stagesTabs.querySelectorAll<HTMLElement>("[data-stagetab]").forEach((b, n) => {
+        const on = n === i;
+        b.setAttribute("aria-selected", String(on));
+      });
+      stagesPanel.innerHTML = `<div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+        <div class="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-2xl border border-white/10 bg-ink-2">
+          <div class="px-6 text-center text-on-ink/40"><svg class="mx-auto h-12 w-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">${s.icon}</svg><p class="mt-3 text-xs">Фото этапа · ${s.label} (заглушка)</p></div>
+          ${s.badge ? `<div class="absolute inset-x-4 bottom-4 flex items-center gap-2 rounded-xl border border-accent/30 bg-accent/15 px-4 py-3 text-sm text-accent-soft"><svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>${s.badge}</div>` : ""}
+        </div>
+        <div>
+          <p class="font-[var(--font-display)] text-xl text-on-ink">${s.heading}</p>
+          <ul class="mt-5 space-y-3.5">${s.items.map((it) => `<li class="flex gap-3 text-sm leading-relaxed"><svg class="mt-1 h-4 w-4 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg><span><span class="font-semibold text-on-ink">${it.t}</span> <span class="text-on-ink/60">— ${it.d}</span></span></li>`).join("")}</ul>
+          <button type="button" data-stage-cta class="mt-7 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">Получить полную комплектацию</button>
+        </div>
+      </div>`;
+    };
+    const renderStages = () => {
+      stagesTabs.innerHTML = data.stages.map((s, i) => `<button type="button" role="tab" data-stagetab="${i}" aria-selected="${i === 0}" class="group flex shrink-0 flex-col items-center gap-2 rounded-2xl border px-4 py-3 transition-colors aria-selected:border-accent/60 aria-selected:bg-accent/10 border-white/10 bg-white/[0.02] hover:border-white/25">
+        <svg class="h-6 w-6 text-on-ink/45 transition-colors group-aria-selected:text-accent-soft" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">${s.icon}</svg>
+        <span class="whitespace-nowrap text-[11px] font-medium uppercase tracking-wide text-on-ink/55 transition-colors group-aria-selected:text-on-ink">${s.label}</span>
+      </button>`).join("");
+      stagesTabs.querySelectorAll<HTMLButtonElement>("[data-stagetab]").forEach((b) => b.addEventListener("click", () => setStage(Number(b.dataset.stagetab))));
+      setStage(0);
+    };
 
     const openModal = (code: string) => {
       const p = data.projects[code]; if (!p) return;
@@ -462,10 +496,7 @@ const payload = {
 
       const feats = p.features && p.features.length ? p.features : data.defaultFeatures;
       mFeats.innerHTML = feats.map((f) => `<li class="rounded-full border border-white/12 bg-white/[0.03] px-3.5 py-1.5 text-xs text-on-ink/75">${f}</li>`).join("");
-      mIncludes.innerHTML = data.includes.map((g) => `<div class="rounded-2xl border border-white/10 bg-white/[0.02] p-5 transition-colors duration-300 hover:border-accent/30 sm:p-6">
-        <div class="flex items-center gap-3.5"><span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-accent/30 bg-accent/[0.06] text-accent-soft"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${g.icon}</svg></span><span><span class="block font-[var(--font-display)] text-lg text-on-ink">${g.title}</span><span class="mt-0.5 block text-xs text-on-ink/45">${g.sub}</span></span></div>
-        <ul class="mt-5 space-y-2.5 border-t border-white/10 pt-5">${g.items.map((it) => `<li class="flex items-baseline gap-2.5 text-sm text-on-ink/75"><svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>${it}</li>`).join("")}</ul>
-      </div>`).join("");
+      renderStages();
 
       // Визуализации — все внешние кадры (первый крупный, если их несколько)
       if (exts.length) {
@@ -540,6 +571,8 @@ const payload = {
       presentation: ["Презентация", "Получить презентацию"],
       video: ["Видеообзор", "Запросить видеообзор"],
       calc: ["Расчёт", "Получить расчёт"],
+      layout: ["Планировка", "Изменить планировку"],
+      complectation: ["Комплектация", "Получить комплектацию"],
     };
     let reqMethod = "telegram", reqIntent = "smeta", reqProject = selected, reqLastFocus: HTMLElement | null = null;
 
@@ -642,6 +675,12 @@ const payload = {
     // CTA → открыть модалку заявки (закрыв карточку проекта, если открыта)
     modal.querySelectorAll<HTMLButtonElement>("[data-modal-cta]").forEach((btn) => btn.addEventListener("click", () => { const k = btn.dataset.modalCta!; closeModal(); setTimeout(() => openRequest(k), reduce ? 0 : 320); }));
     root.querySelectorAll<HTMLElement>("[data-calc]").forEach((b) => b.addEventListener("click", () => openRequest("calc")));
+    // CTA внутри карточки: «получить полную комплектацию» и «поменять планировку»
+    modal.addEventListener("click", (e) => {
+      const t = e.target as HTMLElement;
+      if (t.closest("[data-stage-cta]")) { closeModal(); setTimeout(() => openRequest("complectation"), reduce ? 0 : 320); }
+      else if (t.closest("[data-plan-change]")) { closeModal(); setTimeout(() => openRequest("layout"), reduce ? 0 : 320); }
+    });
 
     const init = () => { const a = tabs.find((t) => t.getAttribute("aria-selected") === "true"); if (a) moveIndicator(a); };
     window.addEventListener("load", init); window.addEventListener("resize", init); init();
