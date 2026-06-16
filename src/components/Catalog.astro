@@ -178,6 +178,51 @@ const payload = {
       <div class="mt-4 flex justify-center gap-2" data-dots aria-hidden="true"></div>
     </div>
     )}
+
+    {variant === "coverflow" && (
+    <div class="mt-8" data-coverflow>
+      <div class="relative">
+        <div class="relative mx-auto h-[clamp(300px,52vh,560px)] [perspective:1800px]">
+          <div class="relative h-full w-full [transform-style:preserve-3d]" data-list role="listbox" aria-label="Проекты"></div>
+        </div>
+        <button type="button" data-prev aria-label="Предыдущий проект" class="absolute left-2 top-1/2 z-[60] grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-ink/50 text-on-ink backdrop-blur-md transition-colors hover:border-accent hover:text-accent sm:left-6">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" data-next aria-label="Следующий проект" class="absolute right-2 top-1/2 z-[60] grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-ink/50 text-on-ink backdrop-blur-md transition-colors hover:border-accent hover:text-accent sm:right-6">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="glass hairline-top mx-auto mt-6 max-w-3xl rounded-[24px] p-6 sm:p-7">
+        <div class="flex items-center justify-between gap-3">
+          <span class="flex items-center gap-2">
+            <span class="rounded-full border border-white/15 px-3 py-1 text-xs tracking-wide text-on-ink/80" data-sel-code></span>
+            <span class="rounded-full bg-accent/90 px-3 py-1 text-xs font-semibold text-paper" data-sel-tag></span>
+          </span>
+          <span class="tnum text-xs text-on-ink/55" data-counter></span>
+        </div>
+        <h3 class="mt-4 font-[var(--font-display)] text-2xl text-on-ink sm:text-3xl" data-sel-name></h3>
+        <p class="mt-2 text-sm text-accent-soft" data-sel-hook></p>
+        <div class="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-5">
+          <div>
+            <p class="text-sm text-on-ink/60" data-sel-meta></p>
+            <p class="tnum mt-1 font-[var(--font-display)] text-2xl text-accent-soft" data-sel-price></p>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <button type="button" data-open class="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">Открыть проект</button>
+            <button type="button" data-calc class="inline-flex items-center rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-on-ink transition-colors hover:border-accent hover:text-accent">Получить расчёт</button>
+          </div>
+        </div>
+      </div>
+      <div class="mt-5 flex justify-center gap-2" data-dots aria-hidden="true"></div>
+    </div>
+    )}
+
+    {variant === "spread" && (
+    <div class="mt-8">
+      <div class="no-scrollbar h-[82vh] snap-y snap-mandatory overflow-y-auto rounded-[28px] border border-white/10" data-list data-spread role="listbox" aria-label="Проекты"></div>
+      <p class="mt-3 text-center text-xs text-on-ink/40">Листайте вниз — проекты сменяют друг друга</p>
+    </div>
+    )}
   </div>
 
   <script type="application/json" data-catalog set:html={JSON.stringify(payload)} />
@@ -453,6 +498,8 @@ const payload = {
     const moveIndicator = (tab: HTMLButtonElement) => { indicator.style.width = `${tab.offsetWidth}px`; indicator.style.transform = `translateX(${tab.offsetLeft - 6}px)`; };
     const canHover = window.matchMedia("(hover: hover)").matches;
     const isShowcase = !!root.querySelector("[data-stage]");
+    const isCoverflow = !!root.querySelector("[data-coverflow]");
+    const isSpread = !!root.querySelector("[data-spread]");
     const counterEl = root.querySelector<HTMLElement>("[data-counter]");
     const dotsEl = root.querySelector<HTMLElement>("[data-dots]");
     const selTag = root.querySelector<HTMLElement>("[data-sel-tag]");
@@ -478,6 +525,16 @@ const payload = {
         d.className = `h-1.5 rounded-full transition-all duration-300 ${on ? "w-6 bg-accent" : "w-1.5 bg-white/25 hover:bg-white/50"}`;
       });
     };
+    const layoutCover = (center: number) => {
+      Array.from(list.querySelectorAll<HTMLElement>("[data-select]")).forEach((card, i) => {
+        const off = i - center, a = Math.abs(off);
+        card.style.transform = `translate(-50%,-50%) translateX(${off * 52}%) translateZ(${-a * 220}px) rotateY(${off * -34}deg) scale(${off === 0 ? 1 : 0.86})`;
+        card.style.opacity = a > 2 ? "0" : "1";
+        card.style.zIndex = String(100 - a);
+        card.style.pointerEvents = a > 2 ? "none" : "auto";
+        card.style.filter = off === 0 ? "none" : "brightness(.62)";
+      });
+    };
     const selectProject = (code: string) => {
       selected = code;
       applyFeatured(code);
@@ -486,6 +543,7 @@ const payload = {
         b.setAttribute("aria-selected", String(on));
         if (on && isShowcase) b.scrollIntoView({ behavior: reduce ? "auto" : "smooth", inline: "center", block: "nearest" });
       });
+      if (isCoverflow) layoutCover(codesNow.indexOf(code));
       updateNav(code);
     };
 
@@ -502,12 +560,47 @@ const payload = {
       <span class="absolute left-2 top-2 rounded-full bg-ink/50 px-2 py-0.5 text-[10px] text-on-ink/80 backdrop-blur-md">${p.code}</span>
       <span class="absolute inset-x-0 bottom-0 p-2.5"><span class="block truncate font-[var(--font-display)] text-sm text-on-ink">${p.name}</span><span class="tnum text-[11px] text-on-ink/60">${p.area} м²</span></span>
     </button>`;
-    const cardMarkup = (p: P, active: boolean) => (isShowcase ? thumbCard : bigCard)(p, active);
+    const coverCard = (p: P, active: boolean) => `<button type="button" data-select="${p.code}" role="option" aria-selected="${active}" class="absolute left-1/2 top-1/2 aspect-[4/3] w-[clamp(240px,40vw,560px)] overflow-hidden rounded-[24px] border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,.55)] transition-[transform,opacity,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform">
+      <img src="${p.image}" alt="${p.alt}" class="absolute inset-0 h-full w-full object-cover">
+      <span class="absolute inset-0 bg-gradient-to-t from-ink/85 to-transparent"></span>
+      <span class="absolute left-3 top-3 rounded-full bg-ink/50 px-2.5 py-1 text-[10px] text-on-ink/80 backdrop-blur-md">${p.code}</span>
+      <span class="absolute inset-x-0 bottom-0 p-4"><span class="block font-[var(--font-display)] text-lg text-on-ink">${p.name}</span><span class="block text-xs text-accent-soft">${p.hook}</span></span>
+    </button>`;
+    const spreadCard = (p: P, i: number, total: number) => `<section data-select="${p.code}" class="relative flex h-[82vh] w-full snap-start snap-always items-end overflow-hidden">
+      <img src="${p.image}" alt="${p.alt}" class="absolute inset-0 h-full w-full object-cover">
+      <span class="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/10"></span>
+      <span class="absolute inset-0 bg-gradient-to-r from-ink/70 to-transparent"></span>
+      <span class="tnum absolute right-6 top-6 text-sm text-on-ink/60">${String(i + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}</span>
+      <div class="relative z-10 w-full p-7 sm:p-12 lg:max-w-3xl">
+        <span class="tnum block font-[var(--font-display)] text-5xl leading-none text-white/15 sm:text-7xl">${String(i + 1).padStart(2, "0")}</span>
+        <span class="mt-3 inline-flex items-center gap-2"><span class="rounded-full border border-white/15 px-3 py-1 text-xs text-on-ink/80">${p.code}</span>${p.tag ? `<span class="rounded-full bg-accent/90 px-3 py-1 text-xs font-semibold text-paper">${p.tag}</span>` : ""}</span>
+        <h3 class="display-lg mt-3 text-on-ink">${p.name}</h3>
+        <p class="mt-3 text-lg text-accent-soft">${p.hook}</p>
+        <p class="mt-2 text-on-ink/70">${p.area} м² · ${p.floors} этажа · ${p.summary}</p>
+        <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <span class="tnum font-[var(--font-display)] text-2xl text-accent-soft">${p.price}</span>
+          <div class="flex flex-wrap gap-3">
+            <button type="button" data-open class="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">Открыть проект</button>
+            <button type="button" data-calc class="inline-flex items-center rounded-full border border-white/25 px-6 py-3.5 text-sm font-semibold text-on-ink transition-colors hover:border-accent hover:text-accent">Получить расчёт</button>
+          </div>
+        </div>
+      </div>
+    </section>`;
+    const cardMarkup = (p: P, active: boolean) => (isCoverflow ? coverCard : isShowcase ? thumbCard : bigCard)(p, active);
+
+    let spreadIO: IntersectionObserver | null = null;
+    const observeSpreads = () => {
+      spreadIO?.disconnect();
+      spreadIO = new IntersectionObserver((ents) => ents.forEach((e) => { if (e.isIntersecting && e.intersectionRatio > 0.55) { const c = (e.target as HTMLElement).dataset.select; if (c) selected = c; } }), { root: list, threshold: [0.55] });
+      list.querySelectorAll<HTMLElement>("[data-select]").forEach((s) => spreadIO!.observe(s));
+    };
 
     const buildList = (groupId: string) => {
       const g = data.groups.find((x) => x.id === groupId)!;
       codesNow = g.codes;
+      if (isSpread) { list.innerHTML = g.codes.map((c, i) => spreadCard(data.projects[c], i, g.codes.length)).join(""); observeSpreads(); return; }
       list.innerHTML = g.codes.map((c, i) => cardMarkup(data.projects[c], i === 0)).join("");
+      if (isCoverflow) layoutCover(0);
       if (dotsEl) dotsEl.innerHTML = g.codes.map(() => `<button type="button" data-dot class="h-1.5 w-1.5 rounded-full bg-white/25"></button>`).join("");
     };
 
@@ -530,17 +623,20 @@ const payload = {
     list.addEventListener("click", (e) => {
       const b = (e.target as HTMLElement).closest<HTMLElement>("[data-select]");
       if (!b) return;
-      selectProject(b.dataset.select!);
-      if (!canHover) openModal(b.dataset.select!); // на тач — сразу карточка
+      const code = b.dataset.select!;
+      if (isSpread) return; // в развороте действуют кнопки внутри
+      if (isCoverflow) { if (code === selected) openModal(code); else selectProject(code); return; }
+      selectProject(code);
+      if (!canHover) openModal(code); // на тач — сразу карточка
     });
-    // Живой предпросмотр выбранного дома при наведении на проекты
-    if (canHover) {
+    // Живой предпросмотр при наведении (только список/кинолента)
+    if (canHover && !isCoverflow && !isSpread) {
       list.addEventListener("mouseover", (e) => { const b = (e.target as HTMLElement).closest<HTMLElement>("[data-select]"); if (b) applyFeatured(b.dataset.select!); });
       list.addEventListener("mouseleave", () => applyFeatured(selected));
     }
 
-    // Навигация showcase: стрелки, точки, клавиатура
-    if (isShowcase) {
+    // Навигация showcase/coverflow: стрелки, точки, клавиатура
+    if (isShowcase || isCoverflow) {
       const step = (dir: number) => { const i = codesNow.indexOf(selected); selectProject(codesNow[(i + dir + codesNow.length) % codesNow.length]); };
       root.querySelector("[data-prev]")?.addEventListener("click", () => step(-1));
       root.querySelector("[data-next]")?.addEventListener("click", () => step(1));
@@ -551,6 +647,13 @@ const payload = {
         if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
         else if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
       });
+      // Drag для cover-flow
+      if (isCoverflow) {
+        const cf = root.querySelector<HTMLElement>("[data-coverflow]");
+        let sx = 0, dragging = false;
+        cf?.addEventListener("pointerdown", (e) => { dragging = true; sx = (e as PointerEvent).clientX; });
+        window.addEventListener("pointerup", (e) => { if (!dragging) return; dragging = false; const dx = (e as PointerEvent).clientX - sx; if (dx < -40) step(1); else if (dx > 40) step(-1); });
+      }
     }
 
     // ====================== ПОП-АП ======================
@@ -663,7 +766,8 @@ const payload = {
       if (reduce) done(); else setTimeout(done, 280);
     };
 
-    root.querySelectorAll<HTMLElement>("[data-open]").forEach((b) => b.addEventListener("click", () => openModal(selected)));
+    // Делегирование: «Открыть проект» — работает и для динамических разворотов/карусели
+    root.addEventListener("click", (e) => { if ((e.target as HTMLElement).closest("[data-open]")) openModal(selected); });
     modal.querySelector("[data-modal-close]")!.addEventListener("click", closeModal);
     overlay.addEventListener("click", closeModal);
     document.addEventListener("keydown", (e) => {
@@ -802,7 +906,7 @@ const payload = {
 
     // CTA → открыть модалку заявки (закрыв карточку проекта, если открыта)
     modal.querySelectorAll<HTMLButtonElement>("[data-modal-cta]").forEach((btn) => btn.addEventListener("click", () => { const k = btn.dataset.modalCta!; closeModal(); setTimeout(() => openRequest(k), reduce ? 0 : 320); }));
-    root.querySelectorAll<HTMLElement>("[data-calc]").forEach((b) => b.addEventListener("click", () => openRequest("calc")));
+    root.addEventListener("click", (e) => { if ((e.target as HTMLElement).closest("[data-calc]")) openRequest("calc"); });
     // CTA внутри карточки: «получить полную комплектацию» и «поменять планировку»
     modal.addEventListener("click", (e) => {
       const t = e.target as HTMLElement;
@@ -812,7 +916,8 @@ const payload = {
 
     const init = () => { const a = tabs.find((t) => t.getAttribute("aria-selected") === "true"); if (a) moveIndicator(a); };
     window.addEventListener("load", init); window.addEventListener("resize", init); init();
-    // Инициализация навигации showcase (точки/счётчик)
-    if (isShowcase) { buildList(data.groups[0].id); selectProject(selected); }
+    // Инициализация вариантов
+    if (isShowcase || isCoverflow) { buildList(data.groups[0].id); selectProject(selected); }
+    if (isSpread) { buildList(data.groups[0].id); selected = codesNow[0]; }
   }
 </script>
