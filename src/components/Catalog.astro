@@ -1,5 +1,5 @@
 ---
-import { projects, materials, INTERIORS, DEFAULT_FEATURES, type Material } from "../data/projects";
+import { projects, materials, INTERIORS, DEFAULT_FEATURES, DEFAULT_INCLUDES, type Material } from "../data/projects";
 
 const order: Material[] = ["timber", "ceramic"];
 const byMaterial = (m: Material) => projects.filter((p) => p.material === m);
@@ -17,6 +17,7 @@ const payload = {
   projects: Object.fromEntries(projects.map((p) => [p.code, { ...p, materialLabel: materials[p.material].label }])),
   interiors: INTERIORS,
   defaultFeatures: DEFAULT_FEATURES,
+  includes: DEFAULT_INCLUDES,
 };
 ---
 
@@ -160,6 +161,16 @@ const payload = {
         <section>
           <h4 class="eyebrow text-on-ink/40">О проекте</h4>
           <div data-modal-desc class="mt-5 max-w-2xl space-y-4 text-base leading-relaxed text-on-ink/75 sm:text-lg"></div>
+          <ul data-modal-feats class="mt-6 flex flex-wrap gap-2"></ul>
+        </section>
+
+        <!-- Что входит в стоимость (визуально, сгруппированно) -->
+        <section>
+          <div class="flex flex-wrap items-baseline justify-between gap-3">
+            <h4 class="eyebrow text-on-ink/40">Что входит в стоимость</h4>
+            <span class="text-xs text-on-ink/40">Фиксируется в договоре · детально — в смете</span>
+          </div>
+          <div data-modal-includes class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2"></div>
         </section>
 
         <!-- Характеристики -->
@@ -207,12 +218,6 @@ const payload = {
               <button type="button" data-modal-cta="video" class="mt-3 text-sm font-semibold text-accent-soft underline-offset-4 hover:underline">Запросить видеообзор →</button>
             </div>
           </div>
-        </section>
-
-        <!-- Что входит -->
-        <section>
-          <h4 class="eyebrow text-on-ink/40">Что входит</h4>
-          <ul data-modal-features class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2"></ul>
         </section>
 
         <!-- Финальный CTA -->
@@ -339,7 +344,7 @@ const payload = {
   type Plan = { floor: string; src: string };
   type Img = { src: string; alt: string };
   type P = { code: string; name: string; material: string; materialLabel: string; area: number; floors: number; price: string; image: string; alt: string; description: string; summary: string; specs: Spec[]; longDescription?: string[]; features?: string[]; gallery?: Img[]; plans?: Plan[] };
-  type Payload = { groups: { id: string; label: string; note: string; codes: string[] }[]; projects: Record<string, P>; interiors: Img[]; defaultFeatures: string[] };
+  type Payload = { groups: { id: string; label: string; note: string; codes: string[] }[]; projects: Record<string, P>; interiors: Img[]; defaultFeatures: string[]; includes: { title: string; icon: string; items: string[] }[] };
 
   const root = document.querySelector<HTMLElement>("#catalog");
   if (root) {
@@ -415,7 +420,8 @@ const payload = {
     const hero = modal.querySelector<HTMLImageElement>("[data-modal-hero]")!;
     const videoBg = modal.querySelector<HTMLImageElement>("[data-modal-video-bg]")!;
     const mSpecs = modal.querySelector<HTMLElement>("[data-modal-specs]")!;
-    const mFeatures = modal.querySelector<HTMLElement>("[data-modal-features]")!;
+    const mFeats = modal.querySelector<HTMLElement>("[data-modal-feats]")!;
+    const mIncludes = modal.querySelector<HTMLElement>("[data-modal-includes]")!;
     const mDesc = modal.querySelector<HTMLElement>("[data-modal-desc]")!;
     const mVis = modal.querySelector<HTMLElement>("[data-modal-vis]")!;
     const mVisWrap = modal.querySelector<HTMLElement>("[data-modal-vis-wrap]")!;
@@ -451,7 +457,11 @@ const payload = {
       mSpecs.innerHTML = p.specs.map((s) => `<div class="flex items-baseline justify-between gap-4 border-b border-white/10 py-3.5"><dt class="text-sm text-on-ink/50">${s.label}</dt><dd class="text-right font-[var(--font-display)] text-on-ink">${s.value}</dd></div>`).join("");
 
       const feats = p.features && p.features.length ? p.features : data.defaultFeatures;
-      mFeatures.innerHTML = feats.map((f) => `<li class="flex items-baseline gap-2.5 text-sm text-on-ink/80"><svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>${f}</li>`).join("");
+      mFeats.innerHTML = feats.map((f) => `<li class="rounded-full border border-white/12 bg-white/[0.03] px-3.5 py-1.5 text-xs text-on-ink/75">${f}</li>`).join("");
+      mIncludes.innerHTML = data.includes.map((g) => `<div class="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+        <div class="flex items-center gap-3"><span class="grid h-9 w-9 place-items-center rounded-lg border border-white/12 text-accent-soft"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${g.icon}</svg></span><span class="font-[var(--font-display)] text-base text-on-ink">${g.title}</span></div>
+        <ul class="mt-4 space-y-2">${g.items.map((it) => `<li class="flex items-baseline gap-2.5 text-sm text-on-ink/70"><span class="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent"></span>${it}</li>`).join("")}</ul>
+      </div>`).join("");
 
       // Визуализации — все внешние кадры (первый крупный, если их несколько)
       if (exts.length) {
@@ -533,15 +543,30 @@ const payload = {
       const el = req.querySelector<HTMLElement>(`[data-rq-error="${field}"]`);
       if (el) { el.textContent = msg; el.classList.toggle("hidden", !msg); }
     };
+    const formatRuPhone = (v: string) => {
+      let d = v.replace(/\D/g, "");
+      if (d[0] === "8") d = "7" + d.slice(1);
+      if (d[0] !== "7") d = "7" + d;
+      d = d.slice(0, 11);
+      let r = "+7";
+      if (d.length > 1) r += " (" + d.slice(1, 4);
+      if (d.length >= 4) r += ") " + d.slice(4, 7);
+      if (d.length >= 7) r += "-" + d.slice(7, 9);
+      if (d.length >= 9) r += "-" + d.slice(9, 11);
+      return r;
+    };
     const setMethod = (m: string) => {
       reqMethod = m;
       reqMethodBtns.forEach((b) => b.setAttribute("aria-checked", String(b.dataset.method === m)));
       reqContactLabel.innerHTML = `${methods[m].label} <span class="text-accent">*</span>`;
       reqContact.type = methods[m].type;
       reqContact.placeholder = methods[m].ph;
+      reqContact.inputMode = m === "phone" ? "tel" : "text";
+      reqContact.value = "";
       reqError("contact", "");
     };
     reqMethodBtns.forEach((b) => b.addEventListener("click", () => setMethod(b.dataset.method!)));
+    reqContact.addEventListener("input", () => { if (reqMethod === "phone") reqContact.value = formatRuPhone(reqContact.value); });
 
     const openRequest = (intent: string) => {
       reqIntent = intent; reqProject = selected;
