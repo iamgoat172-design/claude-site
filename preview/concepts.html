@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>СК «Династия» — выбор направления</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Forum&family=Spectral:wght@400;500;600&family=Cormorant:wght@500;600&family=Manrope:wght@400;500;600;700;800&family=Onest:wght@400;500;600;700&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+
+/* ===== switcher bar ===== */
+.switch{position:sticky;top:0;z-index:100;background:#0f1115;color:#fff;border-bottom:1px solid #2a2d35}
+.switch .in{max-width:80rem;margin:auto;padding:.7rem clamp(1rem,3vw,2rem);display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.switch .ttl{font-family:'Manrope',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:.02em;opacity:.7;white-space:nowrap}
+.switch .opts{display:flex;gap:.5rem;flex-wrap:wrap}
+.switch button{font-family:'Manrope',sans-serif;font-weight:600;font-size:.82rem;color:#cfd3da;background:#1a1d24;border:1px solid #2a2d35;border-radius:999px;padding:.5rem .95rem;cursor:pointer;transition:.2s}
+.switch button:hover{color:#fff;border-color:#444}
+.switch button.on{background:#fff;color:#0f1115;border-color:#fff}
+.switch .hint{font-family:'Manrope',sans-serif;font-size:.74rem;opacity:.5;margin-left:auto;white-space:nowrap}
+@media(max-width:700px){.switch .hint{display:none}}
+
+/* ===== theme tokens (default = A) ===== */
+.stage{
+  --bg:oklch(.975 .005 80);--surface:oklch(.945 .006 80);--ink:oklch(.24 .015 60);--soft:oklch(.46 .015 60);
+  --line:oklch(.86 .008 70);--accent:oklch(.52 .06 55);--on-accent:oklch(.98 .01 80);
+  --disp:'Forum',serif;--body:'Onest',sans-serif;--rad:3px;--shadow:0 24px 60px -34px rgba(40,30,15,.4);
+  --hcase:none;--htrack:.005em;--hweight:400;--hlh:1.05;
+}
+.stage[data-t="b"]{
+  --bg:oklch(.97 .012 74);--surface:oklch(.93 .016 70);--ink:oklch(.26 .02 50);--soft:oklch(.45 .02 50);
+  --line:oklch(.87 .015 65);--accent:oklch(.55 .1 47);--on-accent:oklch(.98 .012 80);
+  --disp:'Spectral',serif;--body:'Onest',sans-serif;--rad:18px;--shadow:0 34px 70px -38px rgba(70,45,20,.45);
+  --hcase:none;--htrack:-.01em;--hweight:500;--hlh:1.04;
+}
+.stage[data-t="c"]{
+  --bg:oklch(.2 .025 165);--surface:oklch(.26 .03 165);--ink:oklch(.95 .01 90);--soft:oklch(.78 .02 95);
+  --line:oklch(.4 .03 165);--accent:oklch(.8 .11 85);--on-accent:oklch(.2 .02 90);
+  --disp:'Forum',serif;--body:'Onest',sans-serif;--rad:5px;--shadow:0 34px 70px -30px rgba(0,0,0,.65);
+  --hcase:none;--htrack:.01em;--hweight:400;--hlh:1.05;
+}
+.stage[data-t="d"]{
+  --bg:oklch(1 0 0);--surface:oklch(.972 .003 250);--ink:oklch(.2 .015 262);--soft:oklch(.44 .015 262);
+  --line:oklch(.9 .005 250);--accent:oklch(.5 .09 232);--on-accent:oklch(.99 .005 250);
+  --disp:'Manrope',sans-serif;--body:'Onest',sans-serif;--rad:12px;--shadow:0 24px 50px -28px rgba(0,0,0,.22);
+  --hcase:none;--htrack:-.025em;--hweight:800;--hlh:1;
+}
+
+.stage{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;transition:background .4s,color .4s}
+.wrap{max-width:80rem;margin:auto;padding-inline:clamp(1.25rem,4vw,3rem)}
+h1,h2,h3{font-family:var(--disp);font-weight:var(--hweight);letter-spacing:var(--htrack);line-height:var(--hlh);text-transform:var(--hcase)}
+.kick{font-family:var(--body);font-size:.78rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:inline-flex;align-items:center;gap:.6rem}
+.kick::before{content:"";width:1.8rem;height:1px;background:var(--accent)}
+.lede{font-size:clamp(1.02rem,.95rem + .4vw,1.2rem);line-height:1.7;color:var(--soft);max-width:46ch}
+.btn{display:inline-flex;align-items:center;gap:.55rem;font-family:var(--body);font-weight:600;font-size:.95rem;padding:.95rem 1.7rem;border-radius:999px;background:var(--accent);color:var(--on-accent);cursor:pointer;border:0;transition:transform .25s,opacity .25s,box-shadow .25s;box-shadow:var(--shadow)}
+.btn:hover{transform:translateY(-2px);opacity:.92}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+
+/* hero */
+.hero{padding-block:clamp(3.5rem,7vw,6rem)}
+.hero .g{display:grid;grid-template-columns:1fr;gap:clamp(2rem,4vw,3.5rem);align-items:center}
+.hero h1{font-size:clamp(2.6rem,1.2rem + 6vw,5.4rem);margin-top:1.4rem}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero .lede{margin-top:1.6rem}
+.hero .cta{margin-top:2.2rem;display:flex;gap:1rem;flex-wrap:wrap}
+.hero .pic{position:relative;border-radius:var(--rad);overflow:hidden;box-shadow:var(--shadow);aspect-ratio:4/3}
+.hero .pic img{width:100%;height:100%;object-fit:cover}
+.hero .badge{position:absolute;left:1rem;bottom:1rem;background:var(--bg);color:var(--ink);font-size:.78rem;font-weight:600;padding:.5rem .9rem;border-radius:999px;box-shadow:var(--shadow)}
+@media(min-width:920px){.hero .g{grid-template-columns:1.05fr .95fr}}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem 1rem;padding-block:clamp(2rem,4vw,3rem);border-top:1px solid var(--line)}
+.stat .n{font-family:var(--disp);font-weight:var(--hweight);font-size:clamp(2.2rem,5vw,3.2rem);line-height:1;color:var(--ink)}
+.stat .n b{color:var(--accent);font-weight:inherit}
+.stat .l{font-size:.85rem;color:var(--soft);margin-top:.6rem;max-width:22ch}
+@media(min-width:820px){.stats{grid-template-columns:repeat(4,1fr)}}
+
+/* section */
+.sec{padding-block:clamp(3.5rem,6vw,5.5rem)}
+.shead{max-width:42rem;margin-bottom:2.8rem}
+.shead h2{font-size:clamp(1.9rem,1.2rem + 2.6vw,3.2rem);margin-top:1rem}
+
+/* projects */
+.pg{display:grid;grid-template-columns:1fr;gap:clamp(1.25rem,3vw,1.8rem)}
+.card{border-radius:var(--rad);overflow:hidden;background:var(--surface);box-shadow:var(--shadow);transition:transform .35s var(--ease,ease)}
+.card:hover{transform:translateY(-6px)}
+.card .ph{aspect-ratio:4/3;overflow:hidden}
+.card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.card:hover .ph img{transform:scale(1.05)}
+.card .b{padding:1.3rem}
+.card .r{display:flex;justify-content:space-between;align-items:baseline;gap:.75rem}
+.card h3{font-size:1.5rem}
+.card .pr{color:var(--accent);font-weight:600;white-space:nowrap}
+.card .meta{margin-top:.7rem;font-size:.82rem;color:var(--soft);display:flex;gap:.8rem}
+.card .meta span+span{border-left:1px solid var(--line);padding-left:.8rem}
+@media(min-width:760px){.pg{grid-template-columns:repeat(3,1fr)}}
+
+/* cta band */
+.band{margin-block:clamp(2rem,4vw,3rem);border-radius:calc(var(--rad) * 1.6);background:var(--accent);color:var(--on-accent);padding:clamp(2.2rem,5vw,4rem);box-shadow:var(--shadow);text-align:center}
+.band h2{font-size:clamp(1.8rem,1.2rem + 2.4vw,3rem)}
+.band .lede{color:color-mix(in oklch,var(--on-accent) 85%,transparent);margin:1.2rem auto 0;text-align:center}
+.band .btn{margin-top:1.8rem;background:var(--bg);color:var(--ink)}
+
+.note{font-size:.8rem;color:var(--soft);text-align:center;padding-block:2rem;border-top:1px solid var(--line)}
+.tname{font-family:var(--disp);font-weight:var(--hweight);font-size:1.3rem}
+</style>
+</head>
+<body>
+<div class="switch">
+  <div class="in">
+    <span class="ttl">Направление:</span>
+    <div class="opts">
+      <button data-t="a" class="on">A · Тихий люкс</button>
+      <button data-t="b">B · Тёплый природный</button>
+      <button data-t="c">C · Тёмный элегантный</button>
+      <button data-t="d">D · Чистый современный</button>
+    </div>
+    <span class="hint" id="hint">Меняй стиль кнопками ↑</span>
+  </div>
+</div>
+
+<div class="stage" id="stage" data-t="a">
+  <section class="hero"><div class="wrap g">
+    <div>
+      <span class="kick">СК «Династия» — СПб и Ленобласть</span>
+      <h1>Дома, которые остаются <em>в семье</em></h1>
+      <p class="lede">Проектируем и строим частные дома под ключ — газобетон, кирпич, тёплая керамика и клееный брус. Фиксированная смета, договор на каждый этап, гарантия 25 лет.</p>
+      <div class="cta"><a class="btn">Рассчитать стоимость</a><a class="btn ghost">Смотреть проекты</a></div>
+    </div>
+    <div class="pic"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_32Q9KWTtKxuO9vGsur6JRmOi1Zg/hf_20260617_111739_5ef8b5af-2eb6-4cc9-a2ca-124fbc9d563a.png" alt="Дом"><span class="badge">Проект Dynasty · 276 м²</span></div>
+  </div></section>
+
+  <div class="wrap"><div class="stats">
+    <div class="stat"><div class="n">14<b> лет</b></div><div class="l">проектируем и строим дома</div></div>
+    <div class="stat"><div class="n">320<b>+</b></div><div class="l">семей живут в наших домах</div></div>
+    <div class="stat"><div class="n">25<b> лет</b></div><div class="l">гарантия на конструктив</div></div>
+    <div class="stat"><div class="n">8</div><div class="l">этапов — договор на каждый</div></div>
+  </div></div>
+
+  <section class="sec"><div class="wrap">
+    <div class="shead"><span class="kick">Проекты</span><h2>Дома, которые мы построили</h2></div>
+    <div class="pg">
+      <div class="card"><div class="ph"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_32Q9KWTtKxuO9vGsur6JRmOi1Zg/hf_20260617_111842_466bcd6f-0cdd-4818-bd75-5b7ead23f1e1.png" alt=""></div><div class="b"><div class="r"><h3>Nordic</h3><span class="pr">от 7,9 млн ₽</span></div><div class="meta"><span>164 м²</span><span>1 этаж</span><span>газобетон</span></div></div></div>
+      <div class="card"><div class="ph"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_32Q9KWTtKxuO9vGsur6JRmOi1Zg/hf_20260617_111845_6162b676-f91c-41b5-8ef6-091ea0fd7bdc.png" alt=""></div><div class="b"><div class="r"><h3>Fjord</h3><span class="pr">от 12,4 млн ₽</span></div><div class="meta"><span>212 м²</span><span>2 этажа</span><span>клееный брус</span></div></div></div>
+      <div class="card"><div class="ph"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_32Q9KWTtKxuO9vGsur6JRmOi1Zg/hf_20260617_111843_e0b1644e-92df-4e41-863c-49f475d6d6a2.png" alt=""></div><div class="b"><div class="r"><h3>Estate</h3><span class="pr">от 15,8 млн ₽</span></div><div class="meta"><span>248 м²</span><span>2 этажа</span><span>кирпич</span></div></div></div>
+    </div>
+  </div></section>
+
+  <section><div class="wrap"><div class="band">
+    <span class="kick" style="justify-content:center;color:inherit;opacity:.85">Гарантия 25 лет</span>
+    <h2 style="margin-top:1rem">Рассчитаем ваш дом бесплатно</h2>
+    <p class="lede">Оставьте заявку — инженер свяжется в течение рабочего дня и подготовит предварительную смету. Выезд на участок бесплатно.</p>
+    <a class="btn">Получить расчёт</a>
+  </div></div></section>
+
+  <div class="wrap"><p class="note" id="desc"></p></div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+const descs={
+ a:"A · Тихий люкс — благородный камень/тёплая бумага, элегантный серифный шрифт Forum, много воздуха, тонкие линии. Сдержанно и дорого, как у архитектурного ателье.",
+ b:"B · Тёплый природный — тёплые тона дерева и терракоты, мягкие скругления, спокойная подача с упором на фотографию. Уютно и премиально, скандинавский характер.",
+ c:"C · Тёмный элегантный — глубокий графитово-зелёный, тёплое золото, мягкая кинематографичность (НЕ жёстко). Статус и доверие премиум-класса.",
+ d:"D · Чистый современный — белый, точная сетка, крупный гротеск Manrope, спокойный сине-стальной акцент. Технологично, аккуратно, доверительно."
+};
+document.getElementById('desc').textContent=descs.a;
+document.querySelectorAll('.switch button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.switch button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  const t=b.dataset.t;stage.dataset.t=t;document.getElementById('desc').textContent=descs[t];
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+</script>
+</body>
+</html>
