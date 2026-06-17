@@ -3,408 +3,416 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>СК «Династия» — превью сайта</title>
+<title>СК «ДИНАСТИЯ» — превью v2 (нео-брутализм + 3D)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800;900&family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 <style>
 :root{
-  --bg:oklch(1 0 0);--surface:oklch(.976 .004 195);--surface-2:oklch(.955 .006 197);
-  --ink:oklch(.22 .012 220);--ink-soft:oklch(.4 .012 220);--muted:oklch(.5 .01 220);
-  --primary:oklch(.4 .062 200);--primary-700:oklch(.31 .05 202);--primary-900:oklch(.215 .034 205);
-  --accent:oklch(.72 .1 78);--accent-deep:oklch(.52 .1 62);
-  --line:oklch(.91 .005 210);--line-strong:oklch(.85 .006 210);
-  --on-dark:oklch(.97 .004 200);--on-dark-soft:oklch(.82 .012 200);
-  --display:'Spectral',Georgia,serif;--sans:'Onest',system-ui,sans-serif;
-  --ease:cubic-bezier(.16,1,.3,1);
+  --paper:oklch(.96 .004 250);
+  --paper-2:oklch(.92 .006 250);
+  --ink:oklch(.17 .015 262);
+  --ink-soft:oklch(.34 .02 262);
+  --blue:oklch(.5 .2 264);
+  --blue-deep:oklch(.4 .17 264);
+  --on-blue:oklch(.98 .01 250);
+  --acid:oklch(.88 .2 122);
+  --line:var(--ink);
+  --disp:'Unbounded',system-ui,sans-serif;
+  --sans:'Golos Text',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --bd:2.5px;
+  --ease:cubic-bezier(.2,1,.3,1);
 }
-*{box-sizing:border-box;margin:0;padding:0;border-color:var(--line)}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;line-height:1.5;overflow-x:hidden}
-h1,h2,h3,h4{font-family:var(--display);font-weight:500;letter-spacing:-.02em;line-height:1.05;text-wrap:balance}
-p{text-wrap:pretty}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.45;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
-::selection{background:var(--primary);color:var(--on-dark)}
-.wrap{width:100%;max-width:80rem;margin-inline:auto;padding-inline:clamp(1.25rem,4vw,3.5rem)}
-.eyebrow{display:inline-flex;align-items:center;gap:.75rem;font-size:.82rem;font-weight:600;color:var(--accent-deep)}
-.eyebrow.dk{color:var(--on-dark-soft)}
-.eyebrow::before{content:"";width:2rem;height:1px;background:var(--accent)}
-.d-xl{font-size:clamp(2.6rem,1.4rem + 5.6vw,5.4rem);line-height:.98;letter-spacing:-.035em}
-.d-lg{font-size:clamp(2rem,1.2rem + 3.4vw,3.4rem);line-height:1.03;letter-spacing:-.03em}
-.lede{font-size:1.125rem;line-height:1.7;color:var(--ink-soft);max-width:60ch}
-.lede.dk{color:var(--on-dark-soft)}
-section{position:relative}
-.sec{padding-block:clamp(5rem,9vw,8rem)}
-.btn{display:inline-flex;align-items:center;gap:.6rem;border-radius:999px;padding:.95rem 1.75rem;font-weight:600;font-size:1rem;cursor:pointer;border:0;transition:all .3s var(--ease)}
-.btn-accent{background:var(--accent);color:var(--primary-900);box-shadow:0 10px 30px -10px rgba(0,0,0,.4)}
-.btn-accent:hover{background:var(--on-dark)}
-.btn-primary{background:var(--primary);color:var(--on-dark)}
-.btn-primary:hover{background:var(--primary-700)}
-.btn-ghost{border:1px solid color-mix(in oklch,var(--on-dark) 30%,transparent);color:var(--on-dark);backdrop-filter:blur(4px)}
-.btn-ghost:hover{background:color-mix(in oklch,var(--on-dark) 10%,transparent)}
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+::selection{background:var(--blue);color:var(--on-blue)}
+h1,h2,h3{font-family:var(--disp);font-weight:800;line-height:.92;letter-spacing:-.02em;text-transform:uppercase}
+.wrap{width:100%;max-width:90rem;margin-inline:auto;padding-inline:clamp(1rem,3vw,2.5rem)}
+.mono{font-family:var(--mono)}
+.kick{font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;display:inline-flex;align-items:center;gap:.5rem}
+.kick b{color:var(--blue);font-weight:700}
+.h-sec{font-family:var(--disp);font-weight:800;font-size:clamp(2rem,1rem + 5vw,4.5rem);line-height:.9;letter-spacing:-.03em;text-transform:uppercase}
+.lede{font-size:clamp(1rem,.9rem + .5vw,1.2rem);line-height:1.6;max-width:48ch;color:var(--ink-soft)}
+.sec{padding-block:clamp(4rem,8vw,7rem);position:relative}
+.dark{background:var(--ink);color:var(--paper)}
+.dark .lede{color:color-mix(in oklch,var(--paper) 70%,transparent)}
+.blueb{background:var(--blue);color:var(--on-blue)}
+.blueb .lede{color:color-mix(in oklch,var(--on-blue) 80%,transparent)}
+.reveal{opacity:0;transform:translateY(42px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .reveal.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}*{transition:none!important;animation:none!important}}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}*{animation:none!important}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--mono);font-weight:700;font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;padding:1rem 1.5rem;border:var(--bd) solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer;box-shadow:6px 6px 0 var(--blue);transition:transform .14s var(--ease),box-shadow .14s var(--ease)}
+.btn:hover{transform:translate(3px,3px);box-shadow:3px 3px 0 var(--blue)}
+.btn:active{transform:translate(6px,6px);box-shadow:0 0 0 var(--blue)}
+.btn.blue{background:var(--blue);color:var(--on-blue);box-shadow:6px 6px 0 var(--ink)}
+.btn.blue:hover{box-shadow:3px 3px 0 var(--ink)}
+.btn.ghost{background:transparent;color:inherit;box-shadow:6px 6px 0 var(--ink)}
+.dark .btn.ghost{border-color:var(--paper);box-shadow:6px 6px 0 var(--blue)}
 
 /* header */
-header{position:fixed;inset:0 0 auto;z-index:50;transition:background .5s,box-shadow .5s,backdrop-filter .5s}
-header.scr{background:color-mix(in oklch,var(--bg) 86%,transparent);backdrop-filter:blur(14px) saturate(1.4);box-shadow:0 1px 0 var(--line)}
-.hd{display:flex;align-items:center;justify-content:space-between;height:72px;gap:1.5rem}
-.logo{display:flex;align-items:center;gap:.65rem}
-.logo .mark{flex:none}
-.logo .nm{font-family:var(--display);font-size:1.15rem;font-weight:600;letter-spacing:.08em;line-height:1}
-.logo .sub{font-size:.58rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;line-height:1.4}
-.nav{display:none;gap:2rem;align-items:center}
-.nav a{font-size:.9rem;font-weight:500;color:var(--ink-soft);transition:color .2s}
-.nav a:hover{color:var(--primary)}
-.hd-right{display:flex;align-items:center;gap:.75rem}
-.hd-phone{display:none;align-items:center;gap:.5rem;font-weight:600;font-size:.9rem}
-.burger{width:40px;height:40px;border:1px solid var(--line);border-radius:999px;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.burger span{display:block;width:20px;height:1px;background:var(--ink);margin:2px 0;transition:.3s}
-.sheet{position:fixed;inset:72px 0 0;z-index:40;background:var(--bg);padding:2rem 0;display:flex;flex-direction:column;gap:.25rem;transform:translateY(-8px);opacity:0;pointer-events:none;transition:.3s}
-.sheet.open{opacity:1;transform:none;pointer-events:auto}
-.sheet a{font-family:var(--display);font-size:1.5rem;padding:1rem 0;border-bottom:1px solid var(--line)}
-@media(min-width:1024px){.nav{display:flex}.burger{display:none}}
-@media(min-width:768px){.hd-phone{display:flex}.btn-hd{display:inline-flex!important}}
-.btn-hd{display:none!important;padding:.65rem 1.25rem;font-size:.9rem}
+header{position:sticky;top:0;z-index:60;background:var(--paper);border-bottom:var(--bd) solid var(--ink)}
+.hd{display:flex;align-items:center;justify-content:space-between;height:64px;gap:1rem}
+.logo{display:flex;align-items:center;gap:.55rem;font-family:var(--disp);font-weight:900;font-size:1.1rem;letter-spacing:.02em}
+.logo .sq{width:16px;height:16px;background:var(--blue);border:2px solid var(--ink)}
+.logo sup{font-family:var(--mono);font-size:.5rem;font-weight:500;vertical-align:super}
+.nav{display:none;gap:1.5rem;align-items:center}
+.nav a{font-family:var(--mono);font-size:.78rem;font-weight:500;text-transform:uppercase;letter-spacing:.03em;transition:color .2s;position:relative}
+.nav a:hover{color:var(--blue)}
+.nav a span{color:var(--blue)}
+.hd-r{display:flex;align-items:center;gap:.75rem}
+.hd-phone{display:none;font-family:var(--mono);font-weight:700;font-size:.85rem}
+.burger{width:44px;height:44px;border:var(--bd) solid var(--ink);background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer}
+.burger span{width:20px;height:2.5px;background:var(--ink);transition:.3s}
+.btn-sm{padding:.7rem 1.1rem;font-size:.72rem;box-shadow:4px 4px 0 var(--ink)}
+.sheet{position:fixed;inset:64px 0 0;z-index:55;background:var(--paper);transform:translateY(-100%);transition:transform .4s var(--ease);padding:1.5rem 0;display:flex;flex-direction:column}
+.sheet.open{transform:none}
+.sheet a{font-family:var(--disp);font-weight:800;font-size:2rem;text-transform:uppercase;padding:1rem 0;border-bottom:var(--bd) solid var(--ink)}
+@media(min-width:1080px){.nav{display:flex}.burger{display:none}.hd-phone{display:block}}
+
+/* marquee */
+.marq{background:var(--blue);color:var(--on-blue);border-bottom:var(--bd) solid var(--ink);overflow:hidden;white-space:nowrap;padding-block:.6rem}
+.marq .track{display:inline-flex;gap:2.5rem;animation:scroll 28s linear infinite;font-family:var(--mono);font-weight:700;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em}
+.marq .track span{display:inline-flex;gap:2.5rem}
+.marq .track b{color:var(--ink)}
+@keyframes scroll{to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.marq .track{animation:none}}
 
 /* hero */
-.hero{min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;background:var(--primary-900);padding-bottom:4rem;padding-top:8rem}
-.hero .bg{position:absolute;inset:0;z-index:0}
-.hero .bg img{width:100%;height:120%;object-fit:cover}
-.hero .ov1{position:absolute;inset:0;background:linear-gradient(to top,var(--primary-900),color-mix(in oklch,var(--primary-900) 55%,transparent),color-mix(in oklch,var(--primary-900) 35%,transparent))}
-.hero .ov2{position:absolute;inset:0;background:linear-gradient(to right,color-mix(in oklch,var(--primary-900) 70%,transparent),transparent)}
-.hero .ov3{position:absolute;inset:0 0 auto;height:8rem;background:linear-gradient(to bottom,color-mix(in oklch,var(--primary-900) 60%,transparent),transparent)}
-.hero .inner{position:relative;z-index:2;max-width:48rem}
-.hero h1{color:var(--on-dark);margin-top:1.5rem}
-.hero h1 .it{font-style:italic;color:var(--accent)}
-.hero .lede{margin-top:1.75rem;color:var(--on-dark-soft)}
-.hero .cta{margin-top:2.5rem;display:flex;flex-wrap:wrap;gap:1rem}
+.hero{border-bottom:var(--bd) solid var(--ink)}
+.hero .grid{display:grid;grid-template-columns:1fr;border-top:0}
+.hero .left{padding:clamp(1.5rem,4vw,3.5rem);display:flex;flex-direction:column;justify-content:center;border-bottom:var(--bd) solid var(--ink)}
+.hero h1{font-size:clamp(2.6rem,1rem + 9vw,7.5rem);font-weight:900;letter-spacing:-.04em}
+.hero h1 .bx{background:var(--blue);color:var(--on-blue);padding:0 .15em;display:inline-block;transform:rotate(-1.2deg)}
+.hero h1 .ol{-webkit-text-stroke:2px var(--ink);color:transparent}
+.hero .lede{margin-top:1.6rem}
+.hero .cta{margin-top:2.2rem;display:flex;flex-wrap:wrap;gap:1rem}
+.hero .right{position:relative;min-height:360px;background:var(--paper-2);overflow:hidden}
+#scene{position:absolute;inset:0;width:100%;height:100%;cursor:grab}
+#scene:active{cursor:grabbing}
+.scene-fallback{position:absolute;inset:0;background-size:cover;background-position:center;display:none}
+.scene-tag{position:absolute;left:1rem;bottom:1rem;font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;background:var(--ink);color:var(--paper);padding:.4rem .7rem;z-index:2}
+.scene-tag2{position:absolute;right:1rem;top:1rem;font-family:var(--mono);font-size:.65rem;text-transform:uppercase;color:var(--ink-soft);z-index:2;text-align:right;line-height:1.5}
+@media(min-width:980px){.hero .grid{grid-template-columns:1.15fr .85fr}.hero .left{border-bottom:0;border-right:var(--bd) solid var(--ink)}.hero .right{min-height:560px}}
 
 /* stats */
-.stats{border-block:1px solid var(--line);background:var(--bg)}
-.stats .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2.5rem 1.5rem;padding-block:3.5rem}
-.stat .num{font-family:var(--display);font-weight:600;font-size:clamp(2.75rem,6vw,3.75rem);color:var(--primary);line-height:1;display:flex;align-items:baseline}
-.stat .num b{color:var(--accent-deep);font-weight:600}
-.stat p{margin-top:.75rem;font-size:.9rem;color:var(--ink-soft);max-width:22ch}
-@media(min-width:1024px){.stats .grid{grid-template-columns:repeat(4,1fr)}}
+.statgrid{display:grid;grid-template-columns:repeat(2,1fr);border-left:var(--bd) solid currentColor;border-top:var(--bd) solid currentColor}
+.dark .statgrid{border-color:var(--paper)}
+.stat{border-right:var(--bd) solid;border-bottom:var(--bd) solid;border-color:inherit;padding:clamp(1.25rem,3vw,2.5rem)}
+.stat .n{font-family:var(--disp);font-weight:900;font-size:clamp(2.5rem,7vw,5rem);line-height:.85;letter-spacing:-.04em;display:flex;align-items:baseline}
+.stat .n b{color:var(--blue);font-weight:900}
+.stat .l{font-family:var(--mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.03em;margin-top:1rem;opacity:.8;max-width:24ch}
+@media(min-width:880px){.statgrid{grid-template-columns:repeat(4,1fr)}}
 
-/* tech */
-.tech{background:var(--surface)}
-.tech .layout{display:grid;gap:2.5rem;margin-top:3.5rem}
-.tech-list{display:flex;flex-direction:column}
-.tech-item{position:relative;border-top:0;border-bottom:1px solid var(--line);padding:1.5rem 0;text-align:left;background:none;cursor:pointer;width:100%}
-.tech-item:first-child{border-top:1px solid var(--line)}
-.tech-item .row{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
-.tech-item .tname{font-family:var(--display);font-size:clamp(1.5rem,3vw,1.875rem);color:var(--ink);transition:color .3s}
-.tech-item .price{font-size:.9rem;font-weight:500;color:var(--muted)}
-.tech-item .desc{max-height:0;overflow:hidden;opacity:0;font-size:.92rem;color:var(--ink-soft);transition:.4s var(--ease)}
-.tech-item.on .tname{color:var(--primary)}
-.tech-item.on .price{color:var(--accent-deep)}
-.tech-item.on .desc{max-height:180px;opacity:1;padding-top:.75rem}
-.tech-item .bar{position:absolute;left:-1rem;top:50%;transform:translateY(-50%);width:2px;height:0;background:var(--accent);transition:height .3s}
-.tech-item.on .bar{height:calc(100% - 2rem)}
-.tech-prev{position:relative}
-.tech-prev .frame{position:relative;aspect-ratio:4/3;border-radius:1rem;overflow:hidden;background:var(--surface-2);box-shadow:0 30px 60px -30px rgba(0,0,0,.25)}
-.tech-prev .frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s var(--ease),transform .6s var(--ease);transform:scale(1.04)}
-.tech-prev .frame img.on{opacity:1;transform:none}
-.tech-prev .frame .sh{position:absolute;inset:0;background:linear-gradient(to top,color-mix(in oklch,var(--primary-900) 55%,transparent),transparent)}
-.tech-prev .tags{position:absolute;inset:auto 0 0;padding:1.5rem;display:flex;flex-wrap:wrap;gap:.5rem}
-.tag{background:color-mix(in oklch,var(--on-dark) 15%,transparent);color:var(--on-dark);backdrop-filter:blur(8px);border-radius:999px;padding:.4rem .9rem;font-size:.75rem;font-weight:500}
-.tech-prev .lnk{margin-top:1.5rem;display:inline-flex;gap:.5rem;font-weight:600;font-size:.9rem;color:var(--primary)}
-@media(min-width:1024px){.tech .layout{grid-template-columns:.85fr 1.15fr;gap:4rem}}
+/* section head */
+.shead{display:grid;gap:1.25rem;margin-bottom:3rem}
+.shead .idx{font-family:var(--disp);font-weight:900;font-size:clamp(3rem,8vw,6rem);line-height:.8;color:transparent;-webkit-text-stroke:2px currentColor;opacity:.25}
+.dark .shead .idx,.blueb .shead .idx{-webkit-text-stroke-color:currentColor}
+@media(min-width:880px){.shead{grid-template-columns:auto 1fr;align-items:end;gap:2.5rem}.shead .txt{max-width:46rem}}
+
+/* technologies */
+.techgrid{display:grid;grid-template-columns:1fr;border-top:var(--bd) solid var(--ink);border-left:var(--bd) solid var(--ink)}
+.tcell{border-right:var(--bd) solid var(--ink);border-bottom:var(--bd) solid var(--ink);padding:0;overflow:hidden;background:var(--paper);transition:background .25s}
+.tcell .top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.5rem;cursor:pointer}
+.tcell .nm{font-family:var(--disp);font-weight:800;font-size:clamp(1.4rem,3vw,2.1rem);text-transform:uppercase;letter-spacing:-.02em}
+.tcell .pr{font-family:var(--mono);font-weight:700;font-size:.8rem;white-space:nowrap}
+.tcell .body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s var(--ease)}
+.tcell .body>div{overflow:hidden}
+.tcell.on{background:var(--blue);color:var(--on-blue)}
+.tcell.on .body{grid-template-rows:1fr}
+.tcell .inner{padding:0 1.5rem 1.5rem;display:grid;gap:1.25rem}
+.tcell .pic{aspect-ratio:16/9;border:var(--bd) solid var(--ink);overflow:hidden}
+.tcell .pic img{width:100%;height:100%;object-fit:cover}
+.tcell .feats{display:flex;flex-wrap:wrap;gap:.5rem}
+.tcell .feats span{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;border:2px solid currentColor;padding:.35rem .6rem}
+@media(min-width:880px){.techgrid{grid-template-columns:repeat(2,1fr)}}
 
 /* projects */
-.proj-head{display:flex;flex-direction:column;gap:2rem}
-.filters{display:flex;flex-wrap:wrap;gap:.5rem}
-.chip{border:1px solid var(--line);border-radius:999px;padding:.5rem 1rem;font-size:.875rem;font-weight:500;color:var(--ink-soft);background:none;cursor:pointer;transition:.3s}
-.chip:hover{border-color:color-mix(in oklch,var(--primary) 40%,transparent);color:var(--primary)}
-.chip.on{background:var(--primary);border-color:var(--primary);color:var(--on-dark)}
-.proj-grid{display:grid;gap:1.5rem;margin-top:3rem;grid-template-columns:1fr}
-.card{position:relative;border-radius:1rem;overflow:hidden;background:var(--surface)}
-.card .ph{position:relative;aspect-ratio:4/5;overflow:hidden}
-.card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
-.card:hover .ph img{transform:scale(1.05)}
-.card .sh{position:absolute;inset:0;background:linear-gradient(to top,color-mix(in oklch,var(--primary-900) 85%,transparent),color-mix(in oklch,var(--primary-900) 15%,transparent) 50%,transparent)}
-.card .badge{position:absolute;left:1rem;top:1rem;background:color-mix(in oklch,var(--on-dark) 15%,transparent);color:var(--on-dark);backdrop-filter:blur(8px);border-radius:999px;padding:.3rem .8rem;font-size:.75rem;font-weight:500}
-.card .meta{position:absolute;inset:auto 0 0;padding:1.25rem}
-.card .meta .t{display:flex;align-items:flex-end;justify-content:space-between;gap:.75rem}
-.card .meta h3{font-family:var(--display);font-size:1.5rem;color:var(--on-dark)}
-.card .meta .pr{font-weight:600;color:var(--accent);font-size:.9rem}
-.card .meta dl{display:flex;gap:1rem;margin-top:.75rem;font-size:.78rem;color:var(--on-dark-soft)}
-.card .meta dl div + div{border-left:1px solid color-mix(in oklch,var(--on-dark) 20%,transparent);padding-left:1rem}
-@media(min-width:640px){.proj-grid{grid-template-columns:repeat(2,1fr)}.proj-head{flex-direction:row;align-items:flex-end;justify-content:space-between}}
-@media(min-width:1024px){.proj-grid{grid-template-columns:repeat(3,1fr)}}
+.filters{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:2rem}
+.chip{font-family:var(--mono);font-weight:500;font-size:.78rem;text-transform:uppercase;border:var(--bd) solid var(--ink);background:var(--paper);padding:.55rem 1rem;cursor:pointer;transition:.15s}
+.chip:hover{box-shadow:4px 4px 0 var(--ink);transform:translate(-1px,-1px)}
+.chip.on{background:var(--blue);color:var(--on-blue)}
+.pgrid{display:grid;grid-template-columns:1fr;gap:clamp(1.25rem,3vw,2rem)}
+.pcard{border:var(--bd) solid var(--ink);background:var(--paper);box-shadow:8px 8px 0 var(--ink);transition:transform .18s var(--ease),box-shadow .18s var(--ease)}
+.pcard:hover{transform:translate(4px,4px);box-shadow:4px 4px 0 var(--blue)}
+.pcard .ph{position:relative;aspect-ratio:16/11;overflow:hidden;border-bottom:var(--bd) solid var(--ink)}
+.pcard .ph img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.pcard:hover .ph img{transform:scale(1.06)}
+.pcard .no{position:absolute;left:0;top:0;font-family:var(--disp);font-weight:900;font-size:1rem;background:var(--ink);color:var(--paper);padding:.4rem .7rem}
+.pcard .badge{position:absolute;right:0;top:0;font-family:var(--mono);font-size:.7rem;text-transform:uppercase;background:var(--blue);color:var(--on-blue);padding:.4rem .7rem;border-left:var(--bd) solid var(--ink);border-bottom:var(--bd) solid var(--ink)}
+.pcard .info{padding:1.25rem}
+.pcard .info .r1{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem}
+.pcard .info h3{font-family:var(--disp);font-weight:800;font-size:1.6rem;text-transform:uppercase}
+.pcard .info .pr{font-family:var(--mono);font-weight:700;color:var(--blue);font-size:.9rem;white-space:nowrap}
+.pcard .info dl{display:flex;gap:0;margin-top:1rem;border:2px solid var(--ink)}
+.pcard .info dl div{flex:1;padding:.6rem;font-family:var(--mono);font-size:.72rem;text-transform:uppercase;text-align:center}
+.pcard .info dl div+div{border-left:2px solid var(--ink)}
+@media(min-width:680px){.pgrid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1080px){.pgrid{grid-template-columns:repeat(3,1fr)}}
 
 /* process */
-.process{background:var(--primary-900);color:var(--on-dark)}
-.process .layout{display:grid;gap:3rem}
-.process .img{margin-top:2.5rem;border-radius:1rem;overflow:hidden}
-.process .img img{width:100%;aspect-ratio:3/2;object-fit:cover}
-.timeline{position:relative;padding-left:3.5rem}
-.timeline .track{position:absolute;left:11px;top:.5rem;width:1px;height:100%;background:color-mix(in oklch,var(--on-dark) 15%,transparent)}
-.timeline .fill{position:absolute;left:11px;top:.5rem;width:1px;height:0;background:var(--accent);transition:height .1s linear}
-.timeline ol{list-style:none;display:flex;flex-direction:column;gap:3rem}
-.timeline li{position:relative}
-.timeline .dot{position:absolute;left:-3.5rem;top:.25rem;width:16px;height:16px;border-radius:999px;border:2px solid var(--accent);background:var(--primary-900)}
-.timeline .h{display:flex;align-items:baseline;gap:1rem}
-.timeline .n{font-family:var(--display);font-size:.875rem;font-weight:600;color:var(--accent)}
-.timeline h3{font-family:var(--display);font-size:clamp(1.25rem,2.5vw,1.5rem);color:var(--on-dark)}
-.timeline p{margin-top:.5rem;color:var(--on-dark-soft);max-width:48ch}
-@media(min-width:1024px){.process .layout{grid-template-columns:.9fr 1.1fr;gap:5rem}.process .intro{position:sticky;top:7rem;align-self:start}}
+.steps{border-top:var(--bd) solid var(--paper)}
+.step{display:grid;grid-template-columns:1fr;gap:.5rem;padding:clamp(1.5rem,3vw,2.25rem) 0;border-bottom:var(--bd) solid var(--paper);transition:background .2s,padding .2s}
+.step:hover{background:rgba(255,255,255,.04)}
+.step .no{font-family:var(--disp);font-weight:900;font-size:clamp(2rem,5vw,3.5rem);line-height:.8;color:transparent;-webkit-text-stroke:2px var(--blue)}
+.step h3{font-family:var(--disp);font-weight:800;font-size:clamp(1.2rem,2.5vw,1.8rem);text-transform:uppercase}
+.step p{color:color-mix(in oklch,var(--paper) 70%,transparent);max-width:60ch;font-size:.95rem}
+@media(min-width:880px){.step{grid-template-columns:7rem 1fr 1.3fr;gap:2rem;align-items:start}}
 
 /* advantages */
-.adv-grid{display:grid;grid-template-columns:1fr;border-top:1px solid var(--line);border-left:1px solid var(--line);margin-top:3.5rem}
-.adv{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:2.5rem;transition:background .3s}
-.adv:hover{background:var(--surface)}
-.adv svg{width:28px;height:28px;color:var(--primary);transition:color .3s}
-.adv:hover svg{color:var(--accent-deep)}
-.adv h3{font-family:var(--display);font-size:1.25rem;margin-top:1.5rem}
-.adv p{margin-top:.75rem;color:var(--ink-soft)}
-@media(min-width:640px){.adv-grid{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1024px){.adv-grid{grid-template-columns:repeat(3,1fr)}}
+.advgrid{display:grid;grid-template-columns:1fr;border-top:var(--bd) solid var(--ink);border-left:var(--bd) solid var(--ink)}
+.adv{border-right:var(--bd) solid var(--ink);border-bottom:var(--bd) solid var(--ink);padding:clamp(1.5rem,3vw,2.25rem);position:relative;transition:background .2s,color .2s}
+.adv:hover{background:var(--ink);color:var(--paper)}
+.adv .no{font-family:var(--mono);font-weight:700;font-size:.8rem;color:var(--blue)}
+.adv h3{font-family:var(--disp);font-weight:800;font-size:1.25rem;text-transform:uppercase;margin-top:1rem}
+.adv p{margin-top:.6rem;color:inherit;opacity:.85;font-size:.95rem}
+@media(min-width:680px){.advgrid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1080px){.advgrid{grid-template-columns:repeat(3,1fr)}}
 
 /* guarantee */
-.guar{position:relative;overflow:hidden;border-radius:1.5rem;background:var(--primary);color:var(--on-dark);padding:clamp(2.5rem,5vw,5rem)}
-.guar .glow{position:absolute;right:-4rem;top:-4rem;width:18rem;height:18rem;border-radius:999px;background:color-mix(in oklch,var(--accent) 20%,transparent);filter:blur(60px)}
-.guar .layout{position:relative;display:grid;gap:3rem}
-.guar .big{font-family:var(--display);font-weight:600;font-size:clamp(4rem,10vw,6rem);line-height:1;display:flex;align-items:flex-start}
-.guar .big span{font-size:1.75rem;font-weight:400;color:var(--on-dark-soft);margin:.5rem 0 0 .5rem}
-.guar ul{list-style:none;display:grid;gap:1.25rem;align-self:center}
-.guar li{display:flex;gap:.75rem;align-items:flex-start}
-.guar li svg{flex:none;width:20px;height:20px;color:var(--accent);margin-top:2px}
-@media(min-width:640px){.guar ul{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1024px){.guar .layout{grid-template-columns:.8fr 1.2fr;gap:4rem}}
+.guar{display:grid;grid-template-columns:1fr;gap:2.5rem;align-items:center}
+.guar .big{font-family:var(--disp);font-weight:900;font-size:clamp(7rem,22vw,16rem);line-height:.78;letter-spacing:-.05em;display:flex;align-items:flex-start}
+.guar .big small{font-family:var(--disp);font-size:.16em;font-weight:800;margin-top:.6em;margin-left:.2em}
+.guar ul{list-style:none;display:grid;gap:0;border-top:var(--bd) solid var(--on-blue)}
+.guar li{display:flex;gap:.8rem;align-items:flex-start;padding:1rem 0;border-bottom:var(--bd) solid var(--on-blue);font-weight:500}
+.guar li b{font-family:var(--mono);font-weight:700}
+@media(min-width:980px){.guar{grid-template-columns:.85fr 1.15fr;gap:4rem}}
 
 /* reviews */
-.reviews{background:var(--surface)}
-.rev-grid{display:grid;gap:1px;background:var(--line);border-radius:1rem;overflow:hidden;margin-top:3.5rem;grid-template-columns:1fr}
-.rev{background:var(--bg);padding:2.5rem;display:flex;flex-direction:column}
-.rev .q{font-family:var(--display);font-size:3rem;line-height:.5;color:var(--accent)}
-.rev p{margin-top:1rem;flex:1;color:var(--ink-soft)}
-.rev .who{margin-top:2rem;border-top:1px solid var(--line);padding-top:1.25rem}
-.rev .who .nm{font-family:var(--display);font-size:1.125rem}
-.rev .who .pj{font-size:.875rem;color:var(--muted);margin-top:.25rem}
-@media(min-width:768px){.rev-grid{grid-template-columns:repeat(3,1fr)}}
+.revgrid{display:grid;grid-template-columns:1fr;gap:clamp(1.25rem,3vw,1.75rem)}
+.rev{border:var(--bd) solid var(--ink);background:var(--paper);box-shadow:8px 8px 0 var(--blue);padding:clamp(1.5rem,3vw,2rem);display:flex;flex-direction:column}
+.rev .q{font-family:var(--disp);font-weight:900;font-size:3.5rem;line-height:.4;color:var(--blue)}
+.rev p{margin-top:1.25rem;flex:1;font-size:.97rem}
+.rev .who{margin-top:1.75rem;border-top:2px solid var(--ink);padding-top:1rem}
+.rev .who .nm{font-family:var(--disp);font-weight:800;text-transform:uppercase;font-size:1.05rem}
+.rev .who .pj{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;color:var(--ink-soft);margin-top:.3rem}
+@media(min-width:880px){.revgrid{grid-template-columns:repeat(3,1fr)}}
 
 /* faq */
-.faq .layout{display:grid;gap:3rem}
-.acc{border-bottom:1px solid var(--line)}
-.acc:first-child{border-top:1px solid var(--line)}
+.faqwrap{border-top:var(--bd) solid var(--ink)}
+.acc{border-bottom:var(--bd) solid var(--ink)}
 .acc button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding:1.5rem 0;background:none;border:0;cursor:pointer;text-align:left}
-.acc .q{font-family:var(--display);font-size:clamp(1.25rem,2.5vw,1.5rem);color:var(--ink);transition:color .3s}
-.acc.on .q{color:var(--primary)}
-.acc .pl{flex:none;width:20px;height:20px;color:var(--accent-deep);transition:transform .3s}
-.acc.on .pl{transform:rotate(45deg)}
-.acc .a{max-height:0;overflow:hidden;transition:max-height .4s var(--ease)}
-.acc .a p{padding-bottom:1.5rem;color:var(--ink-soft);max-width:65ch}
-@media(min-width:1024px){.faq .layout{grid-template-columns:.7fr 1.3fr;gap:5rem}}
+.acc .q{font-family:var(--disp);font-weight:800;font-size:clamp(1.1rem,2.5vw,1.6rem);text-transform:uppercase;transition:color .2s}
+.acc.on .q{color:var(--blue)}
+.acc .pl{flex:none;width:40px;height:40px;border:var(--bd) solid var(--ink);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:1.3rem;transition:.25s}
+.acc.on .pl{background:var(--blue);color:var(--on-blue);transform:rotate(45deg)}
+.acc .a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s var(--ease)}
+.acc.on .a{grid-template-rows:1fr}
+.acc .a>div{overflow:hidden}
+.acc .a p{padding-bottom:1.5rem;max-width:70ch;color:var(--ink-soft)}
 
 /* contact */
-.contact{background:var(--primary-900);color:var(--on-dark)}
-.contact .layout{display:grid;gap:3.5rem}
-.contact h2{color:var(--on-dark);margin-top:1.25rem}
-.contact h2 .it{font-style:italic;color:var(--accent)}
-.cinfo{margin-top:2.5rem;display:grid;gap:1.25rem}
-.cinfo .row{display:flex;align-items:center;gap:1rem}
-.cinfo .ic{flex:none;width:44px;height:44px;border-radius:999px;border:1px solid color-mix(in oklch,var(--on-dark) 20%,transparent);display:flex;align-items:center;justify-content:center}
-.cinfo .ic svg{width:20px;height:20px;color:var(--accent)}
-.cinfo .row b{font-size:1.05rem}
-.cinfo .row small{display:block;color:var(--on-dark-soft);font-size:.85rem}
-.cinfo .row span{color:var(--on-dark-soft)}
-.msgs{margin-top:2rem;display:flex;gap:.75rem}
-.msgs a{border:1px solid color-mix(in oklch,var(--on-dark) 25%,transparent);border-radius:999px;padding:.6rem 1.25rem;font-weight:600;font-size:.875rem;transition:.3s}
-.msgs a:hover{border-color:var(--accent);color:var(--accent)}
-.form{background:var(--on-dark);color:var(--ink);border-radius:1.5rem;padding:clamp(1.75rem,4vw,2.5rem)}
-.form h3{font-family:var(--display);font-size:1.5rem}
-.field{display:flex;flex-direction:column;gap:.5rem;margin-top:1.25rem}
-.field span{font-size:.875rem;font-weight:500;color:var(--ink-soft)}
-.inp{width:100%;border-radius:.75rem;border:1px solid var(--line-strong);background:var(--surface);padding:.85rem 1rem;font-size:1rem;font-family:inherit;color:var(--ink);transition:.2s}
-.inp::placeholder{color:var(--muted)}
-.inp:focus{outline:0;background:var(--bg);border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in oklch,var(--primary) 18%,transparent)}
+.cwrap{display:grid;grid-template-columns:1fr;gap:3rem}
+.cinfo{display:grid;gap:1.25rem;margin-top:2rem}
+.cinfo a,.cinfo div{display:flex;gap:.9rem;align-items:flex-start;font-family:var(--mono);font-size:.9rem}
+.cinfo .b{font-size:1.3rem;font-family:var(--disp);font-weight:800}
+.cinfo small{display:block;color:color-mix(in oklch,var(--paper) 60%,transparent);font-size:.78rem;margin-top:.2rem}
+.msgs{display:flex;gap:.75rem;margin-top:1.75rem}
+.form{border:var(--bd) solid var(--paper);background:var(--paper);color:var(--ink);box-shadow:10px 10px 0 var(--blue);padding:clamp(1.5rem,4vw,2.25rem)}
+.form h3{font-family:var(--disp);font-weight:800;font-size:1.5rem;text-transform:uppercase}
+.field{display:flex;flex-direction:column;gap:.4rem;margin-top:1.1rem}
+.field label{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.03em}
+.inp{width:100%;border:var(--bd) solid var(--ink);background:var(--paper);padding:.8rem .9rem;font-size:1rem;font-family:var(--sans);color:var(--ink)}
+.inp:focus{outline:0;box-shadow:4px 4px 0 var(--blue)}
 .form .btn{width:100%;justify-content:center;margin-top:1.5rem}
-.form .note{font-size:.75rem;color:var(--muted);margin-top:.75rem}
-.sent{min-height:24rem;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.sent .ok{width:64px;height:64px;border-radius:999px;background:color-mix(in oklch,var(--primary) 10%,transparent);display:flex;align-items:center;justify-content:center}
-.sent .ok svg{width:32px;height:32px;color:var(--primary)}
-.sent h3{margin-top:1.5rem}
-.sent p{margin-top:.75rem;color:var(--ink-soft);max-width:24rem}
-@media(min-width:1024px){.contact .layout{grid-template-columns:1fr 1fr;gap:5rem}}
+.form .note{font-family:var(--mono);font-size:.68rem;color:var(--ink-soft);margin-top:.8rem;text-transform:uppercase}
+.sent{min-height:22rem;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:1rem}
+.sent .ok{width:64px;height:64px;background:var(--blue);color:var(--on-blue);display:flex;align-items:center;justify-content:center;font-size:2rem;border:var(--bd) solid var(--ink)}
+.sent h3{font-family:var(--disp);text-transform:uppercase}
+@media(min-width:980px){.cwrap{grid-template-columns:1fr 1fr;gap:4rem}}
 
 /* footer */
-footer{background:oklch(.17 .022 208);color:var(--on-dark-soft);padding-block:4rem}
-.fgrid{display:grid;gap:3rem;grid-template-columns:1fr}
-.fgrid .ttl{font-size:.875rem;font-weight:600;color:var(--on-dark);margin-bottom:.5rem}
-.fcol{display:flex;flex-direction:column;gap:.75rem}
-.fcol a:hover{color:var(--accent)}
-.fbar{margin-top:3.5rem;border-top:1px solid color-mix(in oklch,var(--on-dark) 10%,transparent);padding-top:1.75rem;display:flex;flex-direction:column;gap:.75rem;font-size:.875rem}
-@media(min-width:768px){.fgrid{grid-template-columns:1.4fr 1fr 1fr 1.2fr}.fbar{flex-direction:row;justify-content:space-between;align-items:center}}
+footer{background:var(--ink);color:var(--paper);border-top:var(--bd) solid var(--blue)}
+.fbig{font-family:var(--disp);font-weight:900;font-size:clamp(3rem,15vw,12rem);line-height:.8;letter-spacing:-.04em;padding:clamp(1.5rem,4vw,3rem) 0;border-bottom:var(--bd) solid color-mix(in oklch,var(--paper) 25%,transparent);text-transform:uppercase}
+.fgrid{display:grid;grid-template-columns:1fr;gap:2rem;padding-block:2.5rem}
+.fcol{display:flex;flex-direction:column;gap:.6rem;font-family:var(--mono);font-size:.85rem}
+.fcol .t{font-family:var(--disp);font-weight:800;text-transform:uppercase;font-size:.9rem;margin-bottom:.5rem;color:var(--blue)}
+.fcol a:hover{color:var(--blue)}
+.fbar{border-top:2px solid color-mix(in oklch,var(--paper) 25%,transparent);padding-block:1.25rem;display:flex;flex-direction:column;gap:.5rem;font-family:var(--mono);font-size:.72rem;text-transform:uppercase;opacity:.7}
+@media(min-width:780px){.fgrid{grid-template-columns:2fr 1fr 1fr 1.4fr}.fbar{flex-direction:row;justify-content:space-between}}
 
-.banner{background:var(--accent);color:var(--primary-900);text-align:center;font-size:.85rem;font-weight:600;padding:.5rem 1rem}
+.banner{background:var(--ink);color:var(--paper);text-align:center;font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;padding:.5rem 1rem;border-bottom:var(--bd) solid var(--blue)}
+.banner b{color:var(--acid)}
 </style>
 </head>
 <body>
-<div class="banner">Превью-версия для согласования · данные проектов и фото — заглушки, заменим на реальные из архивов</div>
+<div class="banner">Превью v2 · нео-брутализм + 3D · данные проектов/цены/фото — <b>заглушки</b>, заменим на реальные из архивов</div>
 
-<header id="hdr">
+<header>
   <div class="wrap hd">
-    <a href="#top" class="logo" id="logo">
-      <svg class="mark" width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M4 24 14 5l10 19" stroke="var(--accent-deep)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path class="r2" d="M9 24 14 14l5 10" stroke="var(--on-dark)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span><span class="nm" id="logonm" style="color:var(--on-dark);display:block">ДИНАСТИЯ</span><span class="sub" id="logosub" style="color:var(--on-dark-soft);display:block">Строительная компания</span></span>
-    </a>
+    <a href="#top" class="logo"><span class="sq"></span>ДИНАСТИЯ<sup>®</sup></a>
     <nav class="nav">
-      <a href="#technologies">Технологии</a><a href="#projects">Проекты</a><a href="#process">Этапы</a><a href="#advantages">Почему мы</a><a href="#contact">Контакты</a>
+      <a href="#technologies"><span>01</span> Технологии</a>
+      <a href="#projects"><span>02</span> Проекты</a>
+      <a href="#process"><span>03</span> Этапы</a>
+      <a href="#advantages"><span>04</span> Почему мы</a>
+      <a href="#contact"><span>05</span> Контакты</a>
     </nav>
-    <div class="hd-right">
-      <a href="tel:+78122431434" class="hd-phone" id="hdphone" style="color:var(--on-dark)">+7 (812) 243-14-34</a>
-      <a href="#contact" class="btn btn-primary btn-hd">Рассчитать дом</a>
+    <div class="hd-r">
+      <a href="tel:+78122431434" class="hd-phone">+7 (812) 243-14-34</a>
+      <a href="#contact" class="btn blue btn-sm">Рассчитать</a>
       <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
-<div class="sheet" id="sheet">
-  <div class="wrap">
-    <a href="#technologies">Технологии</a><a href="#projects">Проекты</a><a href="#process">Этапы</a><a href="#advantages">Почему мы</a><a href="#contact">Контакты</a>
-    <a href="tel:+78122431434" style="border:0;font-family:var(--sans);font-size:1.1rem;font-weight:600;padding-top:1.5rem">+7 (812) 243-14-34</a>
-  </div>
-</div>
+<div class="sheet" id="sheet"><div class="wrap">
+  <a href="#technologies">Технологии</a><a href="#projects">Проекты</a><a href="#process">Этапы</a><a href="#advantages">Почему мы</a><a href="#contact">Контакты</a>
+</div></div>
+
+<div class="marq"><div class="track" id="marq"></div></div>
 
 <main>
 <section class="hero" id="top">
-  <div class="bg" id="herobg"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_32Q9KWTtKxuO9vGsur6JRmOi1Zg/hf_20260617_111739_5ef8b5af-2eb6-4cc9-a2ca-124fbc9d563a.png" alt="Премиальный частный дом на закате"/></div>
-  <div class="ov1"></div><div class="ov2"></div><div class="ov3"></div>
-  <div class="wrap inner">
-    <p class="eyebrow dk">Санкт-Петербург и Ленинградская область</p>
-    <h1 class="d-xl">Дома, которые<br>остаются <span class="it">в семье</span></h1>
-    <p class="lede dk">Проектируем и строим частные дома под ключ — из газобетона, кирпича, тёплой керамики и клееного бруса. Фиксированная смета, отдельный договор на каждый этап и гарантия 25 лет.</p>
-    <div class="cta">
-      <a href="#contact" class="btn btn-accent">Рассчитать стоимость →</a>
-      <a href="#projects" class="btn btn-ghost">Смотреть проекты</a>
+  <div class="grid">
+    <div class="left">
+      <span class="kick"><b>//</b> СК «ДИНАСТИЯ» — СПб + ЛЕНОБЛАСТЬ</span>
+      <h1 style="margin-top:1.2rem">СТРОИМ<br><span class="ol">ДОМА</span> НА<br><span class="bx">ПОКОЛЕНИЯ</span></h1>
+      <p class="lede">Частные дома под ключ — газобетон, кирпич, тёплая керамика, клееный брус. Фиксированная смета, отдельный договор на каждый этап, гарантия 25 лет.</p>
+      <div class="cta">
+        <a href="#contact" class="btn blue">Рассчитать стоимость →</a>
+        <a href="#projects" class="btn ghost">Проекты</a>
+      </div>
+    </div>
+    <div class="right">
+      <canvas id="scene"></canvas>
+      <div class="scene-fallback" id="scenefb"></div>
+      <div class="scene-tag">3D · ПОКРУТИ МЫШЬЮ</div>
+      <div class="scene-tag2">МОДЕЛЬ: DYNASTY-276<br>МАСШТАБ 1:100</div>
     </div>
   </div>
 </section>
 
-<section class="stats">
-  <div class="wrap"><div class="grid" id="stats"></div></div>
+<section class="sec dark">
+  <div class="wrap"><div class="statgrid" id="stats"></div></div>
 </section>
 
-<section class="sec tech" id="technologies">
+<section class="sec" id="technologies">
   <div class="wrap">
-    <p class="eyebrow reveal">Технологии</p>
-    <h2 class="d-lg reveal" style="margin-top:1.25rem">Четыре материала — один стандарт качества</h2>
-    <p class="lede reveal" style="margin-top:1.25rem">Выбираете технологию под бюджет, климат и образ жизни. За любой из них — одинаково строгий инженерный контроль и фиксированная смета.</p>
-    <div class="layout">
-      <div class="tech-list" id="techlist"></div>
-      <div class="tech-prev">
-        <div class="frame" id="techframe"></div>
-        <a href="#contact" class="lnk">Подобрать технологию под мой участок →</a>
+    <div class="shead">
+      <div class="idx">01</div>
+      <div class="txt">
+        <span class="kick"><b>//</b> ТЕХНОЛОГИИ</span>
+        <h2 class="h-sec" style="margin-top:.8rem">Четыре материала.<br>Один стандарт.</h2>
+        <p class="lede" style="margin-top:1.2rem">Выбираете технологию под бюджет и климат — за любой одинаково строгий инженерный контроль и фиксированная смета. Жми по блоку.</p>
       </div>
     </div>
+    <div class="techgrid" id="techgrid"></div>
   </div>
 </section>
 
-<section class="sec" id="projects">
+<section class="sec" id="projects" style="background:var(--paper-2)">
   <div class="wrap">
-    <div class="proj-head">
-      <div>
-        <p class="eyebrow reveal">Проекты</p>
-        <h2 class="d-lg reveal" style="margin-top:1.25rem">Дома, которые мы уже построили</h2>
-        <p class="lede reveal" style="margin-top:1.25rem">Каждый проект — индивидуальная архитектура под участок и семью. Стоимость указана под ключ, с фиксацией в договоре.</p>
+    <div class="shead">
+      <div class="idx">02</div>
+      <div class="txt">
+        <span class="kick"><b>//</b> ПРОЕКТЫ</span>
+        <h2 class="h-sec" style="margin-top:.8rem">Уже построено</h2>
+        <p class="lede" style="margin-top:1.2rem">Индивидуальная архитектура под участок и семью. Стоимость — под ключ, с фиксацией в договоре.</p>
       </div>
-      <div class="filters" id="filters"></div>
     </div>
-    <div class="proj-grid" id="projgrid"></div>
+    <div class="filters" id="filters"></div>
+    <div class="pgrid" id="pgrid"></div>
   </div>
 </section>
 
-<section class="sec process" id="process">
+<section class="sec dark" id="process">
   <div class="wrap">
-    <div class="layout">
-      <div class="intro">
-        <p class="eyebrow dk reveal">Как мы строим</p>
-        <h2 class="d-lg reveal" style="color:var(--on-dark);margin-top:1.25rem">8 этапов. На каждый — отдельный договор</h2>
-        <p class="lede dk reveal" style="margin-top:1.25rem">Прозрачный процесс без серых зон: вы платите за следующий шаг только после того, как примете предыдущий.</p>
-        <div class="img reveal"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_32Q9KWTtKxuO9vGsur6JRmOi1Zg/hf_20260617_111858_2f59936c-5d13-4ac4-a7e9-7e9e85bba17b.png" alt="Точная кладка блоков"/></div>
-      </div>
-      <div class="timeline" id="timeline">
-        <span class="track"></span><span class="fill" id="tlfill"></span>
-        <ol id="stages"></ol>
+    <div class="shead">
+      <div class="idx">03</div>
+      <div class="txt">
+        <span class="kick"><b>//</b> КАК МЫ СТРОИМ</span>
+        <h2 class="h-sec" style="margin-top:.8rem">8 этапов.<br>8 договоров.</h2>
+        <p class="lede" style="margin-top:1.2rem">Прозрачный процесс без серых зон: платите за следующий шаг только после приёмки предыдущего.</p>
       </div>
     </div>
+    <div class="steps" id="steps"></div>
   </div>
 </section>
 
 <section class="sec" id="advantages">
   <div class="wrap">
-    <p class="eyebrow reveal">Почему «Династия»</p>
-    <h2 class="d-lg reveal" style="margin-top:1.25rem">Доверие, закреплённое договором</h2>
-    <p class="lede reveal" style="margin-top:1.25rem">Мы убрали из стройки то, чего боятся клиенты: размытые сметы, исчезающих прорабов и оплату «вперёд за всё».</p>
-    <div class="adv-grid" id="advgrid"></div>
+    <div class="shead">
+      <div class="idx">04</div>
+      <div class="txt">
+        <span class="kick"><b>//</b> ПОЧЕМУ «ДИНАСТИЯ»</span>
+        <h2 class="h-sec" style="margin-top:.8rem">Доверие = договор</h2>
+        <p class="lede" style="margin-top:1.2rem">Мы убрали из стройки то, чего боятся клиенты: размытые сметы, исчезающих прорабов и оплату «вперёд за всё».</p>
+      </div>
+    </div>
+    <div class="advgrid" id="advgrid"></div>
   </div>
 </section>
 
-<section class="sec" style="padding-top:0">
+<section class="sec blueb">
   <div class="wrap">
     <div class="guar reveal">
-      <div class="glow"></div>
-      <div class="layout">
-        <div>
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4 3 7 7 9 4-2 7-5 7-9V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg>
-          <p class="big">25<span>лет</span></p>
-          <h2 style="color:var(--on-dark);font-size:clamp(1.5rem,3vw,1.875rem);margin-top:1rem">гарантии на конструктив дома</h2>
-          <p class="lede dk" style="margin-top:1rem;max-width:24rem">Не на словах, а юридически — в договоре. Если что-то пойдёт не так с несущими конструкциями, это наша зона ответственности.</p>
-        </div>
-        <ul id="guarlist"></ul>
+      <div>
+        <span class="kick" style="color:var(--on-blue)"><b style="color:var(--ink)">//</b> ГАРАНТИЯ</span>
+        <div class="big">25<small>ЛЕТ</small></div>
+        <h2 style="font-size:clamp(1.3rem,3vw,2rem);margin-top:.5rem">на конструктив дома — по договору</h2>
       </div>
+      <ul id="guarlist"></ul>
     </div>
   </div>
 </section>
 
-<section class="sec reviews">
+<section class="sec">
   <div class="wrap">
-    <p class="eyebrow reveal">Отзывы</p>
-    <h2 class="d-lg reveal" style="margin-top:1.25rem">Семьи, которые нам доверились</h2>
-    <p class="lede reveal" style="margin-top:1.25rem">Лучшая рекомендация — это ключи, переданные в срок, и тёплый дом зимой.</p>
-    <div class="rev-grid" id="revgrid"></div>
-  </div>
-</section>
-
-<section class="sec faq">
-  <div class="wrap layout">
-    <div>
-      <p class="eyebrow reveal">Вопросы</p>
-      <h2 class="d-lg reveal" style="margin-top:1.25rem">Коротко о главном</h2>
-      <p class="lede reveal" style="margin-top:1.25rem">Не нашли ответ? Позвоните нам — расскажем без воды и навязывания.</p>
-    </div>
-    <div id="faqlist"></div>
-  </div>
-</section>
-
-<section class="sec contact" id="contact">
-  <div class="wrap layout">
-    <div>
-      <p class="eyebrow dk">Контакты</p>
-      <h2 class="d-lg">Рассчитаем ваш дом <span class="it">бесплатно</span></h2>
-      <p class="lede dk" style="margin-top:1.25rem;max-width:28rem">Оставьте заявку — инженер свяжется в течение рабочего дня, ответит на вопросы и подготовит предварительную смету. Выезд на участок для замеров — бесплатно.</p>
-      <div class="cinfo">
-        <a href="tel:+78122431434" class="row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg></span><span><b>+7 (812) 243-14-34</b><small>Ежедневно, 9:00 — 21:00</small></span></a>
-        <div class="row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span>Санкт-Петербург, ул. 6-я Красноармейская, д. 6, литер А, офис 9901</span></div>
-        <div class="row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span>Ежедневно, 9:00 — 21:00</span></div>
+    <div class="shead">
+      <div class="idx">05</div>
+      <div class="txt">
+        <span class="kick"><b>//</b> ОТЗЫВЫ</span>
+        <h2 class="h-sec" style="margin-top:.8rem">Кто нам доверился</h2>
       </div>
-      <div class="msgs"><a href="#">WhatsApp</a><a href="#">Telegram</a></div>
     </div>
-    <div class="form reveal" id="formwrap">
-      <form id="leadform" novalidate>
-        <h3>Заявка на расчёт</h3>
-        <label class="field"><span>Как вас зовут</span><input class="inp" id="f-name" type="text" placeholder="Имя" autocomplete="name"></label>
-        <label class="field"><span>Телефон</span><input class="inp" id="f-phone" type="tel" placeholder="+7 (___) ___-__-__" autocomplete="tel"></label>
-        <label class="field"><span>Технология (необязательно)</span><select class="inp" id="f-tech"><option value="">Ещё не выбрал(а)</option><option>Газобетон</option><option>Кирпич</option><option>Тёплая керамика</option><option>Клееный брус</option></select></label>
-        <label class="field"><span>Комментарий (необязательно)</span><textarea class="inp" id="f-comment" rows="3" placeholder="Участок, площадь, пожелания…" style="resize:none"></textarea></label>
-        <button type="submit" class="btn btn-primary" id="f-submit">Получить расчёт →</button>
-        <p class="note">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных.</p>
-      </form>
+    <div class="revgrid" id="revgrid"></div>
+  </div>
+</section>
+
+<section class="sec" style="background:var(--paper-2)">
+  <div class="wrap">
+    <div class="shead">
+      <div class="idx">06</div>
+      <div class="txt">
+        <span class="kick"><b>//</b> ВОПРОСЫ</span>
+        <h2 class="h-sec" style="margin-top:.8rem">Коротко о главном</h2>
+      </div>
+    </div>
+    <div class="faqwrap" id="faqlist"></div>
+  </div>
+</section>
+
+<section class="sec dark" id="contact">
+  <div class="wrap">
+    <div class="cwrap">
+      <div>
+        <span class="kick"><b>//</b> КОНТАКТЫ</span>
+        <h2 class="h-sec" style="margin-top:.8rem">Рассчитаем<br>дом бесплатно</h2>
+        <p class="lede" style="margin-top:1.2rem">Оставьте заявку — инженер свяжется в течение рабочего дня и подготовит предварительную смету. Выезд на участок — бесплатно.</p>
+        <div class="cinfo">
+          <a href="tel:+78122431434"><span>▸</span><span><span class="b">+7 (812) 243-14-34</span><small>Ежедневно, 9:00 — 21:00</small></span></a>
+          <div><span>▸</span><span>Санкт-Петербург, ул. 6-я Красноармейская, д. 6, литер А, офис 9901</span></div>
+          <div><span>▸</span><span>info@sk-dinastiya.com</span></div>
+        </div>
+        <div class="msgs"><a href="#" class="btn ghost btn-sm">WhatsApp</a><a href="#" class="btn ghost btn-sm">Telegram</a></div>
+      </div>
+      <div class="form reveal" id="formwrap">
+        <form id="leadform" novalidate>
+          <h3>Заявка на расчёт</h3>
+          <div class="field"><label>Как вас зовут</label><input class="inp" id="f-name" placeholder="Имя"></div>
+          <div class="field"><label>Телефон</label><input class="inp" id="f-phone" type="tel" placeholder="+7 (___) ___-__-__"></div>
+          <div class="field"><label>Технология</label><select class="inp" id="f-tech"><option value="">Ещё не выбрал(а)</option><option>Газобетон</option><option>Кирпич</option><option>Тёплая керамика</option><option>Клееный брус</option></select></div>
+          <div class="field"><label>Комментарий</label><textarea class="inp" id="f-comment" rows="3" placeholder="Участок, площадь, пожелания…" style="resize:none"></textarea></div>
+          <button class="btn blue" type="submit">Получить расчёт →</button>
+          <p class="note">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных.</p>
+        </form>
+      </div>
     </div>
   </div>
 </section>
@@ -412,29 +420,92 @@ footer{background:oklch(.17 .022 208);color:var(--on-dark-soft);padding-block:4r
 
 <footer>
   <div class="wrap">
+    <div class="fbig">ДИНАСТИЯ®</div>
     <div class="fgrid">
-      <div>
-        <span class="logo"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M4 24 14 5l10 19" stroke="var(--accent-deep)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 24 14 14l5 10" stroke="var(--on-dark)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span><span class="nm" style="color:var(--on-dark);display:block">ДИНАСТИЯ</span><span class="sub" style="color:var(--on-dark-soft);display:block">Строительная компания</span></span></span>
-        <p style="margin-top:1.25rem;max-width:20rem">Строим частные дома под ключ в Санкт-Петербурге и Ленинградской области с 2012 года. Дома, которые остаются в семье.</p>
-      </div>
-      <div class="fcol"><span class="ttl">Разделы</span><a href="#technologies">Технологии</a><a href="#projects">Проекты</a><a href="#process">Этапы</a><a href="#advantages">Почему мы</a><a href="#contact">Контакты</a></div>
-      <div class="fcol"><span class="ttl">Технологии</span><a href="#technologies">Газобетон</a><a href="#technologies">Кирпич</a><a href="#technologies">Тёплая керамика</a><a href="#technologies">Клееный брус</a></div>
-      <div class="fcol"><span class="ttl">Контакты</span><a href="tel:+78122431434" style="color:var(--on-dark);font-weight:600;font-size:1.05rem">+7 (812) 243-14-34</a><a href="mailto:info@sk-dinastiya.com">info@sk-dinastiya.com</a><span style="line-height:1.4">Санкт-Петербург, ул. 6-я Красноармейская, д. 6, литер А, офис 9901</span></div>
+      <div class="fcol"><span class="t">СК «Династия»</span><span style="text-transform:none">Частные дома под ключ в Санкт-Петербурге и Ленинградской области с 2012 года.</span></div>
+      <div class="fcol"><span class="t">Разделы</span><a href="#technologies">Технологии</a><a href="#projects">Проекты</a><a href="#process">Этапы</a><a href="#contact">Контакты</a></div>
+      <div class="fcol"><span class="t">Материалы</span><a href="#technologies">Газобетон</a><a href="#technologies">Кирпич</a><a href="#technologies">Керамика</a><a href="#technologies">Клееный брус</a></div>
+      <div class="fcol"><span class="t">Контакты</span><a href="tel:+78122431434">+7 (812) 243-14-34</a><a href="mailto:info@sk-dinastiya.com">info@sk-dinastiya.com</a><span style="text-transform:none">ул. 6-я Красноармейская, 6А, офис 9901</span></div>
     </div>
-    <div class="fbar"><p>© <span id="year"></span> СК «Династия». Все права защищены.</p><p style="opacity:.7">Информация на сайте не является публичной офертой.</p></div>
+    <div class="fbar"><span>© <span id="year"></span> СК «Династия»</span><span>Не является публичной офертой</span></div>
   </div>
 </footer>
+
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+const cv=document.getElementById('scene');
+try{
+  const wrap=cv.parentElement;
+  const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(38,1,0.1,100);
+  cam.position.set(4.5,3.2,5.2);cam.lookAt(0,0.7,0);
+  const amb=new THREE.AmbientLight(0xffffff,0.75);scene.add(amb);
+  const d=new THREE.DirectionalLight(0xffffff,1.1);d.position.set(5,9,6);scene.add(d);
+  const d2=new THREE.DirectionalLight(0x4060ff,0.5);d2.position.set(-6,2,-4);scene.add(d2);
+
+  const g=new THREE.Group();scene.add(g);
+  const concrete=new THREE.MeshStandardMaterial({color:0xe2e6ee,roughness:.95,metalness:0,flatShading:true});
+  const dark=new THREE.MeshStandardMaterial({color:0x232633,roughness:1,flatShading:true});
+  const blue=0x3a5cff;
+  function edge(geo,pos,rot){const e=new THREE.LineSegments(new THREE.EdgesGeometry(geo),new THREE.LineBasicMaterial({color:blue}));if(pos)e.position.copy(pos);if(rot)e.rotation.copy(rot);g.add(e);return e;}
+
+  const bodyGeo=new THREE.BoxGeometry(2.6,1.5,1.9);
+  const body=new THREE.Mesh(bodyGeo,concrete);body.position.y=0.75;g.add(body);
+  edge(bodyGeo,body.position);
+
+  const wingGeo=new THREE.BoxGeometry(1.3,1.0,1.3);
+  const wing=new THREE.Mesh(wingGeo,concrete);wing.position.set(1.7,0.5,0.3);g.add(wing);
+  edge(wingGeo,wing.position);
+
+  const shape=new THREE.Shape();shape.moveTo(-1.45,0);shape.lineTo(1.45,0);shape.lineTo(0,1.05);shape.closePath();
+  const roofGeo=new THREE.ExtrudeGeometry(shape,{depth:1.9,bevelEnabled:false});
+  const roof=new THREE.Mesh(roofGeo,dark);roof.position.set(0,1.5,-0.95);g.add(roof);
+  edge(roofGeo,roof.position,roof.rotation);
+
+  const grid=new THREE.GridHelper(16,16,0x3a5cff,0xc3c9d6);grid.material.opacity=.5;grid.material.transparent=true;scene.add(grid);
+
+  let px=0,py=0,tx=0,ty=0;
+  wrap.addEventListener('pointermove',e=>{const r=wrap.getBoundingClientRect();tx=((e.clientX-r.left)/r.width-.5)*2;ty=((e.clientY-r.top)/r.height-.5)*2;});
+  wrap.addEventListener('pointerleave',()=>{tx=0;ty=0;});
+  function resize(){const w=wrap.clientWidth,h=wrap.clientHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+  new ResizeObserver(resize).observe(wrap);resize();
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function loop(){requestAnimationFrame(loop);px+=(tx-px)*.05;py+=(ty-py)*.05;
+    if(!reduce)g.rotation.y+=0.0035;
+    g.rotation.y+=(px*0.0009);g.rotation.x=py*0.12;
+    cam.position.x=4.5+px*0.6;cam.position.y=3.2-py*0.4;cam.lookAt(0,0.7,0);
+    renderer.render(scene,cam);}
+  loop();
+}catch(err){
+  cv.style.display='none';
+  const fb=document.getElementById('scenefb');
+  fb.style.display='block';
+  fb.style.backgroundImage="url('https://d8j0ntlcm91z4.cloudfront.net/user_32Q9KWTtKxuO9vGsur6JRmOi1Zg/hf_20260617_111739_5ef8b5af-2eb6-4cc9-a2ca-124fbc9d563a.png')";
+}
+</script>
 
 <script>
 const CDN="https://d8j0ntlcm91z4.cloudfront.net/user_32Q9KWTtKxuO9vGsur6JRmOi1Zg";
 const IMG={hero:CDN+"/hf_20260617_111739_5ef8b5af-2eb6-4cc9-a2ca-124fbc9d563a.png",gazobeton:CDN+"/hf_20260617_111842_466bcd6f-0cdd-4818-bd75-5b7ead23f1e1.png",brick:CDN+"/hf_20260617_111843_e0b1644e-92df-4e41-863c-49f475d6d6a2.png",glulam:CDN+"/hf_20260617_111845_6162b676-f91c-41b5-8ef6-091ea0fd7bdc.png",ceramic:CDN+"/hf_20260617_111854_98947a84-de8f-4fc9-af28-29a6819a9c0e.png",fachwerk:CDN+"/hf_20260617_111857_ab801554-1266-4f5a-9412-fac4b82b7f16.png"};
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 
-const stats=[["14"," лет","проектируем и строим частные дома"],["320","+","семей живут в домах нашей постройки"],["25"," лет","гарантия по договору на конструктив"],["8","","этапов — отдельный договор на каждый"]];
+const marqItems=["СТРОИМ С 2012","ГАРАНТИЯ 25 ЛЕТ","ФИКСИРОВАННАЯ СМЕТА","320+ ДОМОВ","ДОГОВОР НА КАЖДЫЙ ЭТАП","СПб + ЛЕНОБЛАСТЬ","ГАЗОБЕТОН · КИРПИЧ · КЕРАМИКА · БРУС"];
+const mhtml=marqItems.map(x=>`<span>${x} <b>✦</b></span>`).join("");
+$("#marq").innerHTML=mhtml+mhtml;
+
+const stats=[["14"," лет","проектируем и строим частные дома"],["320","+","семей живут в наших домах"],["25"," лет","гарантия на конструктив"],["8","","этапов — договор на каждый"]];
+$("#stats").innerHTML=stats.map(s=>`<div class="stat reveal"><div class="n"><span data-count="${s[0]}">${s[0]}</span><b>${s[1]}</b></div><div class="l">${s[2]}</div></div>`).join("");
+
 const tech=[
- {n:"Газобетон",p:"от 38 000 ₽/м²",s:"Тёплый монолит",d:"Энергоэффективные стены из автоклавного газобетона. Ровная геометрия, быстрый монтаж и комфортный микроклимат без переплат за отопление.",f:["Тёплая стена без утеплителя","Ровная геометрия под чистовую","Срок коробки — от 2 месяцев"],img:IMG.gazobeton,alt:"Дом из газобетона"},
- {n:"Кирпич",p:"от 52 000 ₽/м²",s:"Дом на поколения",d:"Классическая кладка из керамического и клинкерного кирпича. Максимальная долговечность фасада и статус, который не выходит из моды.",f:["Срок службы фасада 100+ лет","Премиальный облик","Высокая теплоёмкость"],img:IMG.brick,alt:"Кирпичный дом"},
- {n:"Тёплая керамика",p:"от 44 000 ₽/м²",s:"Дышащие стены",d:"Поризованные керамические блоки сочетают прочность камня и тепло дерева. Естественная регуляция влажности и тишина внутри дома.",f:["Паропроницаемые стены","Высокая шумоизоляция","Экологичный материал"],img:IMG.ceramic,alt:"Дом из тёплой керамики"},
- {n:"Клееный брус",p:"от 58 000 ₽/м²",s:"Природа в доме",d:"Дома из клееного бруса премиум-класса. Натуральное дерево, выразительная архитектура и въезд без отделки практически сразу.",f:["Готовность под въезд быстрее","Эстетика натурального дерева","Минимальная усадка"],img:IMG.glulam,alt:"Дом из клееного бруса"}];
+ {n:"Газобетон",p:"от 38 000 ₽/м²",d:"Энергоэффективные стены из автоклавного газобетона. Ровная геометрия, быстрый монтаж, комфортный микроклимат без переплат за отопление.",f:["Тёплая стена","Ровная геометрия","Коробка от 2 мес."],img:IMG.gazobeton},
+ {n:"Кирпич",p:"от 52 000 ₽/м²",d:"Классическая кладка из керамического и клинкерного кирпича. Максимальная долговечность фасада и статус, который не выходит из моды.",f:["Фасад 100+ лет","Премиальный облик","Высокая теплоёмкость"],img:IMG.brick},
+ {n:"Тёплая керамика",p:"от 44 000 ₽/м²",d:"Поризованные керамические блоки: прочность камня и тепло дерева. Естественная регуляция влажности и тишина внутри дома.",f:["Дышащие стены","Шумоизоляция","Экологично"],img:IMG.ceramic},
+ {n:"Клееный брус",p:"от 58 000 ₽/м²",d:"Дома из клееного бруса премиум-класса. Натуральное дерево, выразительная архитектура, въезд без отделки почти сразу.",f:["Быстрый въезд","Эстетика дерева","Минимальная усадка"],img:IMG.glulam}];
+$("#techgrid").innerHTML=tech.map((t,i)=>`<div class="tcell${i===0?' on':''}" data-i="${i}"><div class="top"><span class="nm">${t.n}</span><span class="pr">${t.p}</span></div><div class="body"><div><div class="inner"><div class="pic"><img src="${t.img}" alt="${t.n}"></div><p>${t.d}</p><div class="feats">${t.f.map(f=>`<span>${f}</span>`).join("")}</div></div></div></div></div>`).join("");
+$$(".tcell .top").forEach(top=>top.onclick=()=>{const c=top.parentElement,was=c.classList.contains("on");$$(".tcell").forEach(x=>x.classList.remove("on"));if(!was)c.classList.add("on")});
+
 const projects=[
  {t:"Nordic",tech:"Газобетон",area:"164 м²",fl:"1 этаж",term:"6 мес.",pr:"от 7,9 млн ₽",img:IMG.gazobeton},
  {t:"Fjord",tech:"Клееный брус",area:"212 м²",fl:"2 этажа",term:"7 мес.",pr:"от 12,4 млн ₽",img:IMG.glulam},
@@ -443,67 +514,39 @@ const projects=[
  {t:"Glass House",tech:"Фахверк",area:"224 м²",fl:"2 этажа",term:"8 мес.",pr:"от 16,9 млн ₽",img:IMG.fachwerk},
  {t:"Dynasty",tech:"Газобетон + кирпич",area:"276 м²",fl:"2 этажа",term:"10 мес.",pr:"от 18,5 млн ₽",img:IMG.hero}];
 const filters=["Все","Газобетон","Кирпич","Тёплая керамика","Клееный брус","Фахверк"];
-const stages=[["01","Знакомство и расчёт","Обсуждаем участок, бюджет и пожелания. Готовим предварительную смету и концепцию — бесплатно."],["02","Проектирование","Архитектурный и конструктивный проект, инженерные сети, 3D-визуализация будущего дома."],["03","Договор и смета","Фиксируем стоимость, сроки и материалы. Подписываем договор на первый этап работ."],["04","Геология и фундамент","Исследуем грунт и закладываем фундамент, рассчитанный именно под ваш дом и участок."],["05","Коробка и кровля","Возводим стены, перекрытия и кровлю. Дом становится тёплым контуром под отделку."],["06","Инженерия","Отопление, водоснабжение, электрика и вентиляция — всё смонтировано под ключ."],["07","Отделка","Черновая и чистовая отделка по выбранному уровню — от white box до готового интерьера."],["08","Приёмка и заселение","Сдаём дом по чек-листу, передаём документы и паспорт объекта. Вы получаете ключи."]];
-const adv=[["Фиксированная смета","Стоимость закрепляется в договоре до начала работ. Без «вылезающих» сумм и доплат по ходу стройки."],["Договор на каждый этап","Отдельные договоры вместо одного общего. Вы платите только за принятый и проверенный результат."],["Свои бригады","Никаких субподрядчиков с улицы — только штатные инженеры и проверенные мастера с многолетним стажем."],["Контроль на стройке","Личный кабинет с фотоотчётом по каждому этапу и закреплённый прораб, который всегда на связи."],["Гарантия 25 лет","На несущие конструкции — по договору. Мы отвечаем за дом не словами, а юридическим документом."],["Проект под вас","Не шаблоны из каталога, а архитектура под ваш участок, состав семьи и сценарий жизни."]];
-const advIcons=['<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h3"/>','<path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v5h5M9 17l2 2 4-4"/>','<circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M16 5.5a3 3 0 0 1 0 5M21 20a6 6 0 0 0-4-5.66"/>','<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="2.5"/>','<path d="M12 3 5 6v6c0 4 3 7 7 9 4-2 7-5 7-9V6l-7-3Z"/><path d="m9 12 2 2 4-4"/>','<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h6v11M15 4v7h6M9 14h3v6"/>'];
-const guar=["Отдельный официальный договор на каждый из этапов строительства","Гарантия 25 лет на несущие конструкции дома","Фиксированная смета — цена в договоре не меняется","Поэтапная оплата только за принятый результат","Фотоотчёт и контроль качества на каждом этапе","Закреплённый прораб и инженер технадзора"];
-const reviews=[["Алексей и Марина","Дом «Nordic», Всеволожский р-н","Искали тех, кто построит без сюрпризов по деньгам. «Династия» дала фиксированную смету — и держала её до конца. Заехали в срок, дом тёплый, зимой счёт за отопление приятно удивил."],["Сергей","Дом «Estate», Пушкинский р-н","Понравилось, что договор разбит на этапы. Платишь — видишь результат — платишь дальше. Прораб был всегда на связи, фотоотчёт приходил каждую неделю. Это и есть доверие."],["Ольга","Дом «Fjord», Приозерский р-н","Дом из клееного бруса мечты. Архитектор услышал нас и предложил планировку лучше, чем мы сами придумали. Качество сборки — на уровне, придраться не к чему."]];
-const faqs=[["Сколько стоит построить дом под ключ?","Стоимость зависит от технологии, площади и уровня отделки. Дома под ключ начинаются примерно от 7,9 млн ₽. После встречи и расчёта вы получаете фиксированную смету, которая закрепляется в договоре."],["Что значит «договор на каждый этап»?","Мы не просим оплатить всю стройку сразу по одному договору. Каждый из этапов — от фундамента до отделки — оформляется отдельным договором. Вы оплачиваете следующий этап только после приёмки предыдущего."],["Какая гарантия на дом?","На несущие конструкции дома мы даём гарантию 25 лет, закреплённую в договоре. Гарантия на инженерные системы и отделочные работы предоставляется по отдельным условиям."],["Вы работаете со своим проектом или с моим?","И так, и так. Мы можем разработать индивидуальный проект под ваш участок и образ жизни или построить дом по вашему готовому проекту, проверив его на корректность."],["В каких районах вы строите?","Санкт-Петербург и вся Ленинградская область. Выезд инженера на участок для замеров и оценки — бесплатно."]];
-
-const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
-const checkSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>';
-
-// stats
-$("#stats").innerHTML=stats.map(s=>`<div class="stat reveal"><div class="num"><span data-count="${s[0]}">${s[0]}</span><b>${s[1]}</b></div><p>${s[2]}</p></div>`).join("");
-// tech
-$("#techlist").innerHTML=tech.map((t,i)=>`<button class="tech-item${i===0?' on':''}" data-i="${i}"><span class="bar"></span><div class="row"><span class="tname">${t.n}</span><span class="price">${t.p}</span></div><div class="desc">${t.s} — ${t.d}</div></button>`).join("");
-function renderTech(i){const t=tech[i];$("#techframe").innerHTML=`<img class="on" src="${t.img}" alt="${t.alt}"><div class="sh"></div><div class="tags">${t.f.map(f=>`<span class="tag">${f}</span>`).join("")}</div>`}
-renderTech(0);
-$$(".tech-item").forEach(b=>b.onclick=()=>{$$(".tech-item").forEach(x=>x.classList.remove("on"));b.classList.add("on");renderTech(+b.dataset.i)});
-// filters + projects
 $("#filters").innerHTML=filters.map((f,i)=>`<button class="chip${i===0?' on':''}">${f}</button>`).join("");
-function renderProjects(f){const list=f==="Все"?projects:projects.filter(p=>p.tech.includes(f));$("#projgrid").innerHTML=list.map(p=>`<article class="card reveal in"><div class="ph"><img src="${p.img}" alt="${p.t}"><div class="sh"></div><span class="badge">${p.tech}</span><div class="meta"><div class="t"><h3>${p.t}</h3><span class="pr">${p.pr}</span></div><dl><div>${p.area}</div><div>${p.fl}</div><div>срок ${p.term}</div></dl></div></div></article>`).join("")}
-renderProjects("Все");
-$$(".chip").forEach(c=>c.onclick=()=>{$$(".chip").forEach(x=>x.classList.remove("on"));c.classList.add("on");renderProjects(c.textContent)});
-// stages
-$("#stages").innerHTML=stages.map(s=>`<li class="reveal"><span class="dot"></span><div class="h"><span class="n">${s[0]}</span><h3>${s[1]}</h3></div><p>${s[2]}</p></li>`).join("");
-// advantages
-$("#advgrid").innerHTML=adv.map((a,i)=>`<div class="adv reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${advIcons[i]}</svg><h3>${a[0]}</h3><p>${a[1]}</p></div>`).join("");
-// guarantees
-$("#guarlist").innerHTML=guar.map(g=>`<li class="reveal" style="color:var(--on-dark)">${checkSvg}<span>${g}</span></li>`).join("");
-// reviews
+function renderP(f){const l=f==="Все"?projects:projects.filter(p=>p.tech.includes(f));$("#pgrid").innerHTML=l.map((p,i)=>`<article class="pcard reveal in"><div class="ph"><span class="no">0${i+1}</span><span class="badge">${p.tech}</span><img src="${p.img}" alt="${p.t}"></div><div class="info"><div class="r1"><h3>${p.t}</h3><span class="pr">${p.pr}</span></div><dl><div>${p.area}</div><div>${p.fl}</div><div>${p.term}</div></dl></div></article>`).join("")}
+renderP("Все");
+$$(".chip").forEach(c=>c.onclick=()=>{$$(".chip").forEach(x=>x.classList.remove("on"));c.classList.add("on");renderP(c.textContent)});
+
+const steps=[["01","Знакомство и расчёт","Обсуждаем участок, бюджет и пожелания. Готовим предварительную смету и концепцию — бесплатно."],["02","Проектирование","Архитектурный и конструктивный проект, инженерные сети, 3D-визуализация будущего дома."],["03","Договор и смета","Фиксируем стоимость, сроки и материалы. Подписываем договор на первый этап."],["04","Геология и фундамент","Исследуем грунт и закладываем фундамент под ваш дом и участок."],["05","Коробка и кровля","Возводим стены, перекрытия и кровлю. Дом становится тёплым контуром."],["06","Инженерия","Отопление, водоснабжение, электрика и вентиляция — под ключ."],["07","Отделка","Черновая и чистовая отделка — от white box до готового интерьера."],["08","Приёмка и заселение","Сдаём по чек-листу, передаём документы. Вы получаете ключи."]];
+$("#steps").innerHTML=steps.map(s=>`<div class="step reveal"><div class="no">${s[0]}</div><h3>${s[1]}</h3><p>${s[2]}</p></div>`).join("");
+
+const adv=[["Фиксированная смета","Стоимость закрепляется в договоре до начала работ. Без доплат по ходу стройки."],["Договор на каждый этап","Отдельные договоры вместо одного. Платите только за принятый результат."],["Свои бригады","Только штатные инженеры и проверенные мастера. Никаких субподрядчиков с улицы."],["Контроль на стройке","Личный кабинет с фотоотчётом и закреплённый прораб на связи."],["Гарантия 25 лет","На несущие конструкции — по договору. Отвечаем юридически."],["Проект под вас","Не шаблоны из каталога, а архитектура под участок и сценарий жизни."]];
+$("#advgrid").innerHTML=adv.map((a,i)=>`<div class="adv reveal"><div class="no">0${i+1}</div><h3>${a[0]}</h3><p>${a[1]}</p></div>`).join("");
+
+const guar=["Отдельный договор на каждый этап стройки","Гарантия 25 лет на несущие конструкции","Фиксированная смета — цена не меняется","Оплата только за принятый результат","Фотоотчёт и контроль на каждом этапе","Закреплённый прораб и технадзор"];
+$("#guarlist").innerHTML=guar.map((g,i)=>`<li class="reveal"><b>0${i+1}</b><span>${g}</span></li>`).join("");
+
+const reviews=[["Алексей и Марина","Дом «Nordic», Всеволожский р-н","Искали тех, кто построит без сюрпризов по деньгам. «Династия» дала фиксированную смету — и держала её до конца. Заехали в срок, дом тёплый."],["Сергей","Дом «Estate», Пушкинский р-н","Понравилось, что договор разбит на этапы. Платишь — видишь результат — платишь дальше. Прораб всегда на связи."],["Ольга","Дом «Fjord», Приозерский р-н","Дом из клееного бруса мечты. Архитектор предложил планировку лучше, чем мы придумали. Качество сборки — на уровне."]];
 $("#revgrid").innerHTML=reviews.map(r=>`<div class="rev reveal"><span class="q">“</span><p>${r[2]}</p><div class="who"><div class="nm">${r[0]}</div><div class="pj">${r[1]}</div></div></div>`).join("");
-// faq
-$("#faqlist").innerHTML=faqs.map((f,i)=>`<div class="acc${i===0?' on':''}"><button><span class="q">${f[0]}</span><svg class="pl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button><div class="a"><p>${f[1]}</p></div></div>`).join("");
-function syncAcc(){$$(".acc").forEach(a=>{const p=a.querySelector(".a");p.style.maxHeight=a.classList.contains("on")?p.scrollHeight+"px":"0"})}
-$$(".acc button").forEach(b=>b.onclick=()=>{const a=b.parentElement,was=a.classList.contains("on");$$(".acc").forEach(x=>x.classList.remove("on"));if(!was)a.classList.add("on");syncAcc()});
+
+const faqs=[["Сколько стоит дом под ключ?","Зависит от технологии, площади и отделки. Дома под ключ — примерно от 7,9 млн ₽. После встречи и расчёта вы получаете фиксированную смету в договоре."],["Что значит «договор на каждый этап»?","Каждый этап — от фундамента до отделки — оформляется отдельным договором. Вы оплачиваете следующий этап только после приёмки предыдущего."],["Какая гарантия на дом?","На несущие конструкции — 25 лет по договору. Гарантия на инженерные системы и отделку — по отдельным условиям."],["Свой проект или мой?","И так, и так. Разработаем индивидуальный проект под участок или построим по вашему готовому, проверив его."],["В каких районах строите?","Санкт-Петербург и вся Ленинградская область. Выезд инженера на участок — бесплатно."]];
+$("#faqlist").innerHTML=faqs.map((f,i)=>`<div class="acc${i===0?' on':''}"><button><span class="q">${f[0]}</span><span class="pl">+</span></button><div class="a"><div><p>${f[1]}</p></div></div></div>`).join("");
+$$(".acc button").forEach(b=>b.onclick=()=>{const a=b.parentElement,was=a.classList.contains("on");$$(".acc").forEach(x=>x.classList.remove("on"));if(!was)a.classList.add("on")});
+
 $("#year").textContent=new Date().getFullYear();
 
-// reveal observer
-const io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{rootMargin:"-60px"});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{rootMargin:"-50px"});
 $$(".reveal").forEach(el=>io.observe(el));
-setTimeout(syncAcc,300);
-
-// count up
-const cio=new IntersectionObserver((es)=>es.forEach(e=>{if(!e.isIntersecting)return;cio.unobserve(e.target);const el=e.target,target=+el.dataset.count,start=performance.now();function tick(n){const t=Math.min(1,(n-start)/1400);el.textContent=Math.round((1-Math.pow(1-t,4))*target);if(t<1)requestAnimationFrame(tick)}requestAnimationFrame(tick)}),{rootMargin:"-40px"});
+const cio=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;cio.unobserve(e.target);const el=e.target,target=+el.dataset.count,st=performance.now();(function t(n){const k=Math.min(1,(n-st)/1300);el.textContent=Math.round((1-Math.pow(1-k,4))*target);if(k<1)requestAnimationFrame(t)})(st)}),{rootMargin:"-30px"});
 $$("[data-count]").forEach(el=>cio.observe(el));
 
-// header scroll state + logo color swap
-const hdr=$("#hdr"),logonm=$("#logonm"),logosub=$("#logosub"),hdphone=$("#hdphone"),r2=$(".logo .r2");
-function onScroll(){const s=scrollY>24;hdr.classList.toggle("scr",s);
-  logonm.style.color=s?"var(--ink)":"var(--on-dark)";logosub.style.color=s?"var(--muted)":"var(--on-dark-soft)";hdphone.style.color=s?"var(--ink)":"var(--on-dark)";if(r2)r2.setAttribute("stroke",s?"var(--ink)":"var(--on-dark)");
-  // hero parallax
-  const bg=$("#herobg");if(bg)bg.style.transform="translateY("+Math.min(scrollY*0.25,200)+"px)";
-  // timeline fill
-  const tl=$("#timeline"),fill=$("#tlfill");if(tl){const r=tl.getBoundingClientRect(),vh=innerHeight;let p=(vh*0.6-r.top)/(r.height);p=Math.max(0,Math.min(1,p));fill.style.height=(p*100)+"%"}
-}
-addEventListener("scroll",onScroll,{passive:true});onScroll();
-// burger
 const burger=$("#burger"),sheet=$("#sheet");
-burger.onclick=()=>{const o=sheet.classList.toggle("open");document.body.style.overflow=o?"hidden":"";burger.children[0].style.transform=o?"translateY(3px) rotate(45deg)":"";burger.children[1].style.opacity=o?"0":"";burger.children[2].style.transform=o?"translateY(-3px) rotate(-45deg)":""};
-$$("#sheet a").forEach(a=>a.onclick=()=>{sheet.classList.remove("open");document.body.style.overflow="";burger.children[0].style.transform="";burger.children[1].style.opacity="";burger.children[2].style.transform=""});
-// form
-$("#leadform").onsubmit=(e)=>{e.preventDefault();const name=$("#f-name").value.trim(),phone=$("#f-phone").value.trim();if(name.length<2||phone.replace(/\D/g,"").length<10){alert("Заполните имя и телефон");return}$("#formwrap").innerHTML=`<div class="sent"><span class="ok">${checkSvg}</span><h3>Заявка отправлена</h3><p>Спасибо, ${name.split(" ")[0]||"вы"} нам написали. Инженер свяжется с вами по номеру ${phone} в ближайшее рабочее время.</p></div>`};
+burger.onclick=()=>{const o=sheet.classList.toggle("open");document.body.style.overflow=o?"hidden":"";};
+$$("#sheet a").forEach(a=>a.onclick=()=>{sheet.classList.remove("open");document.body.style.overflow=""});
+
+$("#leadform").onsubmit=e=>{e.preventDefault();const n=$("#f-name").value.trim(),p=$("#f-phone").value.trim();if(n.length<2||p.replace(/\D/g,"").length<10){alert("Заполните имя и телефон");return}$("#formwrap").innerHTML=`<div class="sent"><span class="ok">✓</span><h3>Заявка отправлена</h3><p>Спасибо, ${n.split(" ")[0]||"вы"} написали. Инженер свяжется по номеру ${p} в рабочее время.</p></div>`};
 </script>
 </body>
 </html>
