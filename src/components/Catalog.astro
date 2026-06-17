@@ -253,6 +253,41 @@ const payload = {
       <div class="mt-8 border-t border-white/10" data-list role="listbox" aria-label="Проекты"></div>
     </div>
     )}
+
+    {variant === "table" && (
+    <div class="mt-8">
+      <div data-table class="relative h-[68vh] min-h-[460px] cursor-grab touch-none select-none overflow-hidden rounded-[28px] border border-white/10 bg-ink">
+        <div class="pointer-events-none absolute inset-0 opacity-60" style="background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:46px 46px"></div>
+        <div class="pointer-events-none absolute inset-0" style="background:radial-gradient(120% 120% at 50% 28%, transparent 42%, rgba(20,22,27,.6))"></div>
+        <div data-list data-plane class="absolute left-0 top-0 origin-top-left will-change-transform" style="width:1640px;height:1120px"></div>
+        <div class="pointer-events-none absolute left-5 top-5 flex items-center gap-2 text-xs text-on-ink/45">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 9l-2 3 2 3M19 9l2 3-2 3M9 5l3-2 3 2M9 19l3 2 3-2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Перетаскивайте · колесо — масштаб · клик — проект
+        </div>
+        <div class="absolute bottom-5 right-5 flex flex-col gap-2">
+          <button type="button" data-zoom="1" aria-label="Приблизить" class="grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-ink/50 text-on-ink backdrop-blur-md transition-colors hover:border-accent hover:text-accent">+</button>
+          <button type="button" data-zoom="-1" aria-label="Отдалить" class="grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-ink/50 text-on-ink backdrop-blur-md transition-colors hover:border-accent hover:text-accent">−</button>
+          <button type="button" data-fit aria-label="Показать все" class="grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-ink/50 text-on-ink backdrop-blur-md transition-colors hover:border-accent hover:text-accent"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+
+      <div class="glass hairline-top mt-4 flex flex-wrap items-center justify-between gap-4 rounded-[24px] p-5">
+        <div class="flex items-center gap-4">
+          <img data-sel-img src={initSel.image} alt="" class="h-14 w-20 shrink-0 rounded-lg object-cover" />
+          <div>
+            <span class="block text-[11px] tracking-wide text-on-ink/45"><span data-sel-code>{initSel.code}</span> · <span data-sel-tag>{initSel.tag}</span></span>
+            <span class="block font-[var(--font-display)] text-lg text-on-ink" data-sel-name>{initSel.name}</span>
+            <span class="block text-xs text-on-ink/55" data-sel-meta>{initSel.area} м² · {initSel.floors} этажа</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-5">
+          <span class="tnum font-[var(--font-display)] text-xl text-accent-soft" data-sel-price>{initSel.price}</span>
+          <button type="button" data-open class="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">Открыть проект</button>
+          <button type="button" data-calc class="hidden rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-on-ink transition-colors hover:border-accent hover:text-accent sm:inline-flex">Расчёт</button>
+        </div>
+      </div>
+    </div>
+    )}
   </div>
 
   <script type="application/json" data-catalog set:html={JSON.stringify(payload)} />
@@ -531,6 +566,7 @@ const payload = {
     const isCoverflow = !!root.querySelector("[data-coverflow]");
     const isSpread = !!root.querySelector("[data-spread]");
     const isCollection = !!root.querySelector("[data-collection]");
+    const isTable = !!root.querySelector("[data-table]");
     const counterEl = root.querySelector<HTMLElement>("[data-counter]");
     const progressEl = root.querySelector<HTMLElement>("[data-progress]");
     const metaWrap = root.querySelector<HTMLElement>("[data-sel-meta-wrap]");
@@ -651,7 +687,22 @@ const payload = {
       <span class="ml-auto text-xs text-on-ink/35">${p.hook}</span>
       <span class="tnum hidden text-xs text-on-ink/30 sm:block">${p.area} м²</span>
     </button>`;
-    const cardMarkup = (p: P, active: boolean, i = 0) => (isCollection ? collectionRow(p, active, i) : (isCoverflow ? coverCard : isShowcase ? thumbCard : bigCard)(p, active));
+    // Раскладка карточек на «столе» (px в плоскости 1640×1120)
+    const slots = [
+      { x: 70, y: 90, w: 540 }, { x: 700, y: 60, w: 430 }, { x: 1180, y: 150, w: 380 },
+      { x: 150, y: 580, w: 450 }, { x: 690, y: 560, w: 500 }, { x: 1230, y: 620, w: 360 },
+      { x: 470, y: 870, w: 380 }, { x: 980, y: 880, w: 420 },
+    ];
+    const tableCard = (p: P, active: boolean, i: number) => {
+      const s = slots[i % slots.length];
+      return `<button type="button" data-select="${p.code}" role="option" aria-selected="${active}" class="group absolute overflow-hidden rounded-[20px] border border-white/10 shadow-[0_28px_70px_rgba(0,0,0,.5)] transition-[box-shadow,outline] duration-300 hover:z-30 aria-selected:outline aria-selected:outline-2 aria-selected:outline-accent" style="left:${s.x}px;top:${s.y}px;width:${s.w}px">
+        <span class="block aspect-[4/3] overflow-hidden"><img src="${p.image}" alt="${p.alt}" loading="lazy" draggable="false" class="h-full w-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"></span>
+        <span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent"></span>
+        <span class="pointer-events-none absolute left-3 top-3 flex items-center gap-2"><span class="rounded-full border border-white/20 bg-ink/40 px-2.5 py-1 text-[10px] tracking-wide text-on-ink backdrop-blur-md">${p.code}</span>${p.tag ? `<span class="rounded-full bg-accent/90 px-2.5 py-1 text-[10px] font-semibold text-paper">${p.tag}</span>` : ""}</span>
+        <span class="pointer-events-none absolute inset-x-0 bottom-0 p-4"><span class="block font-[var(--font-display)] text-xl text-on-ink">${p.name}</span><span class="block text-xs text-accent-soft">${p.hook}</span></span>
+      </button>`;
+    };
+    const cardMarkup = (p: P, active: boolean, i = 0) => isTable ? tableCard(p, active, i) : isCollection ? collectionRow(p, active, i) : (isCoverflow ? coverCard : isShowcase ? thumbCard : bigCard)(p, active);
 
     let spreadIO: IntersectionObserver | null = null;
     const observeSpreads = () => {
@@ -675,6 +726,7 @@ const payload = {
       note.style.opacity = "0";
       setTimeout(() => { note.textContent = `${g.note}. Переключайте проекты справа, открывайте карточку — внутри визуализации, интерьеры и планировки.`; note.style.opacity = "1"; }, reduce ? 0 : 160);
       buildList(groupId); selectProject(g.codes[0]);
+      if (isTable && tableFit) tableFit();
     };
     note.style.transition = "opacity .3s ease";
 
@@ -689,6 +741,7 @@ const payload = {
       const b = (e.target as HTMLElement).closest<HTMLElement>("[data-select]");
       if (!b) return;
       const code = b.dataset.select!;
+      if (isTable) return; // «стол» обрабатывает клик сам (с учётом drag)
       if (isSpread) return; // в развороте действуют кнопки внутри
       if (isCoverflow) { if (code === selected) openModal(code); else selectProject(code); return; }
       if (isCollection) { selectProject(code); return; } // смена кадра; проект открывает CTA
@@ -696,7 +749,7 @@ const payload = {
       if (!canHover) openModal(code); // на тач — сразу карточка
     });
     // Живой предпросмотр при наведении (только список/кинолента)
-    if (canHover && !isCoverflow && !isSpread) {
+    if (canHover && !isCoverflow && !isSpread && !isTable && !isCollection) {
       list.addEventListener("mouseover", (e) => { const b = (e.target as HTMLElement).closest<HTMLElement>("[data-select]"); if (b) applyFeatured(b.dataset.select!); });
       list.addEventListener("mouseleave", () => applyFeatured(selected));
     }
@@ -720,6 +773,45 @@ const payload = {
         cf?.addEventListener("pointerdown", (e) => { dragging = true; sx = (e as PointerEvent).clientX; });
         window.addEventListener("pointerup", (e) => { if (!dragging) return; dragging = false; const dx = (e as PointerEvent).clientX - sx; if (dx < -40) step(1); else if (dx > 40) step(-1); });
       }
+    }
+
+    // ====================== «СТОЛ АРХИТЕКТОРА» ======================
+    let tableFit: (() => void) | null = null;
+    if (isTable) {
+      const stage = root.querySelector<HTMLElement>("[data-table]")!;
+      const plane = list; const PW = 1640, PH = 1120;
+      let scale = 1, panX = 0, panY = 0, vx = 0, vy = 0;
+      let dragging = false, moved = 0, lastX = 0, lastY = 0, raf = 0;
+      const apply = () => { plane.style.transform = `translate(${panX}px,${panY}px) scale(${scale})`; };
+      const clamp = () => {
+        const w = stage.clientWidth, h = stage.clientHeight;
+        panX = Math.max(Math.min(0, w - PW * scale) - 140, Math.min(140, panX));
+        panY = Math.max(Math.min(0, h - PH * scale) - 140, Math.min(140, panY));
+      };
+      const fit = () => { const w = stage.clientWidth, h = stage.clientHeight; scale = Math.min(w / PW, h / PH) * 0.98; panX = (w - PW * scale) / 2; panY = (h - PH * scale) / 2; apply(); };
+      tableFit = fit;
+      const focusCard = (card: HTMLElement) => {
+        scale = Math.min(1.18, Math.max(0.9, (stage.clientWidth * 0.6) / card.offsetWidth));
+        panX = stage.clientWidth / 2 - (card.offsetLeft + card.offsetWidth / 2) * scale;
+        panY = stage.clientHeight / 2 - (card.offsetTop + card.offsetHeight / 2) * scale;
+        clamp(); plane.style.transition = "transform .6s cubic-bezier(0.22,1,0.36,1)"; apply(); setTimeout(() => (plane.style.transition = ""), 640);
+      };
+      const inertia = () => { if (Math.abs(vx) < 0.15 && Math.abs(vy) < 0.15) return; panX += vx; panY += vy; vx *= 0.92; vy *= 0.92; clamp(); apply(); raf = requestAnimationFrame(inertia); };
+      const animateZoom = (f: number) => { scale = Math.max(0.45, Math.min(1.8, scale * f)); clamp(); plane.style.transition = "transform .3s"; apply(); setTimeout(() => (plane.style.transition = ""), 300); };
+      stage.addEventListener("pointerdown", (e) => { dragging = true; moved = 0; lastX = e.clientX; lastY = e.clientY; vx = vy = 0; cancelAnimationFrame(raf); plane.style.transition = ""; stage.style.cursor = "grabbing"; });
+      stage.addEventListener("pointermove", (e) => { if (!dragging) return; const dx = e.clientX - lastX, dy = e.clientY - lastY; lastX = e.clientX; lastY = e.clientY; moved += Math.abs(dx) + Math.abs(dy); panX += dx; panY += dy; vx = dx; vy = dy; clamp(); apply(); });
+      const endDrag = (e: PointerEvent) => {
+        if (!dragging) return; dragging = false; stage.style.cursor = "grab";
+        if (moved < 6) { const card = (e.target as HTMLElement).closest<HTMLElement>("[data-select]"); if (card) { const code = card.dataset.select!; if (code === selected) openModal(code); else { selectProject(code); focusCard(card); } } }
+        else { raf = requestAnimationFrame(inertia); }
+      };
+      stage.addEventListener("pointerup", endDrag);
+      stage.addEventListener("pointercancel", endDrag);
+      stage.addEventListener("wheel", (e) => { e.preventDefault(); animateZoom(e.deltaY < 0 ? 1.12 : 0.89); }, { passive: false });
+      root.querySelector('[data-zoom="1"]')?.addEventListener("click", () => animateZoom(1.18));
+      root.querySelector('[data-zoom="-1"]')?.addEventListener("click", () => animateZoom(0.85));
+      root.querySelector("[data-fit]")?.addEventListener("click", () => { plane.style.transition = "transform .5s"; fit(); setTimeout(() => (plane.style.transition = ""), 500); });
+      window.addEventListener("resize", () => { clamp(); apply(); });
     }
 
     // ====================== ПОП-АП ======================
@@ -985,5 +1077,6 @@ const payload = {
     // Инициализация вариантов
     if (isShowcase || isCoverflow || isCollection) { buildList(data.groups[0].id); selectProject(selected); }
     if (isSpread) { buildList(data.groups[0].id); selected = codesNow[0]; }
+    if (isTable) { buildList(data.groups[0].id); selectProject(selected); tableFit?.(); }
   }
 </script>
