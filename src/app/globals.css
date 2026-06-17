@@ -1,0 +1,178 @@
+@import "tailwindcss";
+
+/*
+  СК «Династия» — design system
+  Strategy: light & airy on pure white (легко) + deep petrol dark passages
+  + warm brass accent (дорого). OKLCH throughout.
+  Mood: "поверенный камень и тёплая латунь в утреннем свете"
+*/
+
+@theme {
+  /* Surfaces */
+  --color-bg: oklch(1 0 0);
+  --color-surface: oklch(0.976 0.004 195);
+  --color-surface-2: oklch(0.955 0.006 197);
+
+  /* Ink / text */
+  --color-ink: oklch(0.22 0.012 220);
+  --color-ink-soft: oklch(0.4 0.012 220);
+  --color-muted: oklch(0.5 0.01 220);
+
+  /* Brand — deep petrol/teal (heritage, trust) */
+  --color-primary: oklch(0.4 0.062 200);
+  --color-primary-700: oklch(0.31 0.05 202);
+  --color-primary-900: oklch(0.215 0.034 205);
+
+  /* Accent — warm brass / bronze (premium) */
+  --color-accent: oklch(0.72 0.1 78);
+  --color-accent-deep: oklch(0.52 0.1 62);
+
+  /* Lines */
+  --color-line: oklch(0.91 0.005 210);
+  --color-line-strong: oklch(0.85 0.006 210);
+
+  /* On-dark ink */
+  --color-on-dark: oklch(0.97 0.004 200);
+  --color-on-dark-soft: oklch(0.82 0.012 200);
+
+  /* Fonts */
+  --font-display: var(--font-spectral), Georgia, serif;
+  --font-sans: var(--font-onest), system-ui, sans-serif;
+
+  /* Easing */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Z-scale */
+  --z-sticky: 40;
+  --z-nav: 50;
+  --z-modal: 70;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-primary);
+    color: var(--color-on-dark);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Honor reduced motion globally */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .container-x {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+  }
+
+  .display-xl {
+    font-size: clamp(2.6rem, 1.4rem + 5.6vw, 5.6rem);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+
+  .display-lg {
+    font-size: clamp(2rem, 1.2rem + 3.4vw, 3.6rem);
+    line-height: 1.03;
+    letter-spacing: -0.03em;
+  }
+
+  .display-md {
+    font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .measure {
+    max-width: 65ch;
+  }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* Thin hairline grid used as a quiet premium texture */
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, color-mix(in oklch, var(--color-line) 60%, transparent) 1px, transparent 1px);
+    background-size: 25% 100%;
+  }
+
+  .form-input {
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-line-strong);
+    background: var(--color-surface);
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    color: var(--color-ink);
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  .form-input::placeholder {
+    color: var(--color-muted);
+  }
+  .form-input:focus {
+    outline: none;
+    background: var(--color-bg);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 18%, transparent);
+  }
+
+  .noise {
+    position: relative;
+  }
+  .noise::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
