@@ -97,5 +97,36 @@ const initials = (name: string) =>
         }
       </div>
     </div>
+
+    <!-- Видео-отзывы — место под видео (пока заглушки) -->
+    <div class="mt-16">
+      <div class="flex items-baseline justify-between gap-4">
+        <h3 class="font-[var(--font-display)] text-xl text-on-ink sm:text-2xl">Видео-отзывы владельцев</h3>
+        <span class="hidden text-sm text-on-ink/45 sm:block">Снимаем на сданных объектах</span>
+      </div>
+      <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        {
+          [
+            { who: "Сергей и Анна", place: "брус 280 м² · Истра" },
+            { who: "Дмитрий", place: "керамика 312 м² · Всеволожск" },
+            { who: "Олег", place: "брус 365 м² · Дмитров" },
+          ].map((v) => (
+            <figure class="group relative grid aspect-video place-items-center overflow-hidden rounded-[22px] border border-white/10 bg-ink-2">
+              <div class="absolute inset-0 bg-[radial-gradient(120%_120%_at_50%_-10%,rgba(176,136,90,0.12),transparent_60%)]" />
+              <div class="relative z-10 flex flex-col items-center text-center">
+                <span class="grid h-14 w-14 place-items-center rounded-full border border-white/25 bg-white/5 backdrop-blur-md transition-transform duration-300 group-hover:scale-105">
+                  <svg class="ml-1 h-6 w-6 text-on-ink" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+                <span class="mt-3 text-xs text-on-ink/45">Видео готовим</span>
+              </div>
+              <figcaption class="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 p-4 text-sm">
+                <span class="font-medium text-on-ink">{v.who}</span>
+                <span class="text-xs text-on-ink/55">{v.place}</span>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
   </div>
 </section>
