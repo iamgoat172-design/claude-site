@@ -1,8 +1,19 @@
 ---
 // Секция 10 — География. Московская и Ленинградская области.
+// Карта интерактивна и on-brand (без сторонних виджетов, чтобы не ломать
+// арт-направление). Точки-города кликабельны/наводимы → стеклянная карточка
+// с направлениями. Доступно с клавиатуры, уважает prefers-reduced-motion.
+//
+// ▸ Когда появится готовый сайт и нужен «настоящий» интерактив — заменить
+//   блок <!-- MAP --> на embed (Яндекс.Карты / 2GIS). Разметка пинов и
+//   стеклянная рамка сохраняются как fallback.
 const regions = [
   {
+    id: "msk",
+    city: "Москва",
     name: "Московская область",
+    // координаты пина в % внутри рамки карты
+    pos: { x: 37.5, y: 58 },
     areas: [
       "Дмитровское, Рублёво-Успенское, Новорижское ш.",
       "Истринский, Одинцовский, Пушкинский районы",
@@ -10,7 +21,10 @@ const regions = [
     ],
   },
   {
+    id: "spb",
+    city: "Санкт-Петербург",
     name: "Ленинградская область",
+    pos: { x: 75, y: 39 },
     areas: [
       "Всеволожский, Выборгский, Приозерский районы",
       "Курортное и Приозерское направления",
@@ -35,7 +49,7 @@ const regions = [
         <div class="mt-10 grid grid-cols-1 gap-10 sm:grid-cols-2">
           {
             regions.map((r) => (
-              <div>
+              <div data-region={r.id} class="transition-opacity duration-300">
                 <h3 class="font-[var(--font-display)] text-lg text-on-ink">
                   {r.name}
                 </h3>
@@ -52,37 +66,141 @@ const regions = [
         </div>
       </div>
 
-      <!-- Карта-заглушка в стекле -->
+      <!-- MAP — интерактивная схема в стекле -->
       <div
         class="rise glass hairline-top relative aspect-[4/3] overflow-hidden rounded-[28px]"
-        aria-hidden="true"
+        data-map
       >
-        <svg viewBox="0 0 400 300" class="h-full w-full" fill="none">
+        <!-- Декоративная подложка: суша + маршруты -->
+        <svg viewBox="0 0 400 300" class="absolute inset-0 h-full w-full" fill="none" aria-hidden="true">
           <g stroke="#F4F3F0" stroke-opacity="0.12" stroke-width="1">
             <path d="M40 95 Q120 45 210 85 T368 112 L348 215 Q230 262 122 225 T44 196 Z" fill="#F4F3F0" fill-opacity="0.04" />
             <path d="M210 85 Q165 145 182 205" />
             <path d="M122 112 Q205 132 300 120" />
             <path d="M150 175 Q230 150 300 118" stroke="#B0885A" stroke-opacity="0.4" stroke-dasharray="3 5" />
           </g>
-          <g>
-            <circle cx="150" cy="175" r="5" fill="#B0885A" />
-            <circle cx="150" cy="175" r="13" fill="#B0885A" fill-opacity="0.18">
-              <animate attributeName="r" values="9;16;9" dur="3s" repeatCount="indefinite" />
-              <animate attributeName="fill-opacity" values="0.25;0;0.25" dur="3s" repeatCount="indefinite" />
-            </circle>
-            <text x="150" y="200" text-anchor="middle" fill="#F4F3F0" fill-opacity="0.8" font-size="11" font-family="Manrope">Москва</text>
-            <circle cx="300" cy="118" r="5" fill="#B0885A" />
-            <circle cx="300" cy="118" r="13" fill="#B0885A" fill-opacity="0.18">
-              <animate attributeName="r" values="9;16;9" dur="3s" begin="1.5s" repeatCount="indefinite" />
-              <animate attributeName="fill-opacity" values="0.25;0;0.25" dur="3s" begin="1.5s" repeatCount="indefinite" />
-            </circle>
-            <text x="300" y="143" text-anchor="middle" fill="#F4F3F0" fill-opacity="0.8" font-size="11" font-family="Manrope">Санкт-Петербург</text>
-          </g>
         </svg>
-        <p class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-on-ink/40">
-          Схематично · интерактивную карту добавим на готовом сайте
+
+        <!-- Интерактивные точки-города (HTML поверх SVG) -->
+        {
+          regions.map((r) => (
+            <div
+              class="absolute -translate-x-1/2 -translate-y-1/2"
+              style={`left:${r.pos.x}%;top:${r.pos.y}%`}
+            >
+              <button
+                type="button"
+                class="pin group/pin relative grid h-9 w-9 place-items-center rounded-full focus:outline-none"
+                data-pin={r.id}
+                aria-expanded="false"
+                aria-controls={`tip-${r.id}`}
+              >
+                <span class="sr-only">{r.city} — {r.name}</span>
+                <span class="pin-ring absolute inset-0 rounded-full bg-accent/20" aria-hidden="true" />
+                <span class="relative h-2.5 w-2.5 rounded-full bg-accent ring-2 ring-ink transition-transform duration-300 group-hover/pin:scale-125" aria-hidden="true" />
+              </button>
+
+              <span class="pointer-events-none absolute left-1/2 top-9 -translate-x-1/2 whitespace-nowrap text-[11px] text-on-ink/70">
+                {r.city}
+              </span>
+
+              <!-- Стеклянная карточка с направлениями -->
+              <div
+                id={`tip-${r.id}`}
+                role="tooltip"
+                class="tip glass-light pointer-events-none absolute bottom-[calc(100%+14px)] left-1/2 w-60 -translate-x-1/2 rounded-2xl p-4 text-left opacity-0 shadow-[0_16px_48px_rgba(0,0,0,.28)]"
+              >
+                <p class="text-[13px] font-semibold text-ink">{r.name}</p>
+                <ul class="mt-2 space-y-1.5">
+                  {r.areas.map((a) => (
+                    <li class="text-[12px] leading-snug text-ink/70">{a}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))
+        }
+
+        <p class="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-on-ink/40">
+          Наведите или нажмите на точку
         </p>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  /* Пульсация кольца у точки — отключается при reduced-motion */
+  .pin-ring {
+    animation: pin-pulse 3s ease-out infinite;
+  }
+  .pin[data-pin="spb"] .pin-ring {
+    animation-delay: 1.5s;
+  }
+  @keyframes pin-pulse {
+    0% { transform: scale(0.7); opacity: 0.5; }
+    70% { transform: scale(1.8); opacity: 0; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+
+  /* Показ карточки: hover / клавиатурный фокус / открыто по клику */
+  .pin:hover ~ .tip,
+  .pin:focus-visible ~ .tip,
+  .pin.is-open ~ .tip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px);
+  }
+  .tip {
+    transition: opacity 0.3s var(--ease-out-soft, ease), transform 0.3s var(--ease-out-soft, ease);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pin-ring { animation: none; }
+    .tip { transition: none; }
+  }
+</style>
+
+<script>
+  // Тач/клик: переключаем карточку у точки. Hover/фокус работают на CSS.
+  const map = document.querySelector<HTMLElement>("[data-map]");
+  if (map) {
+    const pins = Array.from(map.querySelectorAll<HTMLButtonElement>(".pin"));
+    const regionBlocks = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-region]"),
+    );
+
+    const closeAll = (except?: HTMLButtonElement) => {
+      pins.forEach((p) => {
+        if (p !== except) {
+          p.classList.remove("is-open");
+          p.setAttribute("aria-expanded", "false");
+        }
+      });
+      regionBlocks.forEach((b) => (b.style.opacity = "1"));
+    };
+
+    pins.forEach((pin) => {
+      pin.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const open = pin.classList.toggle("is-open");
+        pin.setAttribute("aria-expanded", String(open));
+        closeAll(open ? pin : undefined);
+        if (open) {
+          // Приглушаем «не выбранную» область в списке слева
+          const id = pin.dataset.pin;
+          regionBlocks.forEach((b) => {
+            b.style.opacity = b.dataset.region === id ? "1" : "0.4";
+          });
+        }
+      });
+    });
+
+    document.addEventListener("click", () => closeAll());
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeAll();
+        pins.forEach((p) => p.blur());
+      }
+    });
+  }
+</script>
