@@ -1,0 +1,88 @@
+---
+// Портфолио-кейс одного построенного дома: путь стройки + интерьеры + финал.
+// Сейчас собран по проекту «Гранд». ⚠️ Документальные кадры — сгенерированы под
+// стиль проекта; адрес/дату/подписи заменить на реальные после сдачи объекта.
+import { PORTFOLIO } from "../data/projects";
+---
+
+<section id="portfolio" class="relative overflow-hidden bg-ink py-20 sm:py-28">
+  <div class="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <p class="eyebrow text-accent-soft">Кейс объекта</p>
+        <h2 class="display-lg mt-5 text-on-ink">Построили дом<br />«{PORTFOLIO.name}»</h2>
+        <p class="mt-5 max-w-md text-[15px] leading-relaxed text-on-ink/65">
+          Один реальный объект — от сборки домокомплекта до новоселья. Так
+          выглядит наша работа на каждом этапе, без приукрашивания.
+        </p>
+      </div>
+      <dl class="flex flex-wrap gap-x-8 gap-y-3">
+        {
+          PORTFOLIO.meta.map((m) => (
+            <div class="border-l border-accent/40 pl-3">
+              <dt class="tnum font-[var(--font-display)] text-lg text-on-ink">{m.v}</dt>
+              <dd class="text-xs uppercase tracking-[0.16em] text-on-ink/45">{m.k}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <!-- Hero объекта -->
+    <figure class="rise mt-12 overflow-hidden rounded-[28px] border border-white/10">
+      <img src={PORTFOLIO.hero} alt={`Построенный дом «${PORTFOLIO.name}»`} loading="lazy" decoding="async" class="aspect-[16/9] w-full object-cover" />
+    </figure>
+
+    <!-- Путь стройки -->
+    <h3 class="mt-16 font-[var(--font-display)] text-xl text-on-ink sm:text-2xl">Путь стройки</h3>
+    <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        PORTFOLIO.stages.map((s) => (
+          <article class="rise group overflow-hidden rounded-[22px] border border-white/10 bg-white/[0.02]">
+            <figure class="relative aspect-[4/3] overflow-hidden">
+              <img src={s.src} alt={s.t} loading="lazy" decoding="async" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <span class="absolute left-3 top-3 tnum rounded-full bg-ink/55 px-2.5 py-1 text-xs text-on-ink backdrop-blur-md">{s.n}</span>
+            </figure>
+            <div class="p-5">
+              <p class="font-[var(--font-display)] text-on-ink">{s.t}</p>
+              <p class="mt-1.5 text-sm leading-relaxed text-on-ink/60">{s.d}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <!-- Дом внутри -->
+    <h3 class="mt-16 font-[var(--font-display)] text-xl text-on-ink sm:text-2xl">Дом внутри</h3>
+    <div class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {
+        PORTFOLIO.interiors.map((src, i) => (
+          <figure class={`rise overflow-hidden rounded-[20px] border border-white/10 ${i === 0 ? "col-span-2 row-span-2 lg:col-span-2" : ""}`}>
+            <img src={src} alt="Интерьер построенного дома" loading="lazy" decoding="async" class="h-full w-full object-cover" />
+          </figure>
+        ))
+      }
+    </div>
+
+    <!-- Финальный вид -->
+    <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+      {
+        PORTFOLIO.finals.map((f) => (
+          <figure class="rise relative overflow-hidden rounded-[20px] border border-white/10">
+            <img src={f.src} alt={f.t} loading="lazy" decoding="async" class="aspect-[4/3] h-full w-full object-cover" />
+            <div class="absolute inset-0 scrim-bottom"></div>
+            <figcaption class="absolute bottom-3 left-4 right-4 text-sm text-on-ink">{f.t}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+
+    <div class="mt-10 flex flex-wrap items-center gap-4">
+      <button type="button" data-quiz="complectation" class="inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">
+        Хочу такой же дом — рассчитать
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="text-sm text-on-ink/50">Покажем объект вживую и свяжем с владельцем</span>
+    </div>
+  </div>
+</section>
