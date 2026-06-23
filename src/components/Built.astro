@@ -1,15 +1,16 @@
 ---
-// Секция 7 — Построенные дома. Асимметричная галерея (заполненная сетка 3×3).
-// ⚠️ Сейчас — сгенерированные кадры-заглушки. Заменить реальными фото объектов.
-import { projects } from "../data/projects";
+// Секция 7 — Построенные дома. Асимметричная галерея.
+// Реальные рендеры проекта «Гранд» + кадры сдачи объектов на стадии финального
+// благоустройства с владельцами. ⚠️ Сгенерированные кадры — заменить фото с участков.
+import { LIFESTYLE } from "../data/projects";
 
 const g = [
-  { src: projects[0].image, area: 268, place: "Истринский р-н, МО", cls: "sm:col-span-2 sm:row-span-2" },
-  { src: projects[3].image, area: 289, place: "Всеволожский р-н, ЛО", cls: "" },
-  { src: projects[1].image, area: 305, place: "Одинцовский р-н, МО", cls: "" },
-  { src: projects[2].image, area: 254, place: "Пушкинский р-н, МО", cls: "" },
-  { src: projects[4].image, area: 334, place: "Дмитровский р-н, МО", cls: "" },
-  { src: projects[5].image, area: 262, place: "Выборгский р-н, ЛО", cls: "" },
+  { src: LIFESTYLE.ownersFinishing, label: "Сдача · благоустройство", place: "Одинцовский р-н, МО", cls: "sm:col-span-2 sm:row-span-2" },
+  { src: "/images/projects/grand/ext-1.webp", label: "«Гранд» · 365 м²", place: "брус · МО", cls: "" },
+  { src: LIFESTYLE.aerial, label: "Готовый участок", place: "Выборгский р-н, ЛО", cls: "" },
+  { src: LIFESTYLE.ownersCrew, label: "Финал работ с владельцами", place: "Дмитровский р-н, МО", cls: "" },
+  { src: "/images/projects/grand/ext-2.webp", label: "«Гранд» · терраса", place: "брус · МО", cls: "" },
+  { src: LIFESTYLE.family, label: "Заехали и живут", place: "Всеволожский р-н, ЛО", cls: "" },
 ];
 ---
 
@@ -40,17 +41,17 @@ const g = [
           >
             <img
               src={it.src}
-              alt={`Построенный дом ${it.area} м², ${it.place}`}
+              alt={`Построенный дом — ${it.label}, ${it.place}`}
               loading="lazy"
               decoding="async"
               class="h-full w-full object-cover transition-transform duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
             />
             <div class="absolute inset-0 scrim-bottom" />
             <figcaption class="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-2">
-              <span class="tnum font-[var(--font-display)] text-lg text-on-ink">
-                {it.area} м²
+              <span class="font-[var(--font-display)] text-lg text-on-ink">
+                {it.label}
               </span>
-              <span class="rounded-full bg-ink/40 px-3 py-1 text-xs text-on-ink/80 backdrop-blur-md">
+              <span class="shrink-0 rounded-full bg-ink/40 px-3 py-1 text-xs text-on-ink/80 backdrop-blur-md">
                 {it.place}
               </span>
             </figcaption>

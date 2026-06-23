@@ -29,7 +29,8 @@ const endpoint = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? "";
         <h2 class="display-lg mt-4 text-on-ink">Рассчитаем<br />ваш дом</h2>
         <p class="mt-4 max-w-md text-[15px] leading-relaxed text-on-ink/70">
           Оставьте контакты — перезвоним, уточним детали и подготовим
-          предварительную смету. Без навязчивых звонков.
+          предварительную смету. Договор с фиксированной ценой, оплата
+          с юрлица на юрлицо — безопасно и официально. Без навязчивых звонков.
         </p>
         <p
           id="lf-request-note"
@@ -191,6 +192,21 @@ const endpoint = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? "";
             <dd class="font-medium">Вологодская область</dd>
           </div>
         </dl>
+
+        <!-- Безопасная сделка -->
+        <div class="glass hairline-top mt-8 rounded-[20px] p-6">
+          <p class="flex items-center gap-2.5 font-[var(--font-display)] text-on-ink">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-accent/40 text-accent-soft accent-glow">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l7 4v5c0 4.5-3 8.5-7 9.5-4-1-7-5-7-9.5V7l7-4z" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            Безопасная сделка
+          </p>
+          <ul class="mt-4 space-y-2.5 text-sm text-on-ink/70">
+            <li class="flex items-baseline gap-2.5"><span class="h-1.5 w-1.5 shrink-0 translate-y-1.5 rounded-full bg-accent"></span>Договор с фиксированной сметой</li>
+            <li class="flex items-baseline gap-2.5"><span class="h-1.5 w-1.5 shrink-0 translate-y-1.5 rounded-full bg-accent"></span>Оплата с юрлица на юрлицо, официально</li>
+            <li class="flex items-baseline gap-2.5"><span class="h-1.5 w-1.5 shrink-0 translate-y-1.5 rounded-full bg-accent"></span>Поэтапная оплата и приёмка · гарантия 25 лет</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
