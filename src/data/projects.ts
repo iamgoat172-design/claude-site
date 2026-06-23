@@ -155,10 +155,10 @@ export const INTERIORS: { src: string; alt: string }[] = [
 // владельцами на участке. Сгенерированы под арт-направление; заменяются на
 // реальные фото объектов после сдачи.
 export const LIFESTYLE = {
-  family: `${IMG_BASE}/hf_20260623_165837_53843309-683a-4de7-b067-1f34f9888a04_min.webp`,
-  ownersFinishing: `${IMG_BASE}/hf_20260623_165836_61a120d3-c221-4491-9886-d7b218b119f9_min.webp`,
-  ownersCrew: `${IMG_BASE}/hf_20260623_165838_51ed9bdd-8510-4586-9740-2cb400b67243_min.webp`,
-  aerial: `${IMG_BASE}/hf_20260623_165839_df6b7811-78e3-48ac-9df4-62261e3ff101_min.webp`,
+  family: `${IMG_BASE}/hf_20260623_171009_dfaf5a37-41d8-46fe-a88d-b47ab191e20e_min.webp`,
+  ownersFinishing: `${IMG_BASE}/hf_20260623_171004_125e2ee8-478e-4356-b6d1-203bc8951864_min.webp`,
+  ownersCrew: `${IMG_BASE}/hf_20260623_171007_2e66d51f-2321-4acc-89fd-aa480e2f6474_min.webp`,
+  aerial: `${IMG_BASE}/hf_20260623_171010_6847be9d-2259-4eed-858c-b06be729c276_min.webp`,
 };
 
 export const materials: Record<

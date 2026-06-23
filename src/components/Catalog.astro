@@ -555,7 +555,8 @@ const payload = {
     let selected = data.groups[0].codes[0];
 
     const setText = (sel: string, scope: ParentNode, val: string) => { const el = scope.querySelector<HTMLElement>(sel); if (el) el.textContent = val; };
-    const swapImg = (img: HTMLImageElement, src: string) => {
+    const swapImg = (img: HTMLImageElement | null, src: string) => {
+      if (!img) return;
       if (reduce) { img.src = src; return; }
       img.style.opacity = "0";
       const n = new Image(); n.onload = () => { img.src = src; img.style.opacity = ""; }; n.src = src;
@@ -601,7 +602,8 @@ const payload = {
         if (metaWrap) metaWrap.innerHTML = [["Площадь", `${p.area} м²`], ["Этажей", String(p.floors)], ["Материал", p.materialLabel]].map(([l, v]) => `<span class="flex flex-col gap-1 border-l border-white/15 pl-4"><span class="text-[11px] uppercase tracking-[0.16em] text-on-ink/40">${l}</span><span class="tnum font-[var(--font-display)] text-lg text-on-ink">${v}</span></span>`).join("");
         return;
       }
-      swapImg(selImg, p.image); selImg.alt = p.alt; swapImg(backdrop, p.image);
+      if (selImg) { swapImg(selImg, p.image); selImg.alt = p.alt; }
+      swapImg(backdrop, p.image);
       setText("[data-sel-code]", root, p.code);
       setText("[data-sel-name]", root, p.name);
       setText("[data-sel-hook]", root, p.hook);
