@@ -1,0 +1,446 @@
+---
+// Квиз-движок (две воронки): «Рассчитать комплектацию» и «Узнать стоимость / смету».
+// Открывается событием `vz-quiz` (detail: { kind, project? }) или кликом по
+// любому элементу с атрибутом data-quiz="smeta|complectation".
+// На финальном шаге собирает контакт и отправляет лид тем же способом, что и
+// основная форма (PUBLIC_LEAD_ENDPOINT; пусто → демо-режим).
+import { INTERIORS } from "../data/projects";
+
+type Opt = { v: string; label: string; desc?: string };
+type Q = { id: string; q: string; hint?: string; multi?: boolean; options: Opt[] };
+type Quiz = { kind: string; eyebrow: string; title: string; sub: string; cta: string; steps: Q[] };
+
+const quizzes: Record<string, Quiz> = {
+  complectation: {
+    kind: "complectation",
+    eyebrow: "Конфигуратор · 5 шагов · ~1 минута",
+    title: "Рассчитать комплектацию",
+    sub: "Соберём ваш дом по шагам и пришлём состав с ориентиром по цене.",
+    cta: "Получить комплектацию",
+    steps: [
+      { id: "material", q: "Из чего строим дом?", options: [
+        { v: "Клееный брус", label: "Клееный брус", desc: "Тёплый «дышащий» дом из своего северного леса" },
+        { v: "Тёплая керамика", label: "Тёплая керамика", desc: "Поротерм: тишина и инерция тепла" },
+        { v: "Поможете выбрать", label: "Помогите выбрать", desc: "Сравним под ваш участок и бюджет" },
+      ] },
+      { id: "area", q: "Какая площадь нужна?", hint: "Ориентир по осям, скорректируем в проекте", options: [
+        { v: "250–350 м²", label: "250–350 м²" },
+        { v: "350–500 м²", label: "350–500 м²" },
+        { v: "500–650 м²", label: "500–650 м²" },
+        { v: "650+ м²", label: "Более 650 м²" },
+      ] },
+      { id: "floors", q: "Этажность дома", options: [
+        { v: "1 этаж", label: "Один этаж" },
+        { v: "2 этажа", label: "Два этажа" },
+        { v: "С мансардой/цоколем", label: "С мансардой или цоколем" },
+      ] },
+      { id: "tier", q: "До какого уровня довести?", hint: "Можно начать с любого этапа", options: [
+        { v: "Тёплый контур", label: "Тёплый контур", desc: "Коробка, кровля, окна — под внутренние работы" },
+        { v: "White Box", label: "White Box", desc: "Инженерия и стяжка — под чистовую отделку" },
+        { v: "Под ключ", label: "Под ключ", desc: "Заезжайте и живите" },
+        { v: "Пока не решил", label: "Пока не решил", desc: "Подскажем оптимальный вариант" },
+      ] },
+      { id: "term", q: "Когда планируете старт?", options: [
+        { v: "В этом сезоне", label: "В этом сезоне" },
+        { v: "Через сезон", label: "Через сезон" },
+        { v: "Пока выбираю", label: "Пока выбираю" },
+      ] },
+    ],
+  },
+  smeta: {
+    kind: "smeta",
+    eyebrow: "Расчёт сметы · 4 шага · ~1 минута",
+    title: "Узнать стоимость и получить смету",
+    sub: "Зафиксируем вводные и пришлём детальную смету в PDF — без «вылезающих» строк.",
+    cta: "Получить смету",
+    steps: [
+      { id: "plot", q: "Участок под строительство", options: [
+        { v: "Есть участок", label: "Участок уже есть" },
+        { v: "В поиске участка", label: "Ещё в поиске" },
+      ] },
+      { id: "ground", q: "Знаете геологию и фундамент?", hint: "От грунта зависит тип фундамента", options: [
+        { v: "Есть данные по участку", label: "Есть данные по участку" },
+        { v: "Нужен выезд инженера", label: "Нужен выезд инженера", desc: "Бесплатно по МО и ЛО" },
+      ] },
+      { id: "budget", q: "Ориентир по бюджету", hint: "Поможет подобрать материал и комплектацию", options: [
+        { v: "до 15 млн ₽", label: "до 15 млн ₽" },
+        { v: "15–25 млн ₽", label: "15–25 млн ₽" },
+        { v: "25–40 млн ₽", label: "25–40 млн ₽" },
+        { v: "более 40 млн ₽", label: "более 40 млн ₽" },
+      ] },
+      { id: "term", q: "Когда планируете начать?", options: [
+        { v: "В этом сезоне", label: "В этом сезоне" },
+        { v: "Через сезон", label: "Через сезон" },
+        { v: "Изучаю варианты", label: "Пока изучаю" },
+      ] },
+    ],
+  },
+};
+
+const heroImg = INTERIORS[0]?.src ?? "";
+const payload = { quizzes, heroImg };
+---
+
+<div data-quiz-modal hidden class="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-6">
+  <div data-quiz-overlay class="absolute inset-0 bg-ink/85 opacity-0 backdrop-blur-md transition-opacity duration-300"></div>
+  <div role="dialog" aria-modal="true" aria-labelledby="quiz-title" class="glass hairline-top relative grid max-h-[94dvh] w-full max-w-3xl translate-y-4 grid-cols-1 overflow-hidden rounded-[28px] opacity-0 transition-all duration-300 lg:grid-cols-[5fr_7fr]" data-quiz-dialog>
+
+    <!-- Левая визуальная панель + ценности (безопасность/гарантия) -->
+    <div class="relative hidden overflow-hidden bg-ink-2 lg:block">
+      <img src={heroImg} alt="" class="absolute inset-0 h-full w-full object-cover opacity-30" />
+      <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/75 to-ink/35"></div>
+      <div class="relative z-10 flex h-full flex-col justify-between p-8">
+        <span class="eyebrow text-accent-soft">Вологодское Зодчество</span>
+        <div>
+          <p data-quiz-aside class="font-[var(--font-display)] text-2xl text-on-ink"></p>
+          <ul class="mt-5 space-y-3">
+            {
+              [
+                "Фиксированная смета в договоре",
+                "Гарантия 25 лет на дом",
+                "Поэтапная приёмка и авторский надзор",
+                "Свой лес и производство",
+              ].map((t) => (
+                <li class="flex items-baseline gap-2.5 text-sm text-on-ink/85">
+                  <svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  {t}
+                </li>
+              ))
+            }
+          </ul>
+          <p class="mt-6 text-xs text-on-ink/40">Ответим в течение 15 минут в удобном вам канале.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Правая колонка: квиз -->
+    <div class="flex min-h-0 flex-col">
+      <!-- Шапка: прогресс + закрыть -->
+      <div class="sticky top-0 z-20 border-b border-white/10 bg-ink/65 px-6 py-4 backdrop-blur-xl sm:px-8">
+        <div class="flex items-center justify-between gap-4">
+          <div class="min-w-0">
+            <p data-quiz-eyebrow class="eyebrow text-accent-soft"></p>
+            <p id="quiz-title" data-quiz-step-label class="mt-1 truncate text-sm text-on-ink/55"></p>
+          </div>
+          <button type="button" data-quiz-close aria-label="Закрыть" class="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/15 bg-ink/40 text-on-ink transition-colors hover:border-accent hover:text-accent">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="mt-3 h-1 overflow-hidden rounded-full bg-white/10">
+          <div data-quiz-progress class="h-full rounded-full bg-accent transition-[width] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)]" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Тело -->
+      <div data-quiz-scroll class="min-h-0 flex-1 overflow-y-auto px-6 py-7 sm:px-8">
+        <!-- Шаг с вопросом -->
+        <div data-quiz-step>
+          <h3 data-quiz-q class="font-[var(--font-display)] text-2xl text-on-ink sm:text-[1.75rem]"></h3>
+          <p data-quiz-hint class="mt-2 text-sm text-on-ink/50"></p>
+          <div data-quiz-options class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2"></div>
+        </div>
+
+        <!-- Финальный шаг: контакт -->
+        <div data-quiz-contact hidden>
+          <h3 class="font-[var(--font-display)] text-2xl text-on-ink sm:text-[1.75rem]">Куда прислать результат?</h3>
+          <p class="mt-2 text-sm text-on-ink/50">Подготовим под ваши ответы и свяжемся в удобном канале.</p>
+          <form class="mt-6 space-y-5" data-quiz-form novalidate>
+            <div>
+              <label for="qz-name" class="block text-sm font-medium text-on-ink">Имя <span class="text-accent">*</span></label>
+              <input id="qz-name" name="name" type="text" autocomplete="name" required class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-on-ink placeholder:text-on-ink/35 focus:border-accent focus:outline-none" placeholder="Как к вам обращаться" />
+              <p class="mt-1.5 hidden text-sm text-red-300" data-qz-error="name" role="alert"></p>
+            </div>
+            <div>
+              <label for="qz-phone" class="block text-sm font-medium text-on-ink">Телефон <span class="text-accent">*</span></label>
+              <input id="qz-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-on-ink placeholder:text-on-ink/35 focus:border-accent focus:outline-none" placeholder="+7 (___) ___-__-__" data-quiz-phone />
+              <p class="mt-1.5 hidden text-sm text-red-300" data-qz-error="phone" role="alert"></p>
+            </div>
+            <fieldset>
+              <legend class="block text-sm font-medium text-on-ink">Куда вам удобнее ответить</legend>
+              <div class="mt-2 grid grid-cols-3 gap-2" role="radiogroup" aria-label="Способ связи" data-quiz-methods>
+                {
+                  [
+                    { id: "telegram", label: "Telegram", icon: '<path d="M22 4 11 13M22 4l-7 17-4-8-8-4 19-5z" stroke-linecap="round" stroke-linejoin="round"/>' },
+                    { id: "max", label: "МАКС", icon: '<path d="M4 5h16v11H8l-4 4z" stroke-linecap="round" stroke-linejoin="round"/>' },
+                    { id: "phone", label: "Телефон", icon: '<path d="M5 4h4l2 5-3 2a12 12 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" stroke-linecap="round" stroke-linejoin="round"/>' },
+                  ].map((m, i) => (
+                    <button type="button" role="radio" aria-checked={i === 2 ? "true" : "false"} data-method={m.id} class="group flex flex-col items-center gap-1.5 rounded-xl border px-3 py-3 text-xs font-medium transition-colors aria-checked:border-accent aria-checked:bg-accent/10 aria-checked:text-accent-soft border-white/15 bg-white/[0.03] text-on-ink/65 hover:border-white/30">
+                      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" set:html={m.icon} />
+                      {m.label}
+                    </button>
+                  ))
+                }
+              </div>
+            </fieldset>
+            <div data-quiz-tg hidden>
+              <label for="qz-tg" class="block text-sm font-medium text-on-ink">Ник в Telegram <span class="text-on-ink/40">(необязательно)</span></label>
+              <input id="qz-tg" name="telegram" type="text" class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-on-ink placeholder:text-on-ink/35 focus:border-accent focus:outline-none" placeholder="@username" />
+            </div>
+            <label class="flex items-start gap-3 text-sm text-on-ink/60">
+              <input type="checkbox" name="consent" required class="mt-0.5 h-4 w-4 shrink-0 accent-[#B0885A]" />
+              <span>Согласен на обработку персональных данных и <a href="/privacy" target="_blank" rel="noopener" class="text-accent-soft underline underline-offset-2">политику конфиденциальности</a>.</span>
+            </label>
+            <p class="hidden text-sm text-red-300" data-qz-error="consent" role="alert"></p>
+          </form>
+        </div>
+
+        <!-- Успех -->
+        <div data-quiz-success hidden class="flex flex-col items-center justify-center py-10 text-center">
+          <span class="grid h-16 w-16 place-items-center rounded-full border border-accent/40 text-accent accent-glow">
+            <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <h3 class="mt-5 font-[var(--font-display)] text-2xl text-on-ink">Готово, заявка принята</h3>
+          <p data-quiz-success-text class="mt-3 max-w-xs text-sm text-on-ink/60"></p>
+          <button type="button" data-quiz-close class="mt-7 rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-on-ink transition-colors hover:border-accent hover:text-accent">Закрыть</button>
+        </div>
+      </div>
+
+      <!-- Подвал: навигация -->
+      <div data-quiz-nav class="flex items-center justify-between gap-3 border-t border-white/10 bg-ink/40 px-6 py-4 backdrop-blur-xl sm:px-8">
+        <button type="button" data-quiz-back class="inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium text-on-ink/60 transition-colors hover:text-on-ink disabled:opacity-30" disabled>
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Назад
+        </button>
+        <button type="button" data-quiz-next class="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50">
+          <span data-quiz-next-label>Далее</span>
+          <svg class="h-4 w-4 hidden animate-spin" data-quiz-spinner viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="3" stroke-opacity="0.3"/><path d="M21 12a9 9 0 00-9-9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+          <svg class="h-4 w-4" data-quiz-next-arrow viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="application/json" data-quiz-data set:html={JSON.stringify(payload)} />
+</div>
+
+<script>
+  type Opt = { v: string; label: string; desc?: string };
+  type Q = { id: string; q: string; hint?: string; multi?: boolean; options: Opt[] };
+  type Quiz = { kind: string; eyebrow: string; title: string; sub: string; cta: string; steps: Q[] };
+  type Data = { quizzes: Record<string, Quiz>; heroImg: string };
+
+  const modal = document.querySelector<HTMLElement>("[data-quiz-modal]");
+  if (modal) {
+    const data: Data = JSON.parse(modal.querySelector<HTMLElement>("[data-quiz-data]")!.textContent || "{}");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const overlay = modal.querySelector<HTMLElement>("[data-quiz-overlay]")!;
+    const dialog = modal.querySelector<HTMLElement>("[data-quiz-dialog]")!;
+    const scroll = modal.querySelector<HTMLElement>("[data-quiz-scroll]")!;
+    const eyebrowEl = modal.querySelector<HTMLElement>("[data-quiz-eyebrow]")!;
+    const stepLabel = modal.querySelector<HTMLElement>("[data-quiz-step-label]")!;
+    const progress = modal.querySelector<HTMLElement>("[data-quiz-progress]")!;
+    const asideEl = modal.querySelector<HTMLElement>("[data-quiz-aside]")!;
+    const stepWrap = modal.querySelector<HTMLElement>("[data-quiz-step]")!;
+    const qEl = modal.querySelector<HTMLElement>("[data-quiz-q]")!;
+    const hintEl = modal.querySelector<HTMLElement>("[data-quiz-hint]")!;
+    const optionsEl = modal.querySelector<HTMLElement>("[data-quiz-options]")!;
+    const contactWrap = modal.querySelector<HTMLElement>("[data-quiz-contact]")!;
+    const successWrap = modal.querySelector<HTMLElement>("[data-quiz-success]")!;
+    const navWrap = modal.querySelector<HTMLElement>("[data-quiz-nav]")!;
+    const backBtn = modal.querySelector<HTMLButtonElement>("[data-quiz-back]")!;
+    const nextBtn = modal.querySelector<HTMLButtonElement>("[data-quiz-next]")!;
+    const nextLabel = modal.querySelector<HTMLElement>("[data-quiz-next-label]")!;
+    const nextArrow = modal.querySelector<HTMLElement>("[data-quiz-next-arrow]")!;
+    const spinner = modal.querySelector<HTMLElement>("[data-quiz-spinner]")!;
+    const form = modal.querySelector<HTMLFormElement>("[data-quiz-form]")!;
+    const phoneInput = modal.querySelector<HTMLInputElement>("[data-quiz-phone]")!;
+    const tgWrap = modal.querySelector<HTMLElement>("[data-quiz-tg]")!;
+    const methodBtns = Array.from(modal.querySelectorAll<HTMLButtonElement>("[data-method]"));
+
+    const endpoint = document.querySelector<HTMLFormElement>("[data-lead-form]")?.dataset.endpoint || "";
+    const methods: Record<string, string> = { telegram: "Telegram", max: "МАКС", phone: "Телефон" };
+
+    let quiz: Quiz | null = null;
+    let project: { code: string; name: string } | null = null;
+    let step = 0; // 0..steps.length-1 = вопросы; steps.length = контакт
+    let answers: Record<string, string> = {};
+    let method = "phone";
+    let lastFocus: HTMLElement | null = null;
+
+    const formatRuPhone = (v: string) => {
+      let d = v.replace(/\D/g, "");
+      if (d[0] === "8") d = "7" + d.slice(1);
+      if (d[0] !== "7") d = "7" + d;
+      d = d.slice(0, 11);
+      let r = "+7";
+      if (d.length > 1) r += " (" + d.slice(1, 4);
+      if (d.length >= 4) r += ") " + d.slice(4, 7);
+      if (d.length >= 7) r += "-" + d.slice(7, 9);
+      if (d.length >= 9) r += "-" + d.slice(9, 11);
+      return r;
+    };
+    phoneInput.addEventListener("input", () => { phoneInput.value = formatRuPhone(phoneInput.value); });
+    phoneInput.addEventListener("focus", () => { if (!phoneInput.value) phoneInput.value = "+7 "; });
+
+    const qzError = (field: string, msg: string) => {
+      const el = modal.querySelector<HTMLElement>(`[data-qz-error="${field}"]`);
+      if (el) { el.textContent = msg; el.classList.toggle("hidden", !msg); }
+    };
+    const setMethod = (m: string) => {
+      method = m;
+      methodBtns.forEach((b) => b.setAttribute("aria-checked", String(b.dataset.method === m)));
+      tgWrap.hidden = m !== "telegram";
+    };
+    methodBtns.forEach((b) => b.addEventListener("click", () => setMethod(b.dataset.method!)));
+
+    const totalSteps = () => quiz!.steps.length + 1; // + контактный шаг
+    const isContact = () => step === quiz!.steps.length;
+
+    const renderProgress = () => {
+      progress.style.width = `${((step + 1) / totalSteps()) * 100}%`;
+      stepLabel.textContent = `Шаг ${step + 1} из ${totalSteps()}`;
+    };
+
+    const renderStep = () => {
+      renderProgress();
+      backBtn.disabled = step === 0;
+      if (isContact()) {
+        stepWrap.hidden = true;
+        contactWrap.hidden = false;
+        successWrap.hidden = true;
+        nextLabel.textContent = quiz!.cta;
+        nextArrow.classList.add("hidden");
+        scroll.scrollTop = 0;
+        setTimeout(() => modal.querySelector<HTMLInputElement>("#qz-name")?.focus(), reduce ? 0 : 150);
+        return;
+      }
+      stepWrap.hidden = false;
+      contactWrap.hidden = true;
+      successWrap.hidden = true;
+      nextLabel.textContent = "Далее";
+      nextArrow.classList.remove("hidden");
+      const s = quiz!.steps[step];
+      qEl.textContent = s.q;
+      hintEl.textContent = s.hint || "";
+      hintEl.hidden = !s.hint;
+      const chosen = answers[s.id];
+      optionsEl.innerHTML = s.options.map((o) => {
+        const on = chosen === o.v;
+        return `<button type="button" data-opt="${o.v}" aria-pressed="${on}" class="group flex h-full flex-col items-start gap-1 rounded-2xl border px-4 py-4 text-left transition-colors ${on ? "border-accent bg-accent/10" : "border-white/12 bg-white/[0.02] hover:border-white/30"}">
+          <span class="flex w-full items-center justify-between gap-2">
+            <span class="font-[var(--font-display)] text-base ${on ? "text-on-ink" : "text-on-ink/85"}">${o.label}</span>
+            <span class="grid h-5 w-5 shrink-0 place-items-center rounded-full border ${on ? "border-accent bg-accent text-paper" : "border-white/25 text-transparent"}"><svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </span>
+          ${o.desc ? `<span class="text-xs leading-snug text-on-ink/50">${o.desc}</span>` : ""}
+        </button>`;
+      }).join("");
+      nextBtn.disabled = !chosen;
+      scroll.scrollTop = 0;
+    };
+
+    optionsEl.addEventListener("click", (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLElement>("[data-opt]");
+      if (!b) return;
+      const s = quiz!.steps[step];
+      answers[s.id] = b.dataset.opt!;
+      // визуально + авто-переход вперёд (single-choice)
+      renderStep();
+      if (!reduce) setTimeout(() => next(), 240); else next();
+    });
+
+    const next = () => {
+      if (isContact()) { submit(); return; }
+      const s = quiz!.steps[step];
+      if (!answers[s.id]) { nextBtn.disabled = true; return; }
+      step++;
+      renderStep();
+    };
+    const back = () => { if (step === 0) return; step--; renderStep(); };
+    nextBtn.addEventListener("click", next);
+    backBtn.addEventListener("click", back);
+
+    const open = (kind: string, proj?: { code: string; name: string } | null) => {
+      quiz = data.quizzes[kind];
+      if (!quiz) return;
+      project = proj || null;
+      step = 0; answers = {}; setMethod("phone");
+      form.reset();
+      ["name", "phone", "consent"].forEach((f) => qzError(f, ""));
+      eyebrowEl.textContent = quiz.eyebrow;
+      asideEl.textContent = quiz.title;
+      successWrap.hidden = true;
+      navWrap.hidden = false;
+      renderStep();
+      lastFocus = document.activeElement as HTMLElement;
+      modal.hidden = false; document.body.style.overflow = "hidden";
+      requestAnimationFrame(() => { overlay.style.opacity = "1"; dialog.style.opacity = "1"; dialog.style.transform = "translateY(0)"; });
+    };
+    const close = () => {
+      overlay.style.opacity = "0"; dialog.style.opacity = "0"; dialog.style.transform = "translateY(16px)";
+      const done = () => { modal.hidden = true; document.body.style.overflow = ""; lastFocus?.focus(); };
+      if (reduce) done(); else setTimeout(done, 280);
+    };
+    modal.querySelectorAll<HTMLButtonElement>("[data-quiz-close]").forEach((b) => b.addEventListener("click", close));
+    overlay.addEventListener("click", close);
+
+    const submit = async () => {
+      const fd = new FormData(form);
+      const name = String(fd.get("name") || "").trim();
+      const phone = String(fd.get("phone") || "").trim();
+      const telegram = String(fd.get("telegram") || "").trim();
+      const consent = form.querySelector<HTMLInputElement>('[name="consent"]')!.checked;
+      let firstInvalid: HTMLElement | null = null;
+      ["name", "phone", "consent"].forEach((f) => qzError(f, ""));
+      if (!name) { qzError("name", "Укажите, как к вам обращаться"); firstInvalid ??= modal.querySelector("#qz-name"); }
+      if (phone.replace(/\D/g, "").length < 10) { qzError("phone", "Введите корректный номер телефона"); firstInvalid ??= phoneInput; }
+      if (!consent) { qzError("consent", "Нужно согласие на обработку данных"); }
+      if (firstInvalid || !consent) { firstInvalid?.focus(); return; }
+
+      const answerLines = quiz!.steps.map((s) => `${s.q.replace(/\?$/, "")}: ${answers[s.id] || "—"}`).join("; ");
+      const requestLabel = quiz!.kind === "smeta" ? "Расчёт сметы (квиз)" : "Конфигуратор комплектации (квиз)";
+      const body = {
+        name, phone,
+        channel: methods[method],
+        telegram: method === "telegram" ? telegram : "",
+        request: project ? `${requestLabel} по проекту ${project.code} «${project.name}». ${answerLines}` : `${requestLabel}. ${answerLines}`,
+        project: project?.code || "",
+        quiz: quiz!.kind,
+        answers,
+      };
+      nextBtn.disabled = true; spinner.classList.remove("hidden"); nextArrow.classList.add("hidden"); nextLabel.textContent = "Отправляем…";
+      try {
+        if (endpoint) {
+          const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+          if (!res.ok) throw new Error("bad");
+        } else { console.info("Quiz lead (demo):", body); await new Promise((r) => setTimeout(r, 600)); }
+        contactWrap.hidden = true; stepWrap.hidden = true; navWrap.hidden = true; successWrap.hidden = false;
+        progress.style.width = "100%";
+        modal.querySelector<HTMLElement>("[data-quiz-success-text]")!.textContent =
+          `Свяжемся по телефону или в ${methods[method]} и пришлём ${quiz!.kind === "smeta" ? "смету" : "комплектацию"}${project ? ` по проекту «${project.name}»` : ""}.`;
+      } catch {
+        qzError("phone", "Не удалось отправить. Позвоните: 8 (499) 113-57-63");
+      } finally {
+        spinner.classList.add("hidden"); nextLabel.textContent = quiz!.cta; nextBtn.disabled = false;
+      }
+    };
+    form.addEventListener("submit", (e) => { e.preventDefault(); submit(); });
+
+    // Клавиатура: Esc — закрыть; 1–9 — выбрать вариант; ловушка фокуса Tab
+    document.addEventListener("keydown", (e) => {
+      if (modal.hidden) return;
+      if (e.key === "Escape") { close(); return; }
+      if (quiz && !isContact() && successWrap.hidden && /^[1-9]$/.test(e.key)) {
+        const idx = Number(e.key) - 1;
+        const btns = Array.from(optionsEl.querySelectorAll<HTMLButtonElement>("[data-opt]"));
+        if (btns[idx]) { btns[idx].click(); }
+      } else if (e.key === "Tab") {
+        const f = dialog.querySelectorAll<HTMLElement>('button, a[href], input, [tabindex]:not([tabindex="-1"])');
+        const vis = Array.from(f).filter((el) => el.offsetParent !== null && !(el as HTMLButtonElement).disabled);
+        if (!vis.length) return; const first = vis[0], last = vis[vis.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+
+    // Точки входа: событие vz-quiz и статические data-quiz="kind"
+    document.addEventListener("vz-quiz", (e) => {
+      const d = (e as CustomEvent).detail || {};
+      open(d.kind || "smeta", d.project || null);
+    });
+    document.addEventListener("click", (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLElement>("[data-quiz]");
+      if (b) { e.preventDefault(); open(b.dataset.quiz || "smeta", null); }
+    });
+  }
+</script>

@@ -509,7 +509,7 @@ const payload = {
 
           <label class="flex items-start gap-3 text-sm text-on-ink/60">
             <input type="checkbox" name="consent" required class="mt-0.5 h-4 w-4 shrink-0 accent-[#B0885A]" />
-            <span>Согласен на обработку персональных данных и <a href="#" class="text-accent-soft underline underline-offset-2">политику конфиденциальности</a>.</span>
+            <span>Согласен на обработку персональных данных и <a href="/privacy" target="_blank" rel="noopener" class="text-accent-soft underline underline-offset-2">политику конфиденциальности</a>.</span>
           </label>
           <p class="hidden text-sm text-red-300" data-rq-error="consent" role="alert"></p>
 
@@ -1062,13 +1062,25 @@ const payload = {
       }
     });
 
-    // CTA → открыть модалку заявки (закрыв карточку проекта, если открыта)
-    modal.querySelectorAll<HTMLButtonElement>("[data-modal-cta]").forEach((btn) => btn.addEventListener("click", () => { const k = btn.dataset.modalCta!; closeModal(); setTimeout(() => openRequest(k), reduce ? 0 : 320); }));
-    root.addEventListener("click", (e) => { if ((e.target as HTMLElement).closest("[data-calc]")) openRequest("calc"); });
-    // CTA внутри карточки: «получить полную комплектацию» и «поменять планировку»
+    // Открыть квиз (комплектация/смета) с текущим проектом
+    const openQuiz = (kind: string, code?: string) => {
+      const p = data.projects[code || selected];
+      document.dispatchEvent(new CustomEvent("vz-quiz", { detail: { kind, project: p ? { code: p.code, name: p.name } : null } }));
+    };
+
+    // CTA в карточке проекта: «Скачать смету» → квиз сметы; «Презентация/Видео» → заявка
+    modal.querySelectorAll<HTMLButtonElement>("[data-modal-cta]").forEach((btn) => btn.addEventListener("click", () => {
+      const k = btn.dataset.modalCta!;
+      const code = selected;
+      closeModal();
+      setTimeout(() => { if (k === "smeta") openQuiz("smeta", code); else openRequest(k); }, reduce ? 0 : 320);
+    }));
+    // «Получить расчёт» по всему каталогу → квиз комплектации
+    root.addEventListener("click", (e) => { if ((e.target as HTMLElement).closest("[data-calc]")) openQuiz("complectation"); });
+    // CTA внутри карточки: «получить полную комплектацию» → квиз; «поменять планировку» → заявка
     modal.addEventListener("click", (e) => {
       const t = e.target as HTMLElement;
-      if (t.closest("[data-stage-cta]")) { closeModal(); setTimeout(() => openRequest("complectation"), reduce ? 0 : 320); }
+      if (t.closest("[data-stage-cta]")) { const code = selected; closeModal(); setTimeout(() => openQuiz("complectation", code), reduce ? 0 : 320); }
       else if (t.closest("[data-plan-change]")) { closeModal(); setTimeout(() => openRequest("layout"), reduce ? 0 : 320); }
     });
 

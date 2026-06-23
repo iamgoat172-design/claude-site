@@ -1,0 +1,154 @@
+---
+// Секция — Люди и востребованность. Три слоя:
+//  1) Lifestyle-полоса «в этих домах живут» (фото-якорь людей);
+//  2) Команда, которая отвечает за ваш дом (человеческая гарантия безопасности);
+//  3) Живой спрос: счётчики + ограничение слотов сезона (социальная востребованность).
+//
+// ⚠️ Заглушки: имена команды, портреты и цифры спроса — замените реальными.
+//    Слот под фото людей помечен data-people-photo.
+import { INTERIORS } from "../data/projects";
+
+const lifestyle = INTERIORS[0]?.src ?? "";
+
+// Команда проекта — «лица», которые отвечают за результат.
+const team = [
+  { role: "Архитектор", name: "Алексей Громов", exp: "17 лет", duty: "Ведёт проект от эскиза до рабочей документации", icon: '<path d="M3 17 17 3l4 4L7 21H3z" stroke-linejoin="round"/><path d="M13 7l4 4" stroke-linecap="round"/>' },
+  { role: "Главный инженер", name: "Игорь Лебедев", exp: "21 год", duty: "Фундамент, конструктив и инженерные системы", icon: '<path d="M12 3l7 4v5c0 4.5-3 8.5-7 9.5-4-1-7-5-7-9.5V7l7-4z" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>' },
+  { role: "Прораб", name: "Сергей Морозов", exp: "15 лет", duty: "Сборка на участке и поэтапная приёмка с вами", icon: '<path d="M14 7l3 3M3 21l8-8M14 7l4-4 3 3-4 4-3-3z" stroke-linecap="round" stroke-linejoin="round"/>' },
+  { role: "Менеджер проекта", name: "Мария Зайцева", exp: "9 лет", duty: "Ваш единый контакт, сроки и документы", icon: '<path d="M4 19a8 8 0 0116 0" stroke-linecap="round"/><circle cx="12" cy="8" r="4"/>' },
+];
+
+// Цифры живого спроса (заглушки — обновляйте под реальные).
+const demand = [
+  { to: 640, suffix: "+", label: "семей уже живут в наших домах" },
+  { to: 28, suffix: "", label: "заявок за последнюю неделю" },
+  { to: 12, suffix: "", label: "домов в работе прямо сейчас" },
+  { to: 5, suffix: "", label: "слотов на старт в этом сезоне", scarce: true },
+];
+---
+
+<section id="people" class="relative overflow-hidden bg-ink-2 py-20 sm:py-28">
+  <div class="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <p class="eyebrow text-accent-soft">Люди и доверие</p>
+        <h2 class="display-lg mt-5 text-on-ink">За каждым домом —<br />люди, а не подрядчик</h2>
+      </div>
+      <p class="max-w-sm text-[15px] leading-relaxed text-on-ink/65">
+        Вы знаете имена тех, кто строит ваш дом, и видите семьи, которые уже
+        в них живут. Это и есть гарантия: спокойствие, что всё будет хорошо.
+      </p>
+    </div>
+
+    <!-- 1) Lifestyle-полоса: в этих домах живут -->
+    <figure class="rise relative mt-12 overflow-hidden rounded-[28px] border border-white/10">
+      <img
+        src={lifestyle}
+        data-people-photo
+        alt="Семья в гостиной дома из клееного бруса"
+        loading="lazy"
+        decoding="async"
+        class="h-[clamp(260px,42vh,460px)] w-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/45 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-ink/70 via-transparent to-transparent"></div>
+      <figcaption class="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-5 p-6 sm:p-10">
+        <div class="max-w-lg">
+          <p class="font-[var(--font-display)] text-2xl leading-snug text-on-ink sm:text-3xl">
+            «Дом, в котором семья живёт, а не достраивает годами»
+          </p>
+          <p class="mt-3 text-sm text-on-ink/70">
+            Сдаём готовый дом за 1–2 сезона по фиксированной смете — заезжайте и живите.
+          </p>
+        </div>
+        <button type="button" data-quiz="smeta" class="inline-flex shrink-0 items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">
+          Узнать стоимость своего дома
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </figcaption>
+    </figure>
+
+    <!-- 2) Команда проекта -->
+    <div class="mt-16">
+      <div class="flex items-baseline justify-between gap-4">
+        <h3 class="font-[var(--font-display)] text-xl text-on-ink sm:text-2xl">Команда, которая отвечает за ваш дом</h3>
+        <span class="hidden text-sm text-on-ink/45 sm:block">Закреплены за вашим проектом</span>
+      </div>
+      <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          team.map((m, i) => (
+            <article class={`rise rise-${Math.min(i + 1, 4)} glass hairline-top flex flex-col rounded-[22px] p-6`}>
+              <div class="flex items-center gap-4">
+                {/* Аватар-заглушка: стеклянный диск с иконкой роли. Замените портретом. */}
+                <span class="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-accent/40 bg-white/5 text-accent-soft accent-glow">
+                  <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" set:html={m.icon} />
+                </span>
+                <div>
+                  <p class="font-[var(--font-display)] text-on-ink">{m.name}</p>
+                  <p class="text-xs text-accent-soft">{m.role}</p>
+                </div>
+              </div>
+              <p class="mt-5 flex-1 text-sm leading-relaxed text-on-ink/65">{m.duty}</p>
+              <p class="mt-4 border-t border-white/10 pt-4 text-xs text-on-ink/45">
+                <span class="tnum font-[var(--font-display)] text-base text-on-ink">{m.exp}</span> в профессии
+              </p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- 3) Живой спрос -->
+    <div class="rise mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-[24px] border border-white/10 lg:grid-cols-4" data-demand>
+      {
+        demand.map((d) => (
+          <div class="bg-white/[0.02] px-6 py-8">
+            <p class="flex items-baseline gap-1">
+              <span class="tnum font-[var(--font-display)] text-3xl text-on-ink sm:text-4xl" data-count={d.to} data-suffix={d.suffix}>0{d.suffix}</span>
+              {d.scarce && (
+                <span class="ml-1 inline-flex h-2 w-2 rounded-full bg-accent" aria-hidden="true">
+                  <span class="h-2 w-2 animate-ping rounded-full bg-accent" />
+                </span>
+              )}
+            </p>
+            <p class={`mt-3 text-sm leading-snug ${d.scarce ? "text-accent-soft" : "text-on-ink/55"}`}>{d.label}</p>
+          </div>
+        ))
+      }
+    </div>
+    <div class="mt-7 flex flex-wrap items-center gap-4">
+      <button type="button" data-quiz="complectation" class="inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">
+        Забронировать старт в этом сезоне
+      </button>
+      <span class="text-sm text-on-ink/50">Бесплатный расчёт · ни к чему не обязывает</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Счётчики живого спроса. Уважает prefers-reduced-motion.
+  const wrap = document.querySelector<HTMLElement>("[data-demand]");
+  if (wrap) {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const nums = Array.from(wrap.querySelectorAll<HTMLElement>("[data-count]"));
+    const run = () => {
+      nums.forEach((el) => {
+        const to = Number(el.dataset.count || "0");
+        const suffix = el.dataset.suffix || "";
+        if (reduce) { el.textContent = `${to}${suffix}`; return; }
+        const dur = 1100, t0 = performance.now();
+        const tick = (t: number) => {
+          const p = Math.min(1, (t - t0) / dur);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = `${Math.round(to * eased)}${suffix}`;
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    };
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((ents) => ents.forEach((e) => { if (e.isIntersecting) { run(); io.disconnect(); } }), { threshold: 0.3 });
+      io.observe(wrap);
+    } else run();
+  }
+</script>

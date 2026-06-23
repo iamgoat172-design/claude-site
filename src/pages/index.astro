@@ -11,7 +11,9 @@ import Built from "../components/Built.astro";
 import Reviews from "../components/Reviews.astro";
 import DesignBureau from "../components/DesignBureau.astro";
 import Geography from "../components/Geography.astro";
+import SocialProof from "../components/SocialProof.astro";
 import LeadForm from "../components/LeadForm.astro";
+import Quiz from "../components/Quiz.astro";
 import Footer from "../components/Footer.astro";
 ---
 
@@ -20,15 +22,17 @@ import Footer from "../components/Footer.astro";
   <main>
     <Hero />
     <TrustStrip />
-    <Catalog />
+    <Catalog variant="coverflow" />
     <Included />
     <Stages />
     <Pricing />
     <Built />
     <Reviews />
+    <SocialProof />
     <DesignBureau />
     <Geography />
     <LeadForm />
   </main>
   <Footer />
+  <Quiz />
 </Base>
