@@ -1,0 +1,1082 @@
+---
+import { projects, materials, INTERIORS, DEFAULT_FEATURES, INCLUDE_STAGES, type Material } from "../data/projects";
+
+// variant: "list" (по умолчанию) | "showcase" (кинолента)
+const { variant = "list" } = Astro.props as { variant?: "list" | "showcase" };
+
+const order: Material[] = ["timber", "ceramic"];
+const byMaterial = (m: Material) => projects.filter((p) => p.material === m);
+
+const sub: Record<Material, string> = {
+  timber: "Тёплый, дышащий дом",
+  ceramic: "Монолит, тишина, тепло",
+};
+
+const initList = byMaterial("timber");
+const initSel = initList[0];
+
+const payload = {
+  groups: order.map((m) => ({ id: m, label: materials[m].label, note: materials[m].note, codes: byMaterial(m).map((p) => p.code) })),
+  projects: Object.fromEntries(projects.map((p) => [p.code, { ...p, materialLabel: materials[p.material].label }])),
+  interiors: INTERIORS,
+  defaultFeatures: DEFAULT_FEATURES,
+  stages: INCLUDE_STAGES,
+};
+---
+
+<section id="catalog" class="grain relative overflow-hidden bg-ink py-20 sm:py-28">
+  <div class="absolute inset-0 z-0" aria-hidden="true">
+    <img data-backdrop src={initSel.image} alt="" class="h-full w-full scale-110 object-cover opacity-20 blur-2xl transition-opacity duration-700" />
+    <div class="absolute inset-0 bg-ink/72"></div>
+  </div>
+
+  <div class="relative z-10 mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <p class="eyebrow text-accent-soft">Каталог проектов</p>
+        <h2 class="display-lg mt-5 text-on-ink">Выберите материал<br />и проект</h2>
+      </div>
+      <p class="max-w-sm text-[15px] leading-relaxed text-on-ink/65" data-note>
+        {materials[order[0]].note}. Переключайте проекты справа, открывайте
+        карточку — внутри визуализации, интерьеры и планировки.
+      </p>
+    </div>
+
+    <div class="glass relative mt-9 grid w-full max-w-2xl grid-cols-2 gap-1.5 rounded-2xl p-1.5" role="tablist" aria-label="Материал дома" data-tablist>
+      <span class="pointer-events-none absolute left-1.5 top-1.5 z-0 rounded-xl bg-accent accent-glow transition-[transform,width] duration-[450ms] ease-[cubic-bezier(0.34,1.56,0.4,1)]" style="height: calc(100% - 0.75rem)" data-indicator aria-hidden="true"></span>
+      {
+        order.map((m, i) => (
+          <button type="button" role="tab" id={`tab-${m}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? "0" : "-1"} data-tab={m} class="group relative z-10 rounded-xl px-5 py-3 text-left transition-colors duration-300">
+            <span class="flex items-center gap-2">
+              <span class={`h-2 w-2 rounded-full ${m === "timber" ? "bg-[#c8a578]" : "bg-[#b9876a]"} ring-2 ring-white/20`} />
+              <span class="block font-[var(--font-display)] text-base text-on-ink/70 transition-colors group-aria-selected:text-paper sm:text-lg">{materials[m].label}</span>
+            </span>
+            <span class="mt-1 block pl-4 text-xs text-on-ink/45 transition-colors group-aria-selected:text-paper/70">{sub[m]}</span>
+          </button>
+        ))
+      }
+    </div>
+
+    {variant === "list" && (
+    <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[8fr_4fr]">
+      <!-- Выбранный дом -->
+      <div class="flex flex-col gap-4">
+        <button type="button" data-open class="lift group relative block aspect-[16/10] w-full overflow-hidden rounded-[28px] border border-white/10 text-left">
+          <img data-sel-img src={initSel.image} alt={initSel.alt} loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/55 to-transparent"></div>
+          <span class="absolute left-6 top-6 rounded-full border border-white/15 bg-ink/40 px-3.5 py-1.5 text-xs tracking-wide text-on-ink backdrop-blur-md" data-sel-code>{initSel.code}</span>
+          <span class="absolute right-6 top-6 flex items-center gap-2 rounded-full bg-accent/90 px-4 py-1.5 text-xs font-semibold text-paper opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            Открыть проект
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </button>
+
+        <div class="glass hairline-top rounded-[24px] p-6 sm:p-7">
+          <div class="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <h3 class="font-[var(--font-display)] text-2xl text-on-ink sm:text-3xl" data-sel-name>{initSel.name}</h3>
+              <p class="mt-2 text-sm text-on-ink/60" data-sel-meta>{initSel.area} м² · {initSel.floors} этажа</p>
+            </div>
+            <div class="text-right">
+              <p class="text-xs text-on-ink/45">Стоимость</p>
+              <p class="tnum font-[var(--font-display)] text-2xl text-accent-soft" data-sel-price>{initSel.price}</p>
+            </div>
+          </div>
+          <p class="mt-4 border-t border-white/10 pt-4 text-sm text-on-ink/65" data-sel-summary>{initSel.summary}</p>
+          <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <button type="button" data-open class="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">
+              Открыть проект
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button type="button" data-calc class="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 px-6 py-3.5 text-sm font-semibold text-on-ink transition-colors duration-300 hover:border-accent hover:text-accent">Получить расчёт</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Список проектов -->
+      <div class="no-scrollbar flex flex-col gap-3 lg:max-h-[680px] lg:overflow-y-auto lg:pr-1" data-list role="listbox" aria-label="Проекты">
+        {
+          initList.map((p, i) => (
+            <button type="button" data-select={p.code} role="option" aria-selected={i === 0 ? "true" : "false"} class="group relative block aspect-[16/10] w-full shrink-0 overflow-hidden rounded-[20px] border text-left transition-all duration-300 aria-selected:border-accent/70 border-white/10 hover:border-white/30">
+              <img src={p.image} alt={p.alt} loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 group-aria-selected:scale-[1.03]" />
+              <span class="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent"></span>
+              <span class="absolute left-3 top-3 flex items-center gap-2">
+                <span class="rounded-full border border-white/20 bg-ink/40 px-2.5 py-1 text-[10px] tracking-wide text-on-ink backdrop-blur-md">{p.code}</span>
+                {p.tag && <span class="rounded-full bg-accent/90 px-2.5 py-1 text-[10px] font-semibold text-paper">{p.tag}</span>}
+              </span>
+              <span class="absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full bg-accent text-paper opacity-0 transition-opacity duration-300 group-aria-selected:opacity-100" aria-hidden="true"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="absolute inset-x-0 bottom-0 p-4">
+                <span class="flex items-center justify-between gap-2">
+                  <span class="font-[var(--font-display)] text-lg text-on-ink">{p.name}</span>
+                  <span class="tnum text-xs text-on-ink/70">{p.area} м²</span>
+                </span>
+                <span class="mt-1 block text-xs text-accent-soft">{p.hook}</span>
+              </span>
+            </button>
+          ))
+        }
+      </div>
+    </div>
+    )}
+
+    {variant === "showcase" && (
+    <div class="mt-8">
+      <!-- Сцена -->
+      <div class="group relative aspect-[4/3] w-full overflow-hidden rounded-[28px] border border-white/10 sm:aspect-[16/9] lg:aspect-[21/9]" data-stage>
+        <img data-sel-img src={initSel.image} alt={initSel.alt} class="absolute inset-0 h-full w-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/35 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-ink/75 via-ink/10 to-transparent"></div>
+
+        <div class="absolute inset-x-0 top-0 flex items-center justify-between p-5 sm:p-7">
+          <span class="flex items-center gap-2">
+            <span class="rounded-full border border-white/20 bg-ink/40 px-3 py-1 text-xs tracking-wide text-on-ink backdrop-blur-md" data-sel-code>{initSel.code}</span>
+            <span class="rounded-full bg-accent/90 px-3 py-1 text-xs font-semibold text-paper" data-sel-tag>{initSel.tag}</span>
+          </span>
+          <span class="tnum rounded-full bg-ink/40 px-3 py-1 text-xs text-on-ink/85 backdrop-blur-md" data-counter></span>
+        </div>
+
+        <button type="button" data-prev aria-label="Предыдущий проект" class="absolute left-4 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-ink/50 text-on-ink backdrop-blur-md transition-colors hover:border-accent hover:text-accent">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" data-next aria-label="Следующий проект" class="absolute right-4 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-ink/50 text-on-ink backdrop-blur-md transition-colors hover:border-accent hover:text-accent">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <div class="absolute inset-x-0 bottom-0 p-6 sm:p-9 lg:max-w-2xl">
+          <p class="eyebrow text-accent-soft" data-sel-hook>{initSel.hook}</p>
+          <h3 class="display-lg mt-3 text-on-ink" data-sel-name>{initSel.name}</h3>
+          <p class="mt-3 text-on-ink/75" data-sel-meta>{initSel.area} м² · {initSel.floors} этажа</p>
+          <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <span class="tnum font-[var(--font-display)] text-2xl text-accent-soft" data-sel-price>{initSel.price}</span>
+            <div class="flex flex-wrap gap-3">
+              <button type="button" data-open class="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">
+                Открыть проект
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button type="button" data-calc class="inline-flex items-center rounded-full border border-white/25 px-6 py-3.5 text-sm font-semibold text-on-ink transition-colors duration-300 hover:border-accent hover:text-accent">Получить расчёт</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Кинолента -->
+      <div class="no-scrollbar mt-4 flex gap-3 overflow-x-auto pb-1" data-list role="listbox" aria-label="Проекты">
+        {
+          initList.map((p, i) => (
+            <button type="button" data-select={p.code} role="option" aria-selected={i === 0 ? "true" : "false"} class="group relative aspect-[4/3] w-40 shrink-0 overflow-hidden rounded-2xl border text-left transition-all duration-300 aria-selected:border-accent/70 border-white/10 hover:border-white/30 sm:w-48">
+              <img src={p.image} alt={p.alt} loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 group-aria-selected:scale-[1.04]" />
+              <span class="absolute inset-0 bg-gradient-to-t from-ink/90 to-transparent opacity-80 transition-opacity group-aria-selected:opacity-100"></span>
+              <span class="absolute left-2 top-2 rounded-full bg-ink/50 px-2 py-0.5 text-[10px] text-on-ink/80 backdrop-blur-md">{p.code}</span>
+              <span class="absolute inset-x-0 bottom-0 p-2.5">
+                <span class="block truncate font-[var(--font-display)] text-sm text-on-ink">{p.name}</span>
+                <span class="tnum text-[11px] text-on-ink/60">{p.area} м²</span>
+              </span>
+            </button>
+          ))
+        }
+      </div>
+      <div class="mt-4 flex justify-center gap-2" data-dots aria-hidden="true"></div>
+    </div>
+    )}
+
+    {variant === "coverflow" && (
+    <div class="mt-8" data-coverflow>
+      <div class="relative">
+        <div class="relative mx-auto h-[clamp(300px,52vh,560px)] [perspective:1800px]">
+          <div class="relative h-full w-full [transform-style:preserve-3d]" data-list role="listbox" aria-label="Проекты"></div>
+        </div>
+        <button type="button" data-prev aria-label="Предыдущий проект" class="absolute left-2 top-1/2 z-[60] grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-ink/50 text-on-ink backdrop-blur-md transition-colors hover:border-accent hover:text-accent sm:left-6">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" data-next aria-label="Следующий проект" class="absolute right-2 top-1/2 z-[60] grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-ink/50 text-on-ink backdrop-blur-md transition-colors hover:border-accent hover:text-accent sm:right-6">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="glass hairline-top mx-auto mt-6 max-w-3xl rounded-[24px] p-6 sm:p-7">
+        <div class="flex items-center justify-between gap-3">
+          <span class="flex items-center gap-2">
+            <span class="rounded-full border border-white/15 px-3 py-1 text-xs tracking-wide text-on-ink/80" data-sel-code></span>
+            <span class="rounded-full bg-accent/90 px-3 py-1 text-xs font-semibold text-paper" data-sel-tag></span>
+          </span>
+          <span class="tnum text-xs text-on-ink/55" data-counter></span>
+        </div>
+        <h3 class="mt-4 font-[var(--font-display)] text-2xl text-on-ink sm:text-3xl" data-sel-name></h3>
+        <p class="mt-2 text-sm text-accent-soft" data-sel-hook></p>
+        <div class="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-5">
+          <div>
+            <p class="text-sm text-on-ink/60" data-sel-meta></p>
+            <p class="tnum mt-1 font-[var(--font-display)] text-2xl text-accent-soft" data-sel-price></p>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <button type="button" data-open class="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">Открыть проект</button>
+            <button type="button" data-calc class="inline-flex items-center rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-on-ink transition-colors hover:border-accent hover:text-accent">Получить расчёт</button>
+          </div>
+        </div>
+      </div>
+      <div class="mt-5 flex justify-center gap-2" data-dots aria-hidden="true"></div>
+    </div>
+    )}
+
+    {variant === "spread" && (
+    <div class="mt-8">
+      <div class="no-scrollbar h-[82vh] snap-y snap-mandatory overflow-y-auto rounded-[28px] border border-white/10" data-list data-spread role="listbox" aria-label="Проекты"></div>
+      <p class="mt-3 text-center text-xs text-on-ink/40">Листайте вниз — проекты сменяют друг друга</p>
+    </div>
+    )}
+
+    {variant === "collection" && (
+    <div class="mt-8" data-collection>
+      <div class="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] border border-white/10 sm:aspect-[16/10] lg:aspect-[16/8]">
+        <img data-img-a src={initSel.image} alt={initSel.alt} class="kenburns absolute inset-0 h-full w-full object-cover" style="opacity:1" />
+        <img data-img-b src="" alt="" class="kenburns absolute inset-0 h-full w-full object-cover" style="opacity:0" />
+        <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-ink/70 via-transparent to-transparent"></div>
+
+        <div class="absolute inset-x-0 bottom-0 p-6 sm:p-10 lg:max-w-2xl">
+          <p class="eyebrow text-on-ink/55"><span data-counter>01 / 05</span> · Коллекция</p>
+          <h3 class="display-xl mt-3 text-on-ink" data-sel-name>{initSel.name}</h3>
+          <span class="mt-4 block h-px w-16 bg-accent"></span>
+          <p class="mt-4 text-lg text-on-ink/75" data-sel-essence>{initSel.hook}</p>
+          <div class="mt-6 flex flex-wrap items-end gap-x-8 gap-y-3" data-sel-meta-wrap></div>
+          <div class="mt-8 flex flex-wrap items-center gap-6">
+            <span class="tnum font-[var(--font-display)] text-2xl text-accent-soft" data-sel-price>{initSel.price}</span>
+            <button type="button" data-open class="group inline-flex items-center gap-2 text-sm font-semibold text-on-ink">
+              Смотреть проект <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </button>
+            <button type="button" data-calc class="text-sm text-on-ink/55 underline-offset-4 transition-colors hover:text-accent hover:underline">Запросить смету</button>
+          </div>
+        </div>
+        <div class="absolute inset-x-0 bottom-0 h-px bg-white/10"><div class="h-full bg-accent transition-[width] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]" data-progress style="width:20%"></div></div>
+      </div>
+
+      <!-- Типографский индекс коллекции -->
+      <div class="mt-8 border-t border-white/10" data-list role="listbox" aria-label="Проекты"></div>
+    </div>
+    )}
+
+    {variant === "table" && (
+    <div class="mt-8">
+      <div data-table class="relative h-[68vh] min-h-[460px] cursor-grab touch-none select-none overflow-hidden rounded-[28px] border border-white/10 bg-ink">
+        <div class="pointer-events-none absolute inset-0 opacity-60" style="background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:46px 46px"></div>
+        <div class="pointer-events-none absolute inset-0" style="background:radial-gradient(120% 120% at 50% 28%, transparent 42%, rgba(20,22,27,.6))"></div>
+        <div data-list data-plane class="absolute left-0 top-0 origin-top-left will-change-transform" style="width:1640px;height:1120px"></div>
+        <div class="pointer-events-none absolute left-5 top-5 flex items-center gap-2 text-xs text-on-ink/45">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 9l-2 3 2 3M19 9l2 3-2 3M9 5l3-2 3 2M9 19l3 2 3-2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Перетаскивайте · колесо — масштаб · клик — проект
+        </div>
+        <div class="absolute bottom-5 right-5 flex flex-col gap-2">
+          <button type="button" data-zoom="1" aria-label="Приблизить" class="grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-ink/50 text-on-ink backdrop-blur-md transition-colors hover:border-accent hover:text-accent">+</button>
+          <button type="button" data-zoom="-1" aria-label="Отдалить" class="grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-ink/50 text-on-ink backdrop-blur-md transition-colors hover:border-accent hover:text-accent">−</button>
+          <button type="button" data-fit aria-label="Показать все" class="grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-ink/50 text-on-ink backdrop-blur-md transition-colors hover:border-accent hover:text-accent"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+
+      <div class="glass hairline-top mt-4 flex flex-wrap items-center justify-between gap-4 rounded-[24px] p-5">
+        <div class="flex items-center gap-4">
+          <img data-sel-img src={initSel.image} alt="" class="h-14 w-20 shrink-0 rounded-lg object-cover" />
+          <div>
+            <span class="block text-[11px] tracking-wide text-on-ink/45"><span data-sel-code>{initSel.code}</span> · <span data-sel-tag>{initSel.tag}</span></span>
+            <span class="block font-[var(--font-display)] text-lg text-on-ink" data-sel-name>{initSel.name}</span>
+            <span class="block text-xs text-on-ink/55" data-sel-meta>{initSel.area} м² · {initSel.floors} этажа</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-5">
+          <span class="tnum font-[var(--font-display)] text-xl text-accent-soft" data-sel-price>{initSel.price}</span>
+          <button type="button" data-open class="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">Открыть проект</button>
+          <button type="button" data-calc class="hidden rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-on-ink transition-colors hover:border-accent hover:text-accent sm:inline-flex">Расчёт</button>
+        </div>
+      </div>
+    </div>
+    )}
+  </div>
+
+  <script type="application/json" data-catalog set:html={JSON.stringify(payload)} />
+</section>
+
+<!-- ПОП-АП ПРОЕКТА -->
+<div data-modal hidden class="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6">
+  <div data-modal-overlay class="absolute inset-0 bg-ink/85 opacity-0 backdrop-blur-md transition-opacity duration-300"></div>
+  <div role="dialog" aria-modal="true" aria-labelledby="modal-title" class="glass hairline-top relative flex max-h-[94dvh] w-full max-w-5xl translate-y-4 flex-col overflow-hidden rounded-[28px] opacity-0 transition-all duration-300" data-modal-dialog>
+
+    <!-- Sticky bar -->
+    <div class="sticky top-0 z-20 flex items-center justify-between gap-4 border-b border-white/10 bg-ink/65 px-5 py-3 backdrop-blur-xl sm:px-7">
+      <div class="flex min-w-0 items-center gap-3">
+        <span data-modal-code class="shrink-0 rounded-full border border-white/15 px-3 py-1 text-xs tracking-wide text-on-ink/80"></span>
+        <span data-modal-name-sm class="truncate font-[var(--font-display)] text-on-ink"></span>
+      </div>
+      <button type="button" data-modal-close aria-label="Закрыть" class="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/15 bg-ink/40 text-on-ink transition-colors hover:border-accent hover:text-accent">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <!-- Scroll body -->
+    <div data-modal-scroll class="min-h-0 flex-1 overflow-y-auto">
+      <!-- Hero -->
+      <div class="relative aspect-[16/9] w-full">
+        <img data-modal-hero src="" alt="" class="h-full w-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6 sm:p-9">
+          <span data-modal-material class="eyebrow text-accent-soft"></span>
+          <h3 id="modal-title" data-modal-name class="display-lg mt-3 text-on-ink"></h3>
+          <p data-modal-meta class="mt-3 text-on-ink/70"></p>
+        </div>
+      </div>
+
+      <div class="space-y-12 p-6 sm:space-y-14 sm:p-9">
+        <!-- Цена + summary + CTA -->
+        <div class="flex flex-wrap items-end justify-between gap-6 border-b border-white/10 pb-9">
+          <div>
+            <p class="text-xs text-on-ink/45">Стоимость</p>
+            <p data-modal-price class="tnum mt-1 font-[var(--font-display)] text-3xl text-accent-soft"></p>
+            <p data-modal-summary class="mt-2 text-sm text-on-ink/60"></p>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <button type="button" data-modal-cta="smeta" class="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Скачать смету
+            </button>
+            <button type="button" data-modal-cta="presentation" class="inline-flex items-center justify-center rounded-full border border-white/25 px-6 py-3.5 text-sm font-semibold text-on-ink transition-colors duration-300 hover:border-accent hover:text-accent">Презентация</button>
+          </div>
+        </div>
+
+        <!-- Что входит в стоимость — этапы (табы) -->
+        <section>
+          <h4 class="eyebrow text-on-ink/40">Что входит в стоимость</h4>
+          <p class="mt-4 max-w-2xl text-[15px] leading-relaxed text-on-ink/60">
+            Полный цикл — от проекта до сборки на участке. Точный состав
+            фиксируется в смете и договоре.
+          </p>
+          <div data-stages-tabs class="no-scrollbar mt-6 flex gap-2 overflow-x-auto pb-1" role="tablist" aria-label="Этапы"></div>
+          <div data-stages-panel class="mt-5"></div>
+        </section>
+
+        <!-- О проекте -->
+        <section>
+          <h4 class="eyebrow text-on-ink/40">О проекте</h4>
+          <div data-modal-desc class="mt-5 max-w-2xl space-y-4 text-base leading-relaxed text-on-ink/75 sm:text-lg"></div>
+          <ul data-modal-feats class="mt-6 flex flex-wrap gap-2"></ul>
+        </section>
+
+        <!-- Характеристики -->
+        <section>
+          <h4 class="eyebrow text-on-ink/40">Характеристики</h4>
+          <dl data-modal-specs class="mt-5 grid gap-x-10 sm:grid-cols-2"></dl>
+        </section>
+
+        <!-- Визуализации -->
+        <section data-modal-vis-wrap>
+          <h4 class="eyebrow text-on-ink/40">Визуализации</h4>
+          <div data-modal-vis class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2"></div>
+        </section>
+
+        <!-- Интерьеры -->
+        <section data-modal-int-wrap>
+          <h4 class="eyebrow text-on-ink/40">Интерьеры</h4>
+          <div data-modal-int class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2"></div>
+        </section>
+
+        <!-- Планировки -->
+        <section data-modal-plans-wrap>
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <h4 class="eyebrow text-on-ink/40">Планировки</h4>
+            <button type="button" data-plan-change class="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-on-ink transition-colors hover:border-accent hover:text-accent">
+              <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z" stroke-linejoin="round"/></svg>
+              Поменять планировку
+            </button>
+          </div>
+          <div data-modal-plan-tabs class="mt-5 flex gap-2"></div>
+          <div class="mt-3 overflow-hidden rounded-2xl border border-white/10 bg-paper">
+            <img data-modal-plan-img src="" alt="" class="mx-auto w-full max-w-3xl object-contain" />
+          </div>
+        </section>
+        <section data-modal-plans-empty hidden>
+          <h4 class="eyebrow text-on-ink/40">Планировки</h4>
+          <p class="mt-5 rounded-2xl border border-white/10 bg-white/[0.02] p-5 text-sm text-on-ink/55">Планировки по этому проекту пришлём по запросу — вместе со сметой.</p>
+        </section>
+
+        <!-- Видеообзор (заглушка) -->
+        <section>
+          <h4 class="eyebrow text-on-ink/40">Видеообзор</h4>
+          <div class="relative mt-5 grid aspect-video place-items-center overflow-hidden rounded-2xl border border-white/10">
+            <img data-modal-video-bg src="" alt="" class="absolute inset-0 h-full w-full object-cover opacity-30 blur-[2px]" />
+            <div class="absolute inset-0 bg-ink/55"></div>
+            <div class="relative z-10 text-center">
+              <span class="mx-auto grid h-16 w-16 place-items-center rounded-full border border-white/25 bg-white/10 backdrop-blur-md transition-transform duration-300 hover:scale-105">
+                <svg class="ml-1 h-6 w-6 text-on-ink" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+              <p class="mt-4 text-sm text-on-ink/70">Видеообзор готовим</p>
+              <button type="button" data-modal-cta="video" class="mt-3 text-sm font-semibold text-accent-soft underline-offset-4 hover:underline">Запросить видеообзор →</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Финальный CTA -->
+        <div class="accent-glow rounded-3xl border border-accent/30 bg-accent/[0.06] p-7 text-center sm:p-9">
+          <p class="font-[var(--font-display)] text-2xl text-on-ink">Понравился проект?</p>
+          <p data-modal-final class="mx-auto mt-2 max-w-md text-sm text-on-ink/65"></p>
+          <div class="mt-6 flex flex-wrap justify-center gap-3">
+            <button type="button" data-modal-cta="smeta" class="rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">Скачать смету</button>
+            <button type="button" data-modal-cta="presentation" class="rounded-full border border-white/25 px-7 py-3.5 text-sm font-semibold text-on-ink transition-colors hover:border-accent hover:text-accent">Получить презентацию</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ПОП-АП ЗАЯВКИ (смета / презентация / видео / расчёт) -->
+<div data-req hidden class="fixed inset-0 z-[110] flex items-center justify-center p-3 sm:p-6">
+  <div data-req-overlay class="absolute inset-0 bg-ink/85 opacity-0 backdrop-blur-md transition-opacity duration-300"></div>
+  <div role="dialog" aria-modal="true" aria-labelledby="req-title" class="glass hairline-top relative grid max-h-[94dvh] w-full max-w-3xl translate-y-4 grid-cols-1 overflow-hidden rounded-[28px] opacity-0 transition-all duration-300 lg:grid-cols-2" data-req-dialog>
+
+    <!-- Левая визуальная панель -->
+    <div class="relative hidden overflow-hidden bg-ink-2 lg:block">
+      <img data-req-img src="" alt="" class="absolute inset-0 h-full w-full object-cover opacity-35" />
+      <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/30"></div>
+      <div class="relative z-10 flex h-full flex-col justify-between p-8">
+        <span class="eyebrow text-accent-soft">Вологодское Зодчество</span>
+        <div>
+          <p class="font-[var(--font-display)] text-2xl text-on-ink">Что вы получите</p>
+          <ul class="mt-5 space-y-3">
+            {
+              [
+                "Смету по проекту (PDF)",
+                "Планировки этажей",
+                "Презентацию проекта",
+                "Консультацию архитектора",
+              ].map((t) => (
+                <li class="flex items-baseline gap-2.5 text-sm text-on-ink/85">
+                  <svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  {t}
+                </li>
+              ))
+            }
+          </ul>
+          <p class="mt-6 text-xs text-on-ink/40">Ответим в течение 15 минут в удобном вам канале.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Форма -->
+    <div class="flex min-h-0 flex-col overflow-y-auto p-7 sm:p-9">
+      <button type="button" data-req-close aria-label="Закрыть" class="absolute right-4 top-4 z-20 grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-ink/40 text-on-ink transition-colors hover:border-accent hover:text-accent">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+      </button>
+
+      <!-- Состояние: форма -->
+      <div data-req-formwrap>
+        <p data-req-kind class="eyebrow text-accent-soft"></p>
+        <h3 id="req-title" data-req-title class="mt-3 font-[var(--font-display)] text-2xl text-on-ink sm:text-3xl"></h3>
+        <p data-req-sub class="mt-2 text-sm text-on-ink/55"></p>
+
+        <form class="mt-7 space-y-5" data-req-form novalidate>
+          <div>
+            <label for="rq-name" class="block text-sm font-medium text-on-ink">Имя <span class="text-accent">*</span></label>
+            <input id="rq-name" name="name" type="text" autocomplete="name" required class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-on-ink placeholder:text-on-ink/35 focus:border-accent focus:outline-none" placeholder="Как к вам обращаться" />
+            <p class="mt-1.5 hidden text-sm text-red-300" data-rq-error="name" role="alert"></p>
+          </div>
+
+          <div>
+            <label for="rq-phone" class="block text-sm font-medium text-on-ink">Телефон <span class="text-accent">*</span></label>
+            <input id="rq-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-on-ink placeholder:text-on-ink/35 focus:border-accent focus:outline-none" placeholder="+7 (___) ___-__-__" data-req-phone />
+            <p class="mt-1.5 hidden text-sm text-red-300" data-rq-error="phone" role="alert"></p>
+          </div>
+
+          <!-- Способ связи -->
+          <fieldset>
+            <legend class="block text-sm font-medium text-on-ink">Куда вам удобнее ответить</legend>
+            <div class="mt-2 grid grid-cols-3 gap-2" role="radiogroup" aria-label="Способ связи" data-req-methods>
+              {
+                [
+                  { id: "telegram", label: "Telegram", icon: '<path d="M22 4 11 13M22 4l-7 17-4-8-8-4 19-5z" stroke-linecap="round" stroke-linejoin="round"/>' },
+                  { id: "max", label: "МАКС", icon: '<path d="M4 5h16v11H8l-4 4z" stroke-linecap="round" stroke-linejoin="round"/>' },
+                  { id: "phone", label: "Телефон", icon: '<path d="M5 4h4l2 5-3 2a12 12 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" stroke-linecap="round" stroke-linejoin="round"/>' },
+                ].map((m, i) => (
+                  <button type="button" role="radio" aria-checked={i === 0 ? "true" : "false"} data-method={m.id} class="group flex flex-col items-center gap-1.5 rounded-xl border px-3 py-3 text-xs font-medium transition-colors aria-checked:border-accent aria-checked:bg-accent/10 aria-checked:text-accent-soft border-white/15 bg-white/[0.03] text-on-ink/65 hover:border-white/30">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" set:html={m.icon} />
+                    {m.label}
+                  </button>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <!-- Ник в Telegram (только при выборе Telegram, необязательно) -->
+          <div data-req-tg hidden>
+            <label for="rq-tg" class="block text-sm font-medium text-on-ink">Ник в Telegram <span class="text-on-ink/40">(необязательно)</span></label>
+            <input id="rq-tg" name="telegram" type="text" class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-on-ink placeholder:text-on-ink/35 focus:border-accent focus:outline-none" placeholder="@username" />
+          </div>
+
+          <label class="flex items-start gap-3 text-sm text-on-ink/60">
+            <input type="checkbox" name="consent" required class="mt-0.5 h-4 w-4 shrink-0 accent-[#B0885A]" />
+            <span>Согласен на обработку персональных данных и <a href="#" class="text-accent-soft underline underline-offset-2">политику конфиденциальности</a>.</span>
+          </label>
+          <p class="hidden text-sm text-red-300" data-rq-error="consent" role="alert"></p>
+
+          <button type="submit" data-req-submit class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-4 text-base font-semibold text-paper transition-transform duration-300 hover:scale-[1.02] disabled:opacity-60">
+            <span data-req-submit-label>Отправить</span>
+            <svg class="hidden h-5 w-5 animate-spin" data-req-spinner viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="3" stroke-opacity="0.3"/><path d="M21 12a9 9 0 00-9-9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+          </button>
+          <p class="text-center text-xs text-on-ink/40">Это бесплатно и ни к чему не обязывает.</p>
+        </form>
+      </div>
+
+      <!-- Состояние: успех -->
+      <div data-req-success hidden class="flex flex-col items-center justify-center py-10 text-center">
+        <span class="grid h-16 w-16 place-items-center rounded-full border border-accent/40 text-accent accent-glow">
+          <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <h3 class="mt-5 font-[var(--font-display)] text-2xl text-on-ink">Заявка принята</h3>
+        <p data-req-success-text class="mt-3 max-w-xs text-sm text-on-ink/60"></p>
+        <button type="button" data-req-close class="mt-7 rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-on-ink transition-colors hover:border-accent hover:text-accent">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  type Spec = { label: string; value: string };
+  type Plan = { floor: string; src: string };
+  type Img = { src: string; alt: string };
+  type P = { code: string; name: string; material: string; materialLabel: string; area: number; floors: number; price: string; image: string; alt: string; description: string; summary: string; hook: string; tag?: string; specs: Spec[]; longDescription?: string[]; features?: string[]; gallery?: Img[]; plans?: Plan[] };
+  type Stage = { label: string; icon: string; heading: string; items: { t: string; d: string }[]; badge?: string };
+  type Payload = { groups: { id: string; label: string; note: string; codes: string[] }[]; projects: Record<string, P>; interiors: Img[]; defaultFeatures: string[]; stages: Stage[] };
+
+  const root = document.querySelector<HTMLElement>("#catalog");
+  if (root) {
+    const data: Payload = JSON.parse(root.querySelector<HTMLElement>("[data-catalog]")!.textContent || "{}");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-tab]"));
+    const indicator = root.querySelector<HTMLElement>("[data-indicator]")!;
+    const note = root.querySelector<HTMLElement>("[data-note]")!;
+    const backdrop = root.querySelector<HTMLImageElement>("[data-backdrop]")!;
+    const list = root.querySelector<HTMLElement>("[data-list]")!;
+    const selImg = root.querySelector<HTMLImageElement>("[data-sel-img]")!;
+    let selected = data.groups[0].codes[0];
+
+    const setText = (sel: string, scope: ParentNode, val: string) => { const el = scope.querySelector<HTMLElement>(sel); if (el) el.textContent = val; };
+    const swapImg = (img: HTMLImageElement, src: string) => {
+      if (reduce) { img.src = src; return; }
+      img.style.opacity = "0";
+      const n = new Image(); n.onload = () => { img.src = src; img.style.opacity = ""; }; n.src = src;
+    };
+    const moveIndicator = (tab: HTMLButtonElement) => { indicator.style.width = `${tab.offsetWidth}px`; indicator.style.transform = `translateX(${tab.offsetLeft - 6}px)`; };
+    const canHover = window.matchMedia("(hover: hover)").matches;
+    const isShowcase = !!root.querySelector("[data-stage]");
+    const isCoverflow = !!root.querySelector("[data-coverflow]");
+    const isSpread = !!root.querySelector("[data-spread]");
+    const isCollection = !!root.querySelector("[data-collection]");
+    const isTable = !!root.querySelector("[data-table]");
+    const counterEl = root.querySelector<HTMLElement>("[data-counter]");
+    const progressEl = root.querySelector<HTMLElement>("[data-progress]");
+    const metaWrap = root.querySelector<HTMLElement>("[data-sel-meta-wrap]");
+    const imgA = root.querySelector<HTMLImageElement>("[data-img-a]");
+    const imgB = root.querySelector<HTMLImageElement>("[data-img-b]");
+    let topA = true;
+    const crossfade = (src: string) => {
+      if (!imgA || !imgB) return;
+      if (reduce) { (topA ? imgA : imgB).src = src; return; }
+      const incoming = topA ? imgB : imgA, outgoing = topA ? imgA : imgB;
+      const pre = new Image();
+      pre.onload = () => {
+        incoming.src = src;
+        incoming.classList.remove("kenburns"); void incoming.offsetWidth; incoming.classList.add("kenburns");
+        incoming.style.opacity = "1"; outgoing.style.opacity = "0";
+        topA = !topA;
+      };
+      pre.src = src;
+    };
+    const dotsEl = root.querySelector<HTMLElement>("[data-dots]");
+    const selTag = root.querySelector<HTMLElement>("[data-sel-tag]");
+    let codesNow: string[] = data.groups[0].codes;
+
+    // Применить кадр/инфо выбранного (без смены состояния выбора) — для предпросмотра
+    const applyFeatured = (code: string) => {
+      const p = data.projects[code]; if (!p) return;
+      if (isCollection) {
+        crossfade(p.image);
+        setText("[data-sel-name]", root, p.name);
+        setText("[data-sel-essence]", root, p.hook);
+        setText("[data-sel-price]", root, p.price);
+        if (metaWrap) metaWrap.innerHTML = [["Площадь", `${p.area} м²`], ["Этажей", String(p.floors)], ["Материал", p.materialLabel]].map(([l, v]) => `<span class="flex flex-col gap-1 border-l border-white/15 pl-4"><span class="text-[11px] uppercase tracking-[0.16em] text-on-ink/40">${l}</span><span class="tnum font-[var(--font-display)] text-lg text-on-ink">${v}</span></span>`).join("");
+        return;
+      }
+      swapImg(selImg, p.image); selImg.alt = p.alt; swapImg(backdrop, p.image);
+      setText("[data-sel-code]", root, p.code);
+      setText("[data-sel-name]", root, p.name);
+      setText("[data-sel-hook]", root, p.hook);
+      setText("[data-sel-meta]", root, `${p.area} м² · ${p.floors} этажа`);
+      setText("[data-sel-summary]", root, p.summary);
+      setText("[data-sel-price]", root, p.price);
+      if (selTag) { selTag.textContent = p.tag || ""; selTag.hidden = !p.tag; }
+    };
+    const updateNav = (code: string) => {
+      const idx = codesNow.indexOf(code); if (idx < 0) return;
+      if (counterEl) counterEl.textContent = `${String(idx + 1).padStart(2, "0")} / ${String(codesNow.length).padStart(2, "0")}`;
+      if (progressEl) progressEl.style.width = `${((idx + 1) / codesNow.length) * 100}%`;
+      if (dotsEl) dotsEl.querySelectorAll<HTMLElement>("[data-dot]").forEach((d, i) => {
+        const on = i === idx;
+        d.className = `h-1.5 rounded-full transition-all duration-300 ${on ? "w-6 bg-accent" : "w-1.5 bg-white/25 hover:bg-white/50"}`;
+      });
+    };
+    const layoutCover = (center: number) => {
+      Array.from(list.querySelectorAll<HTMLElement>("[data-select]")).forEach((card, i) => {
+        const off = i - center, a = Math.abs(off);
+        card.style.transform = `translate(-50%,-50%) translateX(${off * 52}%) translateZ(${-a * 220}px) rotateY(${off * -34}deg) scale(${off === 0 ? 1 : 0.86})`;
+        card.style.opacity = a > 2 ? "0" : "1";
+        card.style.zIndex = String(100 - a);
+        card.style.pointerEvents = a > 2 ? "none" : "auto";
+        card.style.filter = off === 0 ? "none" : "brightness(.62)";
+      });
+    };
+    const selectProject = (code: string) => {
+      selected = code;
+      applyFeatured(code);
+      list.querySelectorAll<HTMLElement>("[data-select]").forEach((b) => {
+        const on = b.dataset.select === code;
+        b.setAttribute("aria-selected", String(on));
+        if (on && isShowcase) b.scrollIntoView({ behavior: reduce ? "auto" : "smooth", inline: "center", block: "nearest" });
+      });
+      if (isCoverflow) layoutCover(codesNow.indexOf(code));
+      updateNav(code);
+    };
+
+    const bigCard = (p: P, active: boolean) => `<button type="button" data-select="${p.code}" role="option" aria-selected="${active}" class="group relative block aspect-[16/10] w-full shrink-0 overflow-hidden rounded-[20px] border text-left transition-all duration-300 aria-selected:border-accent/70 border-white/10 hover:border-white/30">
+      <img src="${p.image}" alt="${p.alt}" loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 group-aria-selected:scale-[1.03]">
+      <span class="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent"></span>
+      <span class="absolute left-3 top-3 flex items-center gap-2"><span class="rounded-full border border-white/20 bg-ink/40 px-2.5 py-1 text-[10px] tracking-wide text-on-ink backdrop-blur-md">${p.code}</span>${p.tag ? `<span class="rounded-full bg-accent/90 px-2.5 py-1 text-[10px] font-semibold text-paper">${p.tag}</span>` : ""}</span>
+      <span class="absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full bg-accent text-paper opacity-0 transition-opacity duration-300 group-aria-selected:opacity-100" aria-hidden="true"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="absolute inset-x-0 bottom-0 p-4"><span class="flex items-center justify-between gap-2"><span class="font-[var(--font-display)] text-lg text-on-ink">${p.name}</span><span class="tnum text-xs text-on-ink/70">${p.area} м²</span></span><span class="mt-1 block text-xs text-accent-soft">${p.hook}</span></span>
+    </button>`;
+    const thumbCard = (p: P, active: boolean) => `<button type="button" data-select="${p.code}" role="option" aria-selected="${active}" class="group relative aspect-[4/3] w-40 shrink-0 overflow-hidden rounded-2xl border text-left transition-all duration-300 aria-selected:border-accent/70 border-white/10 hover:border-white/30 sm:w-48">
+      <img src="${p.image}" alt="${p.alt}" loading="lazy" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 group-aria-selected:scale-[1.04]">
+      <span class="absolute inset-0 bg-gradient-to-t from-ink/90 to-transparent opacity-80 transition-opacity group-aria-selected:opacity-100"></span>
+      <span class="absolute left-2 top-2 rounded-full bg-ink/50 px-2 py-0.5 text-[10px] text-on-ink/80 backdrop-blur-md">${p.code}</span>
+      <span class="absolute inset-x-0 bottom-0 p-2.5"><span class="block truncate font-[var(--font-display)] text-sm text-on-ink">${p.name}</span><span class="tnum text-[11px] text-on-ink/60">${p.area} м²</span></span>
+    </button>`;
+    const coverCard = (p: P, active: boolean) => `<button type="button" data-select="${p.code}" role="option" aria-selected="${active}" class="absolute left-1/2 top-1/2 aspect-[4/3] w-[clamp(240px,40vw,560px)] overflow-hidden rounded-[24px] border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,.55)] transition-[transform,opacity,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform">
+      <img src="${p.image}" alt="${p.alt}" class="absolute inset-0 h-full w-full object-cover">
+      <span class="absolute inset-0 bg-gradient-to-t from-ink/85 to-transparent"></span>
+      <span class="absolute left-3 top-3 rounded-full bg-ink/50 px-2.5 py-1 text-[10px] text-on-ink/80 backdrop-blur-md">${p.code}</span>
+      <span class="absolute inset-x-0 bottom-0 p-4"><span class="block font-[var(--font-display)] text-lg text-on-ink">${p.name}</span><span class="block text-xs text-accent-soft">${p.hook}</span></span>
+    </button>`;
+    const spreadCard = (p: P, i: number, total: number) => `<section data-select="${p.code}" class="relative flex h-[82vh] w-full snap-start snap-always items-end overflow-hidden">
+      <img src="${p.image}" alt="${p.alt}" class="absolute inset-0 h-full w-full object-cover">
+      <span class="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/10"></span>
+      <span class="absolute inset-0 bg-gradient-to-r from-ink/70 to-transparent"></span>
+      <span class="tnum absolute right-6 top-6 text-sm text-on-ink/60">${String(i + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}</span>
+      <div class="relative z-10 w-full p-7 sm:p-12 lg:max-w-3xl">
+        <span class="tnum block font-[var(--font-display)] text-5xl leading-none text-white/15 sm:text-7xl">${String(i + 1).padStart(2, "0")}</span>
+        <span class="mt-3 inline-flex items-center gap-2"><span class="rounded-full border border-white/15 px-3 py-1 text-xs text-on-ink/80">${p.code}</span>${p.tag ? `<span class="rounded-full bg-accent/90 px-3 py-1 text-xs font-semibold text-paper">${p.tag}</span>` : ""}</span>
+        <h3 class="display-lg mt-3 text-on-ink">${p.name}</h3>
+        <p class="mt-3 text-lg text-accent-soft">${p.hook}</p>
+        <p class="mt-2 text-on-ink/70">${p.area} м² · ${p.floors} этажа · ${p.summary}</p>
+        <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <span class="tnum font-[var(--font-display)] text-2xl text-accent-soft">${p.price}</span>
+          <div class="flex flex-wrap gap-3">
+            <button type="button" data-open class="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">Открыть проект</button>
+            <button type="button" data-calc class="inline-flex items-center rounded-full border border-white/25 px-6 py-3.5 text-sm font-semibold text-on-ink transition-colors hover:border-accent hover:text-accent">Получить расчёт</button>
+          </div>
+        </div>
+      </div>
+    </section>`;
+    const collectionRow = (p: P, active: boolean, i: number) => `<button type="button" data-select="${p.code}" role="option" aria-selected="${active}" class="group flex w-full items-center gap-4 border-b border-white/10 py-4 text-left transition-colors duration-300">
+      <span class="h-5 w-px shrink-0 bg-accent opacity-0 transition-opacity group-aria-selected:opacity-100"></span>
+      <span class="tnum text-xs text-on-ink/30 transition-colors group-aria-selected:text-accent-soft">${String(i + 1).padStart(2, "0")}</span>
+      <span class="font-[var(--font-display)] text-lg text-on-ink/45 transition-colors group-aria-selected:text-on-ink group-hover:text-on-ink/80 sm:text-xl">${p.name}</span>
+      <span class="ml-auto text-xs text-on-ink/35">${p.hook}</span>
+      <span class="tnum hidden text-xs text-on-ink/30 sm:block">${p.area} м²</span>
+    </button>`;
+    // Раскладка карточек на «столе» (px в плоскости 1640×1120)
+    const slots = [
+      { x: 70, y: 90, w: 540 }, { x: 700, y: 60, w: 430 }, { x: 1180, y: 150, w: 380 },
+      { x: 150, y: 580, w: 450 }, { x: 690, y: 560, w: 500 }, { x: 1230, y: 620, w: 360 },
+      { x: 470, y: 870, w: 380 }, { x: 980, y: 880, w: 420 },
+    ];
+    const tableCard = (p: P, active: boolean, i: number) => {
+      const s = slots[i % slots.length];
+      return `<button type="button" data-select="${p.code}" role="option" aria-selected="${active}" class="group absolute overflow-hidden rounded-[20px] border border-white/10 shadow-[0_28px_70px_rgba(0,0,0,.5)] transition-[box-shadow,outline] duration-300 hover:z-30 aria-selected:outline aria-selected:outline-2 aria-selected:outline-accent" style="left:${s.x}px;top:${s.y}px;width:${s.w}px">
+        <span class="block aspect-[4/3] overflow-hidden"><img src="${p.image}" alt="${p.alt}" loading="lazy" draggable="false" class="h-full w-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"></span>
+        <span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent"></span>
+        <span class="pointer-events-none absolute left-3 top-3 flex items-center gap-2"><span class="rounded-full border border-white/20 bg-ink/40 px-2.5 py-1 text-[10px] tracking-wide text-on-ink backdrop-blur-md">${p.code}</span>${p.tag ? `<span class="rounded-full bg-accent/90 px-2.5 py-1 text-[10px] font-semibold text-paper">${p.tag}</span>` : ""}</span>
+        <span class="pointer-events-none absolute inset-x-0 bottom-0 p-4"><span class="block font-[var(--font-display)] text-xl text-on-ink">${p.name}</span><span class="block text-xs text-accent-soft">${p.hook}</span></span>
+      </button>`;
+    };
+    const cardMarkup = (p: P, active: boolean, i = 0) => isTable ? tableCard(p, active, i) : isCollection ? collectionRow(p, active, i) : (isCoverflow ? coverCard : isShowcase ? thumbCard : bigCard)(p, active);
+
+    let spreadIO: IntersectionObserver | null = null;
+    const observeSpreads = () => {
+      spreadIO?.disconnect();
+      spreadIO = new IntersectionObserver((ents) => ents.forEach((e) => { if (e.isIntersecting && e.intersectionRatio > 0.55) { const c = (e.target as HTMLElement).dataset.select; if (c) selected = c; } }), { root: list, threshold: [0.55] });
+      list.querySelectorAll<HTMLElement>("[data-select]").forEach((s) => spreadIO!.observe(s));
+    };
+
+    const buildList = (groupId: string) => {
+      const g = data.groups.find((x) => x.id === groupId)!;
+      codesNow = g.codes;
+      if (isSpread) { list.innerHTML = g.codes.map((c, i) => spreadCard(data.projects[c], i, g.codes.length)).join(""); observeSpreads(); return; }
+      list.innerHTML = g.codes.map((c, i) => cardMarkup(data.projects[c], i === 0, i)).join("");
+      if (isCoverflow) layoutCover(0);
+      if (dotsEl) dotsEl.innerHTML = g.codes.map(() => `<button type="button" data-dot class="h-1.5 w-1.5 rounded-full bg-white/25"></button>`).join("");
+    };
+
+    const switchMaterial = (groupId: string, focus = false) => {
+      tabs.forEach((t) => { const s = t.dataset.tab === groupId; t.setAttribute("aria-selected", String(s)); t.tabIndex = s ? 0 : -1; if (s) { moveIndicator(t); if (focus) t.focus(); } });
+      const g = data.groups.find((x) => x.id === groupId)!;
+      note.style.opacity = "0";
+      setTimeout(() => { note.textContent = `${g.note}. Переключайте проекты справа, открывайте карточку — внутри визуализации, интерьеры и планировки.`; note.style.opacity = "1"; }, reduce ? 0 : 160);
+      buildList(groupId); selectProject(g.codes[0]);
+      if (isTable && tableFit) tableFit();
+    };
+    note.style.transition = "opacity .3s ease";
+
+    tabs.forEach((tab) => tab.addEventListener("click", () => switchMaterial(tab.dataset.tab!)));
+    root.querySelector("[data-tablist]")!.addEventListener("keydown", (e) => {
+      const ev = e as KeyboardEvent; const cur = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true"); let next = cur;
+      if (ev.key === "ArrowRight") next = (cur + 1) % tabs.length; else if (ev.key === "ArrowLeft") next = (cur - 1 + tabs.length) % tabs.length;
+      else if (ev.key === "Home") next = 0; else if (ev.key === "End") next = tabs.length - 1; else return;
+      ev.preventDefault(); switchMaterial(tabs[next].dataset.tab!, true);
+    });
+    list.addEventListener("click", (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLElement>("[data-select]");
+      if (!b) return;
+      const code = b.dataset.select!;
+      if (isTable) return; // «стол» обрабатывает клик сам (с учётом drag)
+      if (isSpread) return; // в развороте действуют кнопки внутри
+      if (isCoverflow) { if (code === selected) openModal(code); else selectProject(code); return; }
+      if (isCollection) { selectProject(code); return; } // смена кадра; проект открывает CTA
+      selectProject(code);
+      if (!canHover) openModal(code); // на тач — сразу карточка
+    });
+    // Живой предпросмотр при наведении (только список/кинолента)
+    if (canHover && !isCoverflow && !isSpread && !isTable && !isCollection) {
+      list.addEventListener("mouseover", (e) => { const b = (e.target as HTMLElement).closest<HTMLElement>("[data-select]"); if (b) applyFeatured(b.dataset.select!); });
+      list.addEventListener("mouseleave", () => applyFeatured(selected));
+    }
+
+    // Навигация showcase/coverflow/collection: стрелки, точки, клавиатура
+    if (isShowcase || isCoverflow || isCollection) {
+      const step = (dir: number) => { const i = codesNow.indexOf(selected); selectProject(codesNow[(i + dir + codesNow.length) % codesNow.length]); };
+      root.querySelector("[data-prev]")?.addEventListener("click", () => step(-1));
+      root.querySelector("[data-next]")?.addEventListener("click", () => step(1));
+      dotsEl?.addEventListener("click", (e) => { const d = (e.target as HTMLElement).closest("[data-dot]"); if (!d) return; const i = Array.from(dotsEl.children).indexOf(d as Element); if (i >= 0) selectProject(codesNow[i]); });
+      document.addEventListener("keydown", (e) => {
+        const modalOpen = !document.querySelector<HTMLElement>("[data-modal]")?.hidden || !document.querySelector<HTMLElement>("[data-req]")?.hidden;
+        if (modalOpen) return;
+        if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
+        else if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+      });
+      // Drag для cover-flow
+      if (isCoverflow) {
+        const cf = root.querySelector<HTMLElement>("[data-coverflow]");
+        let sx = 0, dragging = false;
+        cf?.addEventListener("pointerdown", (e) => { dragging = true; sx = (e as PointerEvent).clientX; });
+        window.addEventListener("pointerup", (e) => { if (!dragging) return; dragging = false; const dx = (e as PointerEvent).clientX - sx; if (dx < -40) step(1); else if (dx > 40) step(-1); });
+      }
+    }
+
+    // ====================== «СТОЛ АРХИТЕКТОРА» ======================
+    let tableFit: (() => void) | null = null;
+    if (isTable) {
+      const stage = root.querySelector<HTMLElement>("[data-table]")!;
+      const plane = list; const PW = 1640, PH = 1120;
+      let scale = 1, panX = 0, panY = 0, vx = 0, vy = 0;
+      let dragging = false, moved = 0, lastX = 0, lastY = 0, raf = 0;
+      const apply = () => { plane.style.transform = `translate(${panX}px,${panY}px) scale(${scale})`; };
+      const clamp = () => {
+        const w = stage.clientWidth, h = stage.clientHeight;
+        panX = Math.max(Math.min(0, w - PW * scale) - 140, Math.min(140, panX));
+        panY = Math.max(Math.min(0, h - PH * scale) - 140, Math.min(140, panY));
+      };
+      const fit = () => { const w = stage.clientWidth, h = stage.clientHeight; scale = Math.min(w / PW, h / PH) * 0.98; panX = (w - PW * scale) / 2; panY = (h - PH * scale) / 2; apply(); };
+      tableFit = fit;
+      const focusCard = (card: HTMLElement) => {
+        scale = Math.min(1.18, Math.max(0.9, (stage.clientWidth * 0.6) / card.offsetWidth));
+        panX = stage.clientWidth / 2 - (card.offsetLeft + card.offsetWidth / 2) * scale;
+        panY = stage.clientHeight / 2 - (card.offsetTop + card.offsetHeight / 2) * scale;
+        clamp(); plane.style.transition = "transform .6s cubic-bezier(0.22,1,0.36,1)"; apply(); setTimeout(() => (plane.style.transition = ""), 640);
+      };
+      const inertia = () => { if (Math.abs(vx) < 0.15 && Math.abs(vy) < 0.15) return; panX += vx; panY += vy; vx *= 0.92; vy *= 0.92; clamp(); apply(); raf = requestAnimationFrame(inertia); };
+      const animateZoom = (f: number) => { scale = Math.max(0.45, Math.min(1.8, scale * f)); clamp(); plane.style.transition = "transform .3s"; apply(); setTimeout(() => (plane.style.transition = ""), 300); };
+      stage.addEventListener("pointerdown", (e) => { dragging = true; moved = 0; lastX = e.clientX; lastY = e.clientY; vx = vy = 0; cancelAnimationFrame(raf); plane.style.transition = ""; stage.style.cursor = "grabbing"; });
+      stage.addEventListener("pointermove", (e) => { if (!dragging) return; const dx = e.clientX - lastX, dy = e.clientY - lastY; lastX = e.clientX; lastY = e.clientY; moved += Math.abs(dx) + Math.abs(dy); panX += dx; panY += dy; vx = dx; vy = dy; clamp(); apply(); });
+      const endDrag = (e: PointerEvent) => {
+        if (!dragging) return; dragging = false; stage.style.cursor = "grab";
+        if (moved < 6) { const card = (e.target as HTMLElement).closest<HTMLElement>("[data-select]"); if (card) { const code = card.dataset.select!; if (code === selected) openModal(code); else { selectProject(code); focusCard(card); } } }
+        else { raf = requestAnimationFrame(inertia); }
+      };
+      stage.addEventListener("pointerup", endDrag);
+      stage.addEventListener("pointercancel", endDrag);
+      stage.addEventListener("wheel", (e) => { e.preventDefault(); animateZoom(e.deltaY < 0 ? 1.12 : 0.89); }, { passive: false });
+      root.querySelector('[data-zoom="1"]')?.addEventListener("click", () => animateZoom(1.18));
+      root.querySelector('[data-zoom="-1"]')?.addEventListener("click", () => animateZoom(0.85));
+      root.querySelector("[data-fit]")?.addEventListener("click", () => { plane.style.transition = "transform .5s"; fit(); setTimeout(() => (plane.style.transition = ""), 500); });
+      window.addEventListener("resize", () => { clamp(); apply(); });
+    }
+
+    // ====================== ПОП-АП ======================
+    const modal = document.querySelector<HTMLElement>("[data-modal]")!;
+    const dialog = modal.querySelector<HTMLElement>("[data-modal-dialog]")!;
+    const overlay = modal.querySelector<HTMLElement>("[data-modal-overlay]")!;
+    const scroll = modal.querySelector<HTMLElement>("[data-modal-scroll]")!;
+    const hero = modal.querySelector<HTMLImageElement>("[data-modal-hero]")!;
+    const videoBg = modal.querySelector<HTMLImageElement>("[data-modal-video-bg]")!;
+    const mSpecs = modal.querySelector<HTMLElement>("[data-modal-specs]")!;
+    const mFeats = modal.querySelector<HTMLElement>("[data-modal-feats]")!;
+    const stagesTabs = modal.querySelector<HTMLElement>("[data-stages-tabs]")!;
+    const stagesPanel = modal.querySelector<HTMLElement>("[data-stages-panel]")!;
+    const mDesc = modal.querySelector<HTMLElement>("[data-modal-desc]")!;
+    const mVis = modal.querySelector<HTMLElement>("[data-modal-vis]")!;
+    const mVisWrap = modal.querySelector<HTMLElement>("[data-modal-vis-wrap]")!;
+    const mInt = modal.querySelector<HTMLElement>("[data-modal-int]")!;
+    const mIntWrap = modal.querySelector<HTMLElement>("[data-modal-int-wrap]")!;
+    const plansWrap = modal.querySelector<HTMLElement>("[data-modal-plans-wrap]")!;
+    const plansEmpty = modal.querySelector<HTMLElement>("[data-modal-plans-empty]")!;
+    const planTabs = modal.querySelector<HTMLElement>("[data-modal-plan-tabs]")!;
+    const planImg = modal.querySelector<HTMLImageElement>("[data-modal-plan-img]")!;
+    let lastFocused: HTMLElement | null = null;
+
+    const imgCard = (g: Img, cls: string) => `<figure class="overflow-hidden rounded-2xl border border-white/10 ${cls}"><img src="${g.src}" alt="${g.alt}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.04]"></figure>`;
+
+    // Этапы «что входит» (табы)
+    const setStage = (i: number) => {
+      const s = data.stages[i];
+      stagesTabs.querySelectorAll<HTMLElement>("[data-stagetab]").forEach((b, n) => {
+        const on = n === i;
+        b.setAttribute("aria-selected", String(on));
+      });
+      stagesPanel.innerHTML = `<div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+        <div class="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-2xl border border-white/10 bg-ink-2">
+          <div class="px-6 text-center text-on-ink/40"><svg class="mx-auto h-12 w-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">${s.icon}</svg><p class="mt-3 text-xs">Фото этапа · ${s.label} (заглушка)</p></div>
+          ${s.badge ? `<div class="absolute inset-x-4 bottom-4 flex items-center gap-2 rounded-xl border border-accent/30 bg-accent/15 px-4 py-3 text-sm text-accent-soft"><svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>${s.badge}</div>` : ""}
+        </div>
+        <div>
+          <p class="font-[var(--font-display)] text-xl text-on-ink">${s.heading}</p>
+          <ul class="mt-5 space-y-3.5">${s.items.map((it) => `<li class="flex gap-3 text-sm leading-relaxed"><svg class="mt-1 h-4 w-4 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg><span><span class="font-semibold text-on-ink">${it.t}</span> <span class="text-on-ink/60">— ${it.d}</span></span></li>`).join("")}</ul>
+          <button type="button" data-stage-cta class="mt-7 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">Получить полную комплектацию</button>
+        </div>
+      </div>`;
+    };
+    const renderStages = () => {
+      stagesTabs.innerHTML = data.stages.map((s, i) => `<button type="button" role="tab" data-stagetab="${i}" aria-selected="${i === 0}" class="group flex shrink-0 flex-col items-center gap-2 rounded-2xl border px-4 py-3 transition-colors aria-selected:border-accent/60 aria-selected:bg-accent/10 border-white/10 bg-white/[0.02] hover:border-white/25">
+        <svg class="h-6 w-6 text-on-ink/45 transition-colors group-aria-selected:text-accent-soft" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">${s.icon}</svg>
+        <span class="whitespace-nowrap text-[11px] font-medium uppercase tracking-wide text-on-ink/55 transition-colors group-aria-selected:text-on-ink">${s.label}</span>
+      </button>`).join("");
+      stagesTabs.querySelectorAll<HTMLButtonElement>("[data-stagetab]").forEach((b) => b.addEventListener("click", () => setStage(Number(b.dataset.stagetab))));
+      setStage(0);
+    };
+
+    const openModal = (code: string) => {
+      const p = data.projects[code]; if (!p) return;
+      lastFocused = document.activeElement as HTMLElement;
+      const exts = p.gallery && p.gallery.length ? p.gallery : [{ src: p.image, alt: p.alt }];
+
+      swapImg(hero, exts[0].src); hero.alt = exts[0].alt;
+      videoBg.src = exts[0].src;
+      setText("[data-modal-code]", modal, p.code);
+      setText("[data-modal-name-sm]", modal, p.name);
+      setText("[data-modal-material]", modal, p.materialLabel);
+      setText("[data-modal-name]", modal, p.name);
+      setText("[data-modal-meta]", modal, `${p.area} м² · ${p.floors} этажа · ${p.materialLabel}`);
+      setText("[data-modal-price]", modal, p.price);
+      setText("[data-modal-summary]", modal, p.summary);
+      setText("[data-modal-final]", modal, `Пришлём смету, планировки и презентацию по проекту ${p.code} «${p.name}».`);
+
+      const paras = p.longDescription && p.longDescription.length ? p.longDescription : [p.description];
+      mDesc.innerHTML = paras.map((t) => `<p>${t}</p>`).join("");
+
+      mSpecs.innerHTML = p.specs.map((s) => `<div class="flex items-baseline justify-between gap-4 border-b border-white/10 py-3.5"><dt class="text-sm text-on-ink/50">${s.label}</dt><dd class="text-right font-[var(--font-display)] text-on-ink">${s.value}</dd></div>`).join("");
+
+      const feats = p.features && p.features.length ? p.features : data.defaultFeatures;
+      mFeats.innerHTML = feats.map((f) => `<li class="rounded-full border border-white/12 bg-white/[0.03] px-3.5 py-1.5 text-xs text-on-ink/75">${f}</li>`).join("");
+      renderStages();
+
+      // Визуализации — все внешние кадры (первый крупный, если их несколько)
+      if (exts.length) {
+        mVisWrap.hidden = false;
+        mVis.innerHTML = exts.map((g, i) => imgCard(g, i === 0 && exts.length > 1 ? "sm:col-span-2 aspect-[16/9]" : "aspect-[4/3]")).join("");
+      } else mVisWrap.hidden = true;
+
+      // Интерьеры
+      mIntWrap.hidden = false;
+      mInt.innerHTML = data.interiors.map((g) => imgCard(g, "aspect-[4/3]")).join("");
+
+      // Планировки
+      if (p.plans && p.plans.length) {
+        plansWrap.hidden = false; plansEmpty.hidden = true;
+        const render = (idx: number) => {
+          planImg.src = p.plans![idx].src; planImg.alt = `Планировка — ${p.plans![idx].floor}`;
+          planTabs.querySelectorAll<HTMLElement>("[data-plan]").forEach((b, i2) => { const on = i2 === idx; b.className = `rounded-full border px-4 py-2 text-sm transition-colors ${on ? "border-accent bg-accent/15 text-accent-soft" : "border-white/15 text-on-ink/60 hover:text-on-ink"}`; });
+        };
+        planTabs.innerHTML = p.plans.map((pl, idx) => `<button type="button" data-plan="${idx}" class="rounded-full border px-4 py-2 text-sm transition-colors ${idx === 0 ? "border-accent bg-accent/15 text-accent-soft" : "border-white/15 text-on-ink/60"}">${pl.floor}</button>`).join("");
+        planTabs.querySelectorAll<HTMLButtonElement>("[data-plan]").forEach((b) => b.addEventListener("click", () => render(Number(b.dataset.plan))));
+        render(0);
+      } else { plansWrap.hidden = true; plansEmpty.hidden = false; }
+
+      scroll.scrollTop = 0;
+      modal.hidden = false; document.body.style.overflow = "hidden";
+      requestAnimationFrame(() => { overlay.style.opacity = "1"; dialog.style.opacity = "1"; dialog.style.transform = "translateY(0)"; });
+      modal.querySelector<HTMLButtonElement>("[data-modal-close]")!.focus();
+    };
+    const closeModal = () => {
+      overlay.style.opacity = "0"; dialog.style.opacity = "0"; dialog.style.transform = "translateY(16px)";
+      const done = () => { modal.hidden = true; document.body.style.overflow = ""; lastFocused?.focus(); };
+      if (reduce) done(); else setTimeout(done, 280);
+    };
+
+    // Делегирование: «Открыть проект» — работает и для динамических разворотов/карусели
+    root.addEventListener("click", (e) => { if ((e.target as HTMLElement).closest("[data-open]")) openModal(selected); });
+    modal.querySelector("[data-modal-close]")!.addEventListener("click", closeModal);
+    overlay.addEventListener("click", closeModal);
+    document.addEventListener("keydown", (e) => {
+      if (modal.hidden) return;
+      if (e.key === "Escape") closeModal();
+      else if (e.key === "Tab") {
+        const f = dialog.querySelectorAll<HTMLElement>('button, a[href], [tabindex]:not([tabindex="-1"])');
+        if (!f.length) return; const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+
+    // ====================== ПОП-АП ЗАЯВКИ ======================
+    const req = document.querySelector<HTMLElement>("[data-req]")!;
+    const reqDialog = req.querySelector<HTMLElement>("[data-req-dialog]")!;
+    const reqOverlay = req.querySelector<HTMLElement>("[data-req-overlay]")!;
+    const reqImg = req.querySelector<HTMLImageElement>("[data-req-img]")!;
+    const reqForm = req.querySelector<HTMLFormElement>("[data-req-form]")!;
+    const reqFormWrap = req.querySelector<HTMLElement>("[data-req-formwrap]")!;
+    const reqSuccess = req.querySelector<HTMLElement>("[data-req-success]")!;
+    const reqPhone = req.querySelector<HTMLInputElement>("[data-req-phone]")!;
+    const reqTgWrap = req.querySelector<HTMLElement>("[data-req-tg]")!;
+    const reqMethodBtns = Array.from(req.querySelectorAll<HTMLButtonElement>("[data-method]"));
+    const reqSubmit = req.querySelector<HTMLButtonElement>("[data-req-submit]")!;
+    const reqSubmitLabel = req.querySelector<HTMLElement>("[data-req-submit-label]")!;
+    const reqSpinner = req.querySelector<HTMLElement>("[data-req-spinner]")!;
+    const endpoint = document.querySelector<HTMLFormElement>("[data-lead-form]")?.dataset.endpoint || "";
+
+    const methods: Record<string, { label: string }> = {
+      telegram: { label: "Telegram" },
+      max: { label: "МАКС" },
+      phone: { label: "Телефон" },
+    };
+    const kindMap: Record<string, [string, string]> = {
+      smeta: ["Смета", "Скачать смету"],
+      presentation: ["Презентация", "Получить презентацию"],
+      video: ["Видеообзор", "Запросить видеообзор"],
+      calc: ["Расчёт", "Получить расчёт"],
+      layout: ["Планировка", "Изменить планировку"],
+      complectation: ["Комплектация", "Получить комплектацию"],
+    };
+    let reqMethod = "telegram", reqIntent = "smeta", reqProject = selected, reqLastFocus: HTMLElement | null = null;
+
+    const reqError = (field: string, msg: string) => {
+      const el = req.querySelector<HTMLElement>(`[data-rq-error="${field}"]`);
+      if (el) { el.textContent = msg; el.classList.toggle("hidden", !msg); }
+    };
+    const formatRuPhone = (v: string) => {
+      let d = v.replace(/\D/g, "");
+      if (d[0] === "8") d = "7" + d.slice(1);
+      if (d[0] !== "7") d = "7" + d;
+      d = d.slice(0, 11);
+      let r = "+7";
+      if (d.length > 1) r += " (" + d.slice(1, 4);
+      if (d.length >= 4) r += ") " + d.slice(4, 7);
+      if (d.length >= 7) r += "-" + d.slice(7, 9);
+      if (d.length >= 9) r += "-" + d.slice(9, 11);
+      return r;
+    };
+    const setMethod = (m: string) => {
+      reqMethod = m;
+      reqMethodBtns.forEach((b) => b.setAttribute("aria-checked", String(b.dataset.method === m)));
+      reqTgWrap.hidden = m !== "telegram"; // ник в Telegram — только при выборе Telegram, необязателен
+    };
+    reqMethodBtns.forEach((b) => b.addEventListener("click", () => setMethod(b.dataset.method!)));
+    reqPhone.addEventListener("input", () => { reqPhone.value = formatRuPhone(reqPhone.value); });
+    reqPhone.addEventListener("focus", () => { if (!reqPhone.value) reqPhone.value = "+7 "; });
+
+    const openRequest = (intent: string) => {
+      reqIntent = intent; reqProject = selected;
+      const p = data.projects[reqProject];
+      reqLastFocus = document.activeElement as HTMLElement;
+      reqImg.src = p.image; reqImg.alt = p.alt;
+      setText("[data-req-kind]", req, kindMap[intent][0]);
+      setText("[data-req-title]", req, kindMap[intent][1]);
+      setText("[data-req-sub]", req, `по проекту ${p.code} «${p.name}»`);
+      reqSubmitLabel.textContent = kindMap[intent][1];
+      reqForm.reset(); ["name", "phone", "consent"].forEach((f) => reqError(f, ""));
+      setMethod("phone");
+      reqFormWrap.hidden = false; reqSuccess.hidden = true;
+      req.hidden = false; document.body.style.overflow = "hidden";
+      requestAnimationFrame(() => { reqOverlay.style.opacity = "1"; reqDialog.style.opacity = "1"; reqDialog.style.transform = "translateY(0)"; });
+      setTimeout(() => req.querySelector<HTMLInputElement>("#rq-name")?.focus(), reduce ? 0 : 200);
+    };
+    const closeRequest = () => {
+      reqOverlay.style.opacity = "0"; reqDialog.style.opacity = "0"; reqDialog.style.transform = "translateY(16px)";
+      const done = () => { req.hidden = true; document.body.style.overflow = ""; reqLastFocus?.focus(); };
+      if (reduce) done(); else setTimeout(done, 280);
+    };
+    req.querySelectorAll<HTMLButtonElement>("[data-req-close]").forEach((b) => b.addEventListener("click", closeRequest));
+    reqOverlay.addEventListener("click", closeRequest);
+
+    reqForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fd = new FormData(reqForm);
+      const name = String(fd.get("name") || "").trim();
+      const phone = String(fd.get("phone") || "").trim();
+      const telegram = String(fd.get("telegram") || "").trim();
+      const consent = reqForm.querySelector<HTMLInputElement>('[name="consent"]')!.checked;
+      let firstInvalid: HTMLElement | null = null;
+      ["name", "phone", "consent"].forEach((f) => reqError(f, ""));
+      if (!name) { reqError("name", "Укажите, как к вам обращаться"); firstInvalid ??= req.querySelector("#rq-name"); }
+      if (phone.replace(/\D/g, "").length < 10) { reqError("phone", "Введите корректный номер телефона"); firstInvalid ??= reqPhone; }
+      if (!consent) { reqError("consent", "Нужно согласие на обработку данных"); }
+      if (firstInvalid || !consent) { firstInvalid?.focus(); return; }
+
+      const p = data.projects[reqProject];
+      const payloadReq = { name, phone, channel: methods[reqMethod].label, telegram: reqMethod === "telegram" ? telegram : "", request: `${kindMap[reqIntent][0]} по проекту ${p.code} «${p.name}»`, project: p.code };
+      reqSubmit.disabled = true; reqSpinner.classList.remove("hidden"); reqSubmitLabel.textContent = "Отправляем…";
+      try {
+        if (endpoint) {
+          const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payloadReq) });
+          if (!res.ok) throw new Error("bad");
+        } else { console.info("Request (demo):", payloadReq); await new Promise((r) => setTimeout(r, 600)); }
+        setText("[data-req-success-text]", req, `Свяжемся с вами по телефону или в ${methods[reqMethod].label} и пришлём ${kindMap[reqIntent][0].toLowerCase()} по проекту «${p.name}».`);
+        reqFormWrap.hidden = true; reqSuccess.hidden = false;
+      } catch {
+        reqError("phone", "Не удалось отправить. Позвоните: 8 (499) 113-57-63");
+      } finally {
+        reqSubmit.disabled = false; reqSpinner.classList.add("hidden"); reqSubmitLabel.textContent = kindMap[reqIntent][1];
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (req.hidden) return;
+      if (e.key === "Escape") closeRequest();
+      else if (e.key === "Tab") {
+        const f = reqDialog.querySelectorAll<HTMLElement>('button, a[href], input, [tabindex]:not([tabindex="-1"])');
+        const vis = Array.from(f).filter((el) => el.offsetParent !== null);
+        if (!vis.length) return; const first = vis[0], last = vis[vis.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+
+    // CTA → открыть модалку заявки (закрыв карточку проекта, если открыта)
+    modal.querySelectorAll<HTMLButtonElement>("[data-modal-cta]").forEach((btn) => btn.addEventListener("click", () => { const k = btn.dataset.modalCta!; closeModal(); setTimeout(() => openRequest(k), reduce ? 0 : 320); }));
+    root.addEventListener("click", (e) => { if ((e.target as HTMLElement).closest("[data-calc]")) openRequest("calc"); });
+    // CTA внутри карточки: «получить полную комплектацию» и «поменять планировку»
+    modal.addEventListener("click", (e) => {
+      const t = e.target as HTMLElement;
+      if (t.closest("[data-stage-cta]")) { closeModal(); setTimeout(() => openRequest("complectation"), reduce ? 0 : 320); }
+      else if (t.closest("[data-plan-change]")) { closeModal(); setTimeout(() => openRequest("layout"), reduce ? 0 : 320); }
+    });
+
+    const init = () => { const a = tabs.find((t) => t.getAttribute("aria-selected") === "true"); if (a) moveIndicator(a); };
+    window.addEventListener("load", init); window.addEventListener("resize", init); init();
+    // Инициализация вариантов
+    if (isShowcase || isCoverflow || isCollection) { buildList(data.groups[0].id); selectProject(selected); }
+    if (isSpread) { buildList(data.groups[0].id); selected = codesNow[0]; }
+    if (isTable) { buildList(data.groups[0].id); selectProject(selected); tableFit?.(); }
+  }
+</script>

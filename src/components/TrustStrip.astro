@@ -1,0 +1,71 @@
+---
+// Секция 2 — Доверие. Манифест + цифры-доказательства + визуальная заглушка.
+const facts = [
+  ["25", "лет на рынке"],
+  ["600+", "домов построено и сдано"],
+  ["12 000 м³", "бруса со своего производства в год"],
+  ["25 лет", "гарантии по договору"],
+];
+---
+
+<section id="trust" class="grain relative overflow-hidden bg-ink-2 py-20 sm:py-28">
+  <div class="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-[6fr_6fr] lg:items-end lg:gap-20">
+      <p class="display-lg rise text-on-ink">
+        Уровень — это не слова,<br />
+        а <span class="text-accent-soft">25 лет и 600 домов.</span>
+      </p>
+      <p class="rise rise-2 max-w-md text-[15px] leading-relaxed text-on-ink/65">
+        Мы не продаём «статус». Мы показываем лес, из которого режем брус,
+        собственное производство, договор с фиксированной сметой и дома, в
+        которых уже живут. Остальное — на участке.
+      </p>
+    </div>
+
+    <dl class="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 lg:grid-cols-4">
+      {
+        facts.map(([big, small], i) => (
+          <div class={`rise rise-${Math.min(i + 1, 4)} bg-white/[0.02] px-6 py-8`}>
+            <dt class="tnum font-[var(--font-display)] text-3xl text-on-ink sm:text-4xl">{big}</dt>
+            <dd class="mt-3 text-sm leading-snug text-on-ink/55">{small}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <!-- Визуальное усиление: производство/лес + гарантия (заглушка) -->
+    <div class="rise mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[7fr_5fr]">
+      <!-- Медиа-заглушка -->
+      <div class="group relative grid aspect-[16/9] place-items-center overflow-hidden rounded-[24px] border border-white/10 bg-ink sm:aspect-[21/9]">
+        <div class="absolute inset-0 bg-[radial-gradient(120%_120%_at_50%_-20%,rgba(176,136,90,0.12),transparent_60%)]"></div>
+        <div class="relative z-10 px-6 text-center">
+          <span class="mx-auto grid h-16 w-16 place-items-center rounded-full border border-white/25 bg-white/5 backdrop-blur-md transition-transform duration-300 group-hover:scale-105">
+            <svg class="ml-1 h-6 w-6 text-on-ink" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+          <p class="mt-4 font-[var(--font-display)] text-on-ink">Собственный лес и производство</p>
+          <p class="mx-auto mt-2 max-w-md text-xs leading-relaxed text-on-ink/45">
+            Заглушка под видео/фото: делянки в Вологодской области, линия клееного
+            бруса, сушильные камеры, контроль качества. Покажем путь «от леса до дома».
+          </p>
+        </div>
+      </div>
+
+      <!-- Гарантия -->
+      <div class="glass hairline-top flex flex-col justify-center rounded-[24px] p-7 sm:p-8">
+        <div class="flex items-center gap-4">
+          <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-accent/40 text-accent-soft accent-glow">
+            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l7 4v5c0 4.5-3 8.5-7 9.5-4-1-7-5-7-9.5V7l7-4z" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <div>
+            <p class="tnum font-[var(--font-display)] text-3xl text-on-ink">25 лет</p>
+            <p class="text-sm text-on-ink/55">гарантии на дом по договору</p>
+          </div>
+        </div>
+        <p class="mt-5 border-t border-white/10 pt-5 text-sm leading-relaxed text-on-ink/65">
+          Фиксированная смета, поэтапная приёмка и гарантийное сопровождение.
+          Здесь разместим скан договора и гарантийного талона (заглушка).
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

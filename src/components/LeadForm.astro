@@ -1,0 +1,306 @@
+---
+// Секция 11 — Форма заявки + контакты.
+// Отправка: POST JSON на PUBLIC_LEAD_ENDPOINT (серверный прокси → CRM).
+// Если эндпоинт не задан — форма работает в демо-режиме (без реальной отправки).
+import { projects } from "../data/projects";
+const bg = projects[5].image; // тёплый кадр в сумерках (заглушка фона)
+const endpoint = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? "";
+---
+
+<section id="lead" class="relative overflow-hidden bg-ink py-20 sm:py-28">
+  <!-- Фоновое фото с затемнением -->
+  <div class="absolute inset-0 -z-10">
+    <img
+      src={bg}
+      alt=""
+      aria-hidden="true"
+      loading="lazy"
+      decoding="async"
+      class="h-full w-full object-cover opacity-40"
+    />
+    <div class="absolute inset-0 bg-ink/70"></div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+      <!-- Форма -->
+      <div class="glass hairline-top rounded-[28px] p-7 sm:p-10">
+        <p class="eyebrow text-accent-soft">Заявка</p>
+        <h2 class="display-lg mt-4 text-on-ink">Рассчитаем<br />ваш дом</h2>
+        <p class="mt-4 max-w-md text-[15px] leading-relaxed text-on-ink/70">
+          Оставьте контакты — перезвоним, уточним детали и подготовим
+          предварительную смету. Без навязчивых звонков.
+        </p>
+        <p
+          id="lf-request-note"
+          hidden
+          class="mt-4 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-4 py-2 text-sm text-accent-soft"
+        >
+        </p>
+
+        <form
+          class="mt-8 space-y-5"
+          data-lead-form
+          data-endpoint={endpoint}
+          novalidate
+        >
+          <input type="hidden" name="request" id="lf-request" />
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <!-- Имя -->
+            <div>
+              <label for="lf-name" class="block text-sm font-medium text-on-ink">
+                Имя <span class="text-accent">*</span>
+              </label>
+              <input
+                id="lf-name"
+                name="name"
+                type="text"
+                autocomplete="name"
+                required
+                aria-required="true"
+                class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-on-ink placeholder:text-on-ink/35 focus:border-accent focus:outline-none"
+                placeholder="Как к вам обращаться"
+              />
+              <p class="mt-1.5 hidden text-sm text-red-300" data-error="name" role="alert"></p>
+            </div>
+
+            <!-- Телефон -->
+            <div>
+              <label for="lf-phone" class="block text-sm font-medium text-on-ink">
+                Телефон <span class="text-accent">*</span>
+              </label>
+              <input
+                id="lf-phone"
+                name="phone"
+                type="tel"
+                inputmode="tel"
+                autocomplete="tel"
+                required
+                aria-required="true"
+                class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-on-ink placeholder:text-on-ink/35 focus:border-accent focus:outline-none"
+                placeholder="+7 (___) ___-__-__"
+              />
+              <p class="mt-1.5 hidden text-sm text-red-300" data-error="phone" role="alert"></p>
+            </div>
+
+            <!-- Материал -->
+            <div>
+              <label for="lf-material" class="block text-sm font-medium text-on-ink">
+                Материал
+              </label>
+              <select
+                id="lf-material"
+                name="material"
+                class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-on-ink focus:border-accent focus:outline-none"
+              >
+                <option value="" class="bg-ink-2">Не определился — поможете выбрать</option>
+                <option value="Клееный брус" class="bg-ink-2">Клееный брус</option>
+                <option value="Тёплая керамика" class="bg-ink-2">Тёплая керамика</option>
+              </select>
+            </div>
+
+            <!-- Площадь -->
+            <div>
+              <label for="lf-area" class="block text-sm font-medium text-on-ink">
+                Площадь, м²
+              </label>
+              <input
+                id="lf-area"
+                name="area"
+                type="number"
+                inputmode="numeric"
+                min="100"
+                max="2000"
+                class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-on-ink placeholder:text-on-ink/35 focus:border-accent focus:outline-none"
+                placeholder="например, 280"
+              />
+            </div>
+          </div>
+
+          <!-- Согласие 152-ФЗ -->
+          <label class="flex items-start gap-3 text-sm text-on-ink/65">
+            <input
+              type="checkbox"
+              name="consent"
+              required
+              aria-required="true"
+              class="mt-0.5 h-4 w-4 shrink-0 accent-[#B0885A]"
+            />
+            <span>
+              Согласен на обработку персональных данных в соответствии с
+              <a href="#" class="text-accent-soft underline underline-offset-2">политикой конфиденциальности</a>.
+            </span>
+          </label>
+          <p class="hidden text-sm text-red-300" data-error="consent" role="alert"></p>
+
+          <button
+            type="submit"
+            class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-7 py-4 text-base font-semibold text-paper transition-transform duration-300 hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60"
+            data-submit
+          >
+            <span data-submit-label>Отправить заявку</span>
+            <svg
+              class="hidden h-5 w-5 animate-spin"
+              data-spinner
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="3" stroke-opacity="0.3" />
+              <path d="M21 12a9 9 0 00-9-9" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </button>
+
+          <!-- Статус отправки -->
+          <p
+            class="hidden rounded-xl px-4 py-3 text-sm"
+            data-status
+            role="status"
+            aria-live="polite"
+          >
+          </p>
+        </form>
+      </div>
+
+      <!-- Контакты -->
+      <div class="flex flex-col justify-center text-on-ink">
+        <p class="eyebrow text-on-ink/40">Контакты</p>
+        <dl class="mt-8 border-t border-white/10">
+          <div class="flex items-baseline justify-between gap-4 border-b border-white/10 py-4">
+            <dt class="text-sm text-on-ink/45">Телефон</dt>
+            <dd>
+              <a href="tel:+74991135763" class="text-lg font-medium transition-colors hover:text-accent">
+                8 (499) 113-57-63
+              </a>
+            </dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-4 border-b border-white/10 py-4">
+            <dt class="text-sm text-on-ink/45">Почта</dt>
+            <dd>
+              <a href="mailto:forestvologda@gmail.com" class="font-medium transition-colors hover:text-accent">
+                forestvologda@gmail.com
+              </a>
+            </dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-4 border-b border-white/10 py-4">
+            <dt class="text-sm text-on-ink/45">Офис</dt>
+            <dd class="text-right font-medium">Москва, Дмитровское ш. 81</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-4 border-b border-white/10 py-4">
+            <dt class="text-sm text-on-ink/45">Производство и лес</dt>
+            <dd class="font-medium">Вологодская область</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("[data-lead-form]");
+  if (form) {
+    const endpoint = form.dataset.endpoint || "";
+    const status = form.querySelector<HTMLElement>("[data-status]")!;
+    const submit = form.querySelector<HTMLButtonElement>("[data-submit]")!;
+    const spinner = form.querySelector<HTMLElement>("[data-spinner]")!;
+    const label = form.querySelector<HTMLElement>("[data-submit-label]")!;
+
+    // Маска RU-телефона
+    const phoneEl = form.elements.namedItem("phone") as HTMLInputElement;
+    const formatRuPhone = (v: string) => {
+      let d = v.replace(/\D/g, "");
+      if (d[0] === "8") d = "7" + d.slice(1);
+      if (d[0] !== "7") d = "7" + d;
+      d = d.slice(0, 11);
+      let r = "+7";
+      if (d.length > 1) r += " (" + d.slice(1, 4);
+      if (d.length >= 4) r += ") " + d.slice(4, 7);
+      if (d.length >= 7) r += "-" + d.slice(7, 9);
+      if (d.length >= 9) r += "-" + d.slice(9, 11);
+      return r;
+    };
+    phoneEl?.addEventListener("input", () => { phoneEl.value = formatRuPhone(phoneEl.value); });
+    phoneEl?.addEventListener("focus", () => { if (!phoneEl.value) phoneEl.value = "+7 "; });
+
+    const showError = (field: string, msg: string) => {
+      const el = form.querySelector<HTMLElement>(`[data-error="${field}"]`);
+      if (el) {
+        el.textContent = msg;
+        el.classList.toggle("hidden", !msg);
+      }
+    };
+
+    const setStatus = (msg: string, ok: boolean) => {
+      status.textContent = msg;
+      status.classList.remove("hidden");
+      status.classList.toggle("bg-accent/15", ok);
+      status.classList.toggle("text-accent-soft", ok);
+      status.classList.toggle("bg-red-500/15", !ok);
+      status.classList.toggle("text-red-300", !ok);
+    };
+
+    const validate = () => {
+      let firstInvalid: HTMLElement | null = null;
+      const name = form.elements.namedItem("name") as HTMLInputElement;
+      const phone = form.elements.namedItem("phone") as HTMLInputElement;
+      const consent = form.elements.namedItem("consent") as HTMLInputElement;
+
+      ["name", "phone", "consent"].forEach((f) => showError(f, ""));
+
+      if (!name.value.trim()) {
+        showError("name", "Укажите, как к вам обращаться");
+        firstInvalid ??= name;
+      }
+      const digits = phone.value.replace(/\D/g, "");
+      if (digits.length < 10) {
+        showError("phone", "Введите корректный номер телефона");
+        firstInvalid ??= phone;
+      }
+      if (!consent.checked) {
+        showError("consent", "Нужно согласие на обработку данных");
+        firstInvalid ??= consent;
+      }
+      return firstInvalid;
+    };
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const invalid = validate();
+      if (invalid) {
+        invalid.focus();
+        return;
+      }
+
+      const data = Object.fromEntries(new FormData(form).entries());
+      submit.disabled = true;
+      spinner.classList.remove("hidden");
+      label.textContent = "Отправляем…";
+
+      try {
+        if (endpoint) {
+          const res = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+          if (!res.ok) throw new Error("bad status");
+        } else {
+          // Демо-режим: реальный эндпоинт CRM не задан.
+          console.info("Lead (demo, endpoint не задан):", data);
+          await new Promise((r) => setTimeout(r, 600));
+        }
+        form.reset();
+        setStatus("Спасибо! Заявка принята — перезвоним в ближайшее время.", true);
+      } catch {
+        setStatus(
+          "Не удалось отправить. Позвоните нам: 8 (499) 113-57-63",
+          false,
+        );
+      } finally {
+        submit.disabled = false;
+        spinner.classList.add("hidden");
+        label.textContent = "Отправить заявку";
+      }
+    });
+  }
+</script>

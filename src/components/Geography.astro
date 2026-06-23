@@ -1,0 +1,88 @@
+---
+// Секция 10 — География. Московская и Ленинградская области.
+const regions = [
+  {
+    name: "Московская область",
+    areas: [
+      "Дмитровское, Рублёво-Успенское, Новорижское ш.",
+      "Истринский, Одинцовский, Пушкинский районы",
+      "Минское, Калужское, Ярославское направления",
+    ],
+  },
+  {
+    name: "Ленинградская область",
+    areas: [
+      "Всеволожский, Выборгский, Приозерский районы",
+      "Курортное и Приозерское направления",
+      "Ближний и средний радиус от КАД",
+    ],
+  },
+];
+---
+
+<section id="geo" class="relative overflow-hidden bg-ink py-20 sm:py-28">
+  <div class="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+    <div class="grid grid-cols-1 items-center gap-14 lg:grid-cols-[5fr_7fr] lg:gap-20">
+      <div>
+        <p class="eyebrow text-accent-soft">География</p>
+        <h2 class="display-lg mt-5 text-on-ink">Где мы<br />строим</h2>
+        <p class="mt-5 max-w-md text-[15px] leading-relaxed text-on-ink/65">
+          Работаем в Московской и Ленинградской областях. Производство и лес —
+          в Вологодской области. Выезжаем на участок для замеров и оценки
+          логистики.
+        </p>
+
+        <div class="mt-10 grid grid-cols-1 gap-10 sm:grid-cols-2">
+          {
+            regions.map((r) => (
+              <div>
+                <h3 class="font-[var(--font-display)] text-lg text-on-ink">
+                  {r.name}
+                </h3>
+                <ul class="mt-4 border-t border-white/10">
+                  {r.areas.map((a) => (
+                    <li class="border-b border-white/10 py-3 text-sm text-on-ink/60">
+                      {a}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Карта-заглушка в стекле -->
+      <div
+        class="rise glass hairline-top relative aspect-[4/3] overflow-hidden rounded-[28px]"
+        aria-hidden="true"
+      >
+        <svg viewBox="0 0 400 300" class="h-full w-full" fill="none">
+          <g stroke="#F4F3F0" stroke-opacity="0.12" stroke-width="1">
+            <path d="M40 95 Q120 45 210 85 T368 112 L348 215 Q230 262 122 225 T44 196 Z" fill="#F4F3F0" fill-opacity="0.04" />
+            <path d="M210 85 Q165 145 182 205" />
+            <path d="M122 112 Q205 132 300 120" />
+            <path d="M150 175 Q230 150 300 118" stroke="#B0885A" stroke-opacity="0.4" stroke-dasharray="3 5" />
+          </g>
+          <g>
+            <circle cx="150" cy="175" r="5" fill="#B0885A" />
+            <circle cx="150" cy="175" r="13" fill="#B0885A" fill-opacity="0.18">
+              <animate attributeName="r" values="9;16;9" dur="3s" repeatCount="indefinite" />
+              <animate attributeName="fill-opacity" values="0.25;0;0.25" dur="3s" repeatCount="indefinite" />
+            </circle>
+            <text x="150" y="200" text-anchor="middle" fill="#F4F3F0" fill-opacity="0.8" font-size="11" font-family="Manrope">Москва</text>
+            <circle cx="300" cy="118" r="5" fill="#B0885A" />
+            <circle cx="300" cy="118" r="13" fill="#B0885A" fill-opacity="0.18">
+              <animate attributeName="r" values="9;16;9" dur="3s" begin="1.5s" repeatCount="indefinite" />
+              <animate attributeName="fill-opacity" values="0.25;0;0.25" dur="3s" begin="1.5s" repeatCount="indefinite" />
+            </circle>
+            <text x="300" y="143" text-anchor="middle" fill="#F4F3F0" fill-opacity="0.8" font-size="11" font-family="Manrope">Санкт-Петербург</text>
+          </g>
+        </svg>
+        <p class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-on-ink/40">
+          Схематично · интерактивную карту добавим на готовом сайте
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

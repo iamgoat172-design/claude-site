@@ -1,0 +1,59 @@
+---
+// Секция 9 — Авторское проектирование с бюро (дома 300+ м² под участок).
+import { projects } from "../data/projects";
+const photo = projects[1].image; // временно: кадр из каталога
+---
+
+<section id="bureau" class="grain relative overflow-hidden bg-ink-2 py-20 sm:py-28">
+  <div class="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+    <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-[6fr_5fr] lg:gap-20">
+      <!-- Фото -->
+      <figure class="rise relative overflow-hidden rounded-[28px] border border-white/10">
+        <img
+          src={photo}
+          alt="Дом по индивидуальному проекту с консольной террасой в лесу"
+          loading="lazy"
+          decoding="async"
+          class="aspect-[5/4] w-full object-cover"
+        />
+        <figcaption class="glass hairline-top absolute bottom-5 left-5 rounded-full px-4 py-2 text-sm text-on-ink">
+          Индивидуальный проект · 300+ м²
+        </figcaption>
+      </figure>
+
+      <!-- Текст -->
+      <div class="rise rise-2">
+        <p class="eyebrow text-accent-soft">Авторское проектирование</p>
+        <h2 class="display-lg mt-5 text-on-ink">
+          Дом под ваш участок<br />и сценарий жизни
+        </h2>
+        <p class="mt-5 max-w-md text-[15px] leading-relaxed text-on-ink/70">
+          Для домов от 300 м² проектируем с собственным бюро. Сначала изучаем
+          участок, виды, инсоляцию и ваш уклад — потом рисуем дом, а не
+          подгоняем готовый проект под рельеф.
+        </p>
+        <ul class="mt-8 border-t border-white/10">
+          {
+            [
+              "Посадка дома по сторонам света и видам",
+              "Планировки под состав семьи",
+              "Расчёт конструктива и инженерии",
+              "Подбор материалов и фасадных решений",
+            ].map((it) => (
+              <li class="flex items-baseline gap-4 border-b border-white/10 py-3.5 text-[15px] text-on-ink/85">
+                <span class="h-1 w-1 shrink-0 translate-y-1.5 rounded-full bg-accent" />
+                {it}
+              </li>
+            ))
+          }
+        </ul>
+        <a
+          href="#lead"
+          class="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-base font-semibold text-paper transition-transform duration-300 hover:scale-[1.03]"
+        >
+          Обсудить индивидуальный проект
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

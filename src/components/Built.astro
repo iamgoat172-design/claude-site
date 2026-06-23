@@ -1,0 +1,62 @@
+---
+// Секция 7 — Построенные дома. Асимметричная галерея (заполненная сетка 3×3).
+// ⚠️ Сейчас — сгенерированные кадры-заглушки. Заменить реальными фото объектов.
+import { projects } from "../data/projects";
+
+const g = [
+  { src: projects[0].image, area: 268, place: "Истринский р-н, МО", cls: "sm:col-span-2 sm:row-span-2" },
+  { src: projects[3].image, area: 289, place: "Всеволожский р-н, ЛО", cls: "" },
+  { src: projects[1].image, area: 305, place: "Одинцовский р-н, МО", cls: "" },
+  { src: projects[2].image, area: 254, place: "Пушкинский р-н, МО", cls: "" },
+  { src: projects[4].image, area: 334, place: "Дмитровский р-н, МО", cls: "" },
+  { src: projects[5].image, area: 262, place: "Выборгский р-н, ЛО", cls: "" },
+];
+---
+
+<section id="built" class="relative overflow-hidden bg-ink py-20 sm:py-28">
+  <div class="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+    <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="eyebrow text-accent-soft">Построенные дома</p>
+        <h2 class="display-lg mt-5 text-on-ink">Реальные объекты<br />с участков</h2>
+        <p class="mt-5 max-w-md text-[15px] leading-relaxed text-on-ink/65">
+          Покажем дом вживую — с участка, а не с рендера. Договоримся о визите
+          на ближайший к вам объект.
+        </p>
+      </div>
+      <a
+        href="#lead"
+        class="inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-white/20 px-5 py-3 text-sm font-medium text-on-ink transition-colors hover:border-accent hover:text-accent sm:self-end"
+      >
+        Запросить тур по объекту
+      </a>
+    </div>
+
+    <div class="mt-12 grid auto-rows-[200px] grid-cols-1 gap-4 sm:grid-cols-3 lg:auto-rows-[240px]">
+      {
+        g.map((it) => (
+          <figure
+            class={`rise lift group relative overflow-hidden rounded-[24px] border border-white/10 ${it.cls}`}
+          >
+            <img
+              src={it.src}
+              alt={`Построенный дом ${it.area} м², ${it.place}`}
+              loading="lazy"
+              decoding="async"
+              class="h-full w-full object-cover transition-transform duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
+            />
+            <div class="absolute inset-0 scrim-bottom" />
+            <figcaption class="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-2">
+              <span class="tnum font-[var(--font-display)] text-lg text-on-ink">
+                {it.area} м²
+              </span>
+              <span class="rounded-full bg-ink/40 px-3 py-1 text-xs text-on-ink/80 backdrop-blur-md">
+                {it.place}
+              </span>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,53 @@
+---
+// Секция 5 — Этапы. Реальная последовательность с фото-глубиной и сильными номерами.
+import { HERO_IMAGE } from "../data/projects";
+
+const stages = [
+  { n: "01", t: "Заявка и расчёт", d: "Участок, материал, бюджет. Предварительная смета." },
+  { n: "02", t: "Проект и смета", d: "Планировки, узлы, фиксированная смета — до рубля." },
+  { n: "03", t: "Договор", d: "Сроки, этапы оплат, гарантия. Всё письменно." },
+  { n: "04", t: "Производство", d: "Брус — со своего леса, керамика — с проверенных заводов." },
+  { n: "05", t: "Стройка", d: "Фундамент, коробка, кровля, инженерия. Контроль на каждом шаге." },
+  { n: "06", t: "Сдача и ключи", d: "Проверка, документы, ключи. Гарантийное сопровождение." },
+];
+---
+
+<section id="stages" class="grain relative overflow-hidden bg-ink py-20 sm:py-28">
+  <!-- Атмосферный фон для глубины -->
+  <div class="absolute inset-0 z-0" aria-hidden="true">
+    <img src={HERO_IMAGE} alt="" class="h-full w-full object-cover opacity-[0.12]" loading="lazy" />
+    <div class="absolute inset-0 bg-gradient-to-b from-ink via-ink/85 to-ink"></div>
+  </div>
+
+  <div class="relative z-10 mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+    <div class="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+      <div>
+        <p class="eyebrow text-accent-soft">Как мы работаем</p>
+        <h2 class="display-lg mt-5 text-on-ink">От заявки<br />до ключей</h2>
+      </div>
+      <p class="max-w-sm text-[15px] leading-relaxed text-on-ink/65">
+        Шесть понятных этапов. На каждом — ответственный и отчёт: вы всегда
+        знаете, что происходит на стройке.
+      </p>
+    </div>
+
+    <ol class="mt-14 grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        stages.map((s) => (
+          <li class="rise group relative rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition-colors duration-500 hover:border-accent/30">
+            <div class="flex items-center gap-4">
+              <span class="tnum font-[var(--font-display)] text-4xl text-accent-soft sm:text-5xl">
+                {s.n}
+              </span>
+              <span class="h-px flex-1 bg-gradient-to-r from-accent/40 to-transparent" />
+            </div>
+            <h3 class="mt-5 font-[var(--font-display)] text-lg text-on-ink">
+              {s.t}
+            </h3>
+            <p class="mt-2 text-sm leading-snug text-on-ink/60">{s.d}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

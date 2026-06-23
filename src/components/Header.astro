@@ -1,0 +1,65 @@
+---
+// Минималистичная шапка: словесный знак, тонкая линия, один акцентный CTA.
+---
+
+<header
+  class="fixed inset-x-0 top-0 z-50 transition-all duration-500"
+  data-header
+>
+  <nav
+    class="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-5 sm:px-8 lg:px-12"
+    aria-label="Основная навигация"
+    data-nav
+  >
+    <a href="#hero" class="group flex items-center gap-2.5">
+      <span class="h-1.5 w-1.5 rounded-full bg-accent transition-transform duration-500 group-hover:scale-150"></span>
+      <span class="text-[13px] font-semibold uppercase tracking-[0.22em] text-on-ink">
+        Вологодское&nbsp;Зодчество
+      </span>
+    </a>
+
+    <div class="hidden items-center gap-8 text-[13px] text-on-ink/70 lg:flex">
+      <a href="#catalog" class="transition-colors hover:text-accent">Проекты</a>
+      <a href="#stages" class="transition-colors hover:text-accent">Этапы</a>
+      <a href="#price" class="transition-colors hover:text-accent">Стоимость</a>
+    </div>
+
+    <div class="flex items-center gap-5">
+      <a
+        href="tel:+74991135763"
+        class="hidden text-[13px] font-medium tracking-wide text-on-ink transition-colors hover:text-accent md:block"
+        >8 (499) 113-57-63</a
+      >
+      <a
+        href="#lead"
+        class="rounded-full border border-white/25 px-4 py-2 text-[13px] font-medium text-on-ink transition-colors duration-300 hover:border-accent hover:text-accent"
+        >Заявка</a
+      >
+    </div>
+  </nav>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>("[data-header]");
+  const nav = document.querySelector<HTMLElement>("[data-nav]");
+  let last = 0;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (header && nav) {
+    window.addEventListener("scroll", () => {
+      const y = window.scrollY;
+      // Стеклянный фон появляется после первого экрана
+      if (y > 80) {
+        nav.classList.add("backdrop-blur-xl", "bg-ink/55");
+        nav.style.boxShadow = "0 1px 0 rgba(255,255,255,0.08)";
+      } else {
+        nav.classList.remove("backdrop-blur-xl", "bg-ink/55");
+        nav.style.boxShadow = "none";
+      }
+      if (!reduce) {
+        if (y > last && y > 240) header.style.transform = "translateY(-110%)";
+        else header.style.transform = "translateY(0)";
+      }
+      last = y;
+    }, { passive: true });
+  }
+</script>
