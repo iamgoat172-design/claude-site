@@ -1,0 +1,35 @@
+---
+// Оффер с дедлайном и ограничением мест. ⚠️ Срок и число мест — обновляйте.
+const slotsLeft = 5;
+---
+
+<section id="offer" class="relative overflow-hidden bg-ink py-8 sm:py-10">
+  <div class="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+    <div class="accent-glow relative overflow-hidden rounded-[24px] border border-accent/30 bg-accent/[0.07] p-6 sm:p-8">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex flex-wrap items-center gap-x-10 gap-y-5">
+          <div>
+            <p class="eyebrow text-accent-soft">Предложение сезона</p>
+            <p class="mt-2 max-w-xl font-[var(--font-display)] text-xl leading-snug text-on-ink sm:text-2xl">
+              Фиксируем цену для всех, кто заключит договор <span class="text-accent-soft">до 30 июня</span>
+            </p>
+          </div>
+          <div class="flex items-center gap-3 border-l border-white/15 pl-6">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75"></span>
+              <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-accent"></span>
+            </span>
+            <div>
+              <p class="tnum font-[var(--font-display)] text-2xl text-on-ink">осталось {slotsLeft}</p>
+              <p class="text-xs text-on-ink/55">мест на стройку в этом сезоне</p>
+            </div>
+          </div>
+        </div>
+        <button type="button" data-quiz="smeta" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">
+          Забронировать место и цену
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

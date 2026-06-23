@@ -1,0 +1,71 @@
+---
+// УТП — Онлайн-камеры на объекте. Прозрачность и контроль стройки на расстоянии.
+import { CAMERAS } from "../data/projects";
+
+const points = [
+  { t: "Трансляция 24/7", d: "Камеры на вашем участке работают круглосуточно — заходите с телефона из любого города." },
+  { t: "Архив записей", d: "Сохраняем историю: всегда можно отмотать назад и посмотреть, как шёл любой этап." },
+  { t: "Для иногородних и инвесторов", d: "Не нужно ехать «проверять» — вы и так видите всё в реальном времени." },
+  { t: "Прозрачно и безопасно", d: "Никаких сюрпризов: стройка на виду, работы соответствуют графику и договору." },
+];
+---
+
+<section id="cameras" class="relative overflow-hidden bg-ink-2 py-20 sm:py-28">
+  <div class="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+    <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-[6fr_6fr] lg:gap-16">
+      <!-- Текст -->
+      <div>
+        <p class="eyebrow inline-flex items-center gap-2 text-accent-soft">
+          <span class="relative flex h-2 w-2">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-accent"></span>
+          </span>
+          Стройка под контролем · УТП
+        </p>
+        <h2 class="display-lg mt-5 text-on-ink">Онлайн-камеры<br />на каждом объекте</h2>
+        <p class="mt-5 max-w-md text-[15px] leading-relaxed text-on-ink/65">
+          На каждой стройке — камеры с трансляцией в реальном времени. Вы видите
+          свой дом на любом этапе, не выходя из офиса или другого города. Это и
+          есть наша прозрачность: смотреть можно в любой момент.
+        </p>
+
+        <div class="mt-9 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+          {
+            points.map((p) => (
+              <div class="flex gap-3">
+                <span class="mt-1 grid h-7 w-7 shrink-0 place-items-center rounded-full border border-accent/40 text-accent-soft">
+                  <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <div>
+                  <p class="font-[var(--font-display)] text-on-ink">{p.t}</p>
+                  <p class="mt-1 text-sm leading-relaxed text-on-ink/60">{p.d}</p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        <button type="button" data-quiz="smeta" class="mt-9 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">
+          Хочу так же строить — рассчитать дом
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <!-- Визуал: телефон с трансляцией + камера на объекте -->
+      <div class="rise grid grid-cols-1 gap-4 sm:grid-cols-5">
+        <figure class="relative overflow-hidden rounded-[24px] border border-white/10 sm:col-span-3">
+          <img src={CAMERAS.phoneFeed} alt="Просмотр стройки дома онлайн с телефона" loading="lazy" decoding="async" class="aspect-[4/3] h-full w-full object-cover" />
+          <figcaption class="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-ink/55 px-3 py-1.5 text-xs text-on-ink backdrop-blur-md">
+            <span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-red-500"></span></span>
+            В эфире · ваш объект
+          </figcaption>
+        </figure>
+        <figure class="relative overflow-hidden rounded-[24px] border border-white/10 sm:col-span-2">
+          <img src={CAMERAS.onSite} alt="Камера видеонаблюдения на стройплощадке дома из бруса" loading="lazy" decoding="async" class="h-full min-h-[180px] w-full object-cover" />
+          <div class="absolute inset-0 scrim-bottom"></div>
+          <figcaption class="absolute bottom-4 left-4 right-4 text-sm text-on-ink">Камера на участке</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
