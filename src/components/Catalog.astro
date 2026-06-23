@@ -202,6 +202,8 @@ const payload = {
         </div>
         <h3 class="mt-4 font-[var(--font-display)] text-2xl text-on-ink sm:text-3xl" data-sel-name></h3>
         <p class="mt-2 text-sm text-accent-soft" data-sel-hook></p>
+        <p class="mt-3 text-sm leading-relaxed text-on-ink/60" data-sel-summary></p>
+        <div class="mt-4 flex flex-wrap gap-2" data-sel-chips></div>
         <div class="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-5">
           <div>
             <p class="text-sm text-on-ink/60" data-sel-meta></p>
@@ -610,6 +612,8 @@ const payload = {
       setText("[data-sel-meta]", root, `${p.area} м² · ${p.floors} этажа`);
       setText("[data-sel-summary]", root, p.summary);
       setText("[data-sel-price]", root, p.price);
+      const chipsEl = root.querySelector<HTMLElement>("[data-sel-chips]");
+      if (chipsEl) chipsEl.innerHTML = (p.specs || []).slice(0, 4).map((s) => `<span class="rounded-full border border-white/12 bg-white/[0.03] px-3 py-1 text-xs text-on-ink/75">${s.label} · ${s.value}</span>`).join("");
       if (selTag) { selTag.textContent = p.tag || ""; selTag.hidden = !p.tag; }
     };
     const updateNav = (code: string) => {

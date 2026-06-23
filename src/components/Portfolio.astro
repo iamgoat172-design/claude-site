@@ -9,12 +9,9 @@ import { PORTFOLIO } from "../data/projects";
   <div class="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
     <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
       <div>
-        <p class="eyebrow text-accent-soft">Кейс объекта</p>
-        <h2 class="display-lg mt-5 text-on-ink">Построили дом<br />«{PORTFOLIO.name}»</h2>
-        <p class="mt-5 max-w-md text-[15px] leading-relaxed text-on-ink/65">
-          Один реальный объект — от сборки домокомплекта до новоселья. Так
-          выглядит наша работа на каждом этапе, без приукрашивания.
-        </p>
+        <p class="eyebrow text-accent-soft">{PORTFOLIO.kicker}</p>
+        <h2 class="display-lg mt-5 text-on-ink">Кейс:<br />«{PORTFOLIO.name}»</h2>
+        <p class="mt-5 max-w-md text-[15px] leading-relaxed text-on-ink/65">{PORTFOLIO.subtitle}</p>
       </div>
       <dl class="flex flex-wrap gap-x-8 gap-y-3">
         {
@@ -56,9 +53,9 @@ import { PORTFOLIO } from "../data/projects";
     <h3 class="mt-16 font-[var(--font-display)] text-xl text-on-ink sm:text-2xl">Дом внутри</h3>
     <div class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
       {
-        PORTFOLIO.interiors.map((src, i) => (
-          <figure class={`rise overflow-hidden rounded-[20px] border border-white/10 ${i === 0 ? "col-span-2 row-span-2 lg:col-span-2" : ""}`}>
-            <img src={src} alt="Интерьер построенного дома" loading="lazy" decoding="async" class="h-full w-full object-cover" />
+        PORTFOLIO.interiors.map((src) => (
+          <figure class="rise overflow-hidden rounded-[20px] border border-white/10">
+            <img src={src} alt="Интерьер построенного дома" loading="lazy" decoding="async" class="aspect-[4/3] h-full w-full object-cover" />
           </figure>
         ))
       }
