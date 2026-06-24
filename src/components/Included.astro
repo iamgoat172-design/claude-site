@@ -1,11 +1,13 @@
 ---
 // Секция — Три уровня готовности (комплектации). Карточки с расшифровкой
-// «что входит» + поп-ап заявки под каждую комплектацию.
+// «что входит» + фон-картинка под стадию + поп-ап заявки под каждую комплектацию.
+const IMG = "https://d8j0ntlcm91z4.cloudfront.net/user_32Q9KWTtKxuO9vGsur6JRmOi1Zg";
 const tiers = [
   {
     n: "01",
     name: "Тёплый контур",
     lead: "Под внутренние работы",
+    bg: `${IMG}/hf_20260624_155755_37854a34-afce-445d-842b-732c72142a4f_min.webp`,
     items: [
       "Фундамент по геологии участка",
       "Стены: клееный брус или тёплая керамика",
@@ -21,6 +23,7 @@ const tiers = [
     name: "White Box",
     lead: "Под чистовую отделку",
     featured: true,
+    bg: `${IMG}/hf_20260624_155756_fd3b6473-9201-4720-ad53-30f116dbaf73_min.webp`,
     items: [
       "Всё из «Тёплого контура»",
       "Разводка отопления, воды и канализации",
@@ -35,6 +38,7 @@ const tiers = [
     n: "03",
     name: "Под ключ",
     lead: "Заезжайте и живите",
+    bg: `${IMG}/hf_20260624_155757_dbdd33a3-e7fb-46f9-bec8-5b7b7454ed66_min.webp`,
     items: [
       "Всё из «White Box»",
       "Чистовая отделка по дизайн-проекту",
@@ -64,37 +68,42 @@ const tiers = [
     <div class="mt-12 grid grid-cols-1 gap-5 lg:grid-cols-3">
       {
         tiers.map((t) => (
-          <article class={`rise flex flex-col rounded-[24px] p-7 sm:p-8 ${t.featured ? "glass hairline-top ring-1 ring-accent/30" : "border border-white/10 bg-white/[0.02]"}`}>
-            <div class="flex items-center justify-between gap-3">
-              <span class="tnum font-[var(--font-display)] text-2xl text-accent-soft">{t.n}</span>
-              {t.featured && (
-                <span class="rounded-full border border-accent/40 px-2.5 py-0.5 text-[10px] uppercase tracking-[0.16em] text-accent-soft">
-                  Выбирают чаще
-                </span>
-              )}
+          <article class={`rise relative flex flex-col overflow-hidden rounded-[24px] border ${t.featured ? "border-accent/40 ring-1 ring-accent/30" : "border-white/10"}`}>
+            <img src={t.bg} alt="" aria-hidden="true" loading="lazy" decoding="async" class="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20" />
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink/85 via-ink/88 to-ink/96"></div>
+            {t.featured && <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_0%,rgba(176,136,90,0.12),transparent_60%)]"></div>}
+            <div class="relative z-10 flex flex-1 flex-col p-7 sm:p-8">
+              <div class="flex items-center justify-between gap-3">
+                <span class="tnum font-[var(--font-display)] text-2xl text-accent-soft">{t.n}</span>
+                {t.featured && (
+                  <span class="rounded-full border border-accent/40 bg-ink/40 px-2.5 py-0.5 text-[10px] uppercase tracking-[0.16em] text-accent-soft backdrop-blur-md">
+                    Выбирают чаще
+                  </span>
+                )}
+              </div>
+              <h3 class="mt-4 font-[var(--font-display)] text-2xl text-on-ink">{t.name}</h3>
+              <p class="mt-1 text-sm text-on-ink/55">{t.lead}</p>
+              <ul class="mt-6 flex-1 space-y-3 border-t border-white/10 pt-6">
+                {t.items.map((it) => (
+                  <li class="flex gap-3 text-sm leading-relaxed text-on-ink/80">
+                    <svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span>{it}</span>
+                  </li>
+                ))}
+              </ul>
+              <p class="mt-6 rounded-xl border border-white/10 bg-ink/40 px-4 py-3 text-sm text-on-ink/75 backdrop-blur-md">{t.result}</p>
+              <button
+                type="button"
+                data-lead="complectation"
+                data-lead-title={`Комплектация «${t.name}»`}
+                data-lead-sub={`${t.lead}. ${t.result}`}
+                data-lead-bullets={JSON.stringify(t.items)}
+                data-lead-cta={`Рассчитать «${t.name}»`}
+                class={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold transition-transform duration-300 hover:scale-[1.02] ${t.featured ? "bg-accent text-paper" : "border border-white/25 bg-ink/40 text-on-ink backdrop-blur-md hover:border-accent hover:text-accent"}`}
+              >
+                Рассчитать в этой комплектации
+              </button>
             </div>
-            <h3 class="mt-4 font-[var(--font-display)] text-2xl text-on-ink">{t.name}</h3>
-            <p class="mt-1 text-sm text-on-ink/50">{t.lead}</p>
-            <ul class="mt-6 flex-1 space-y-3 border-t border-white/10 pt-6">
-              {t.items.map((it) => (
-                <li class="flex gap-3 text-sm leading-relaxed text-on-ink/75">
-                  <svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <span>{it}</span>
-                </li>
-              ))}
-            </ul>
-            <p class="mt-6 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-on-ink/70">{t.result}</p>
-            <button
-              type="button"
-              data-lead="complectation"
-              data-lead-title={`Комплектация «${t.name}»`}
-              data-lead-sub={`${t.lead}. ${t.result}`}
-              data-lead-bullets={JSON.stringify(t.items)}
-              data-lead-cta={`Рассчитать «${t.name}»`}
-              class={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold transition-transform duration-300 hover:scale-[1.02] ${t.featured ? "bg-accent text-paper" : "border border-white/25 text-on-ink hover:border-accent hover:text-accent"}`}
-            >
-              Рассчитать в этой комплектации
-            </button>
           </article>
         ))
       }
