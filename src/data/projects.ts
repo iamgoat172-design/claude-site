@@ -57,6 +57,7 @@ export const INCLUDE_STAGES: {
 }[] = [
   {
     label: "Проектирование",
+    photo: "/images/stages/proekt.webp",
     icon: '<path d="M3 17 17 3l4 4L7 21H3z" stroke-linejoin="round"/><path d="M13 7l4 4" stroke-linecap="round"/>',
     heading: "Индивидуальное проектирование дома с архитектором",
     badge: "При строительстве дома — проектирование бесплатно",
@@ -71,6 +72,7 @@ export const INCLUDE_STAGES: {
   },
   {
     label: "Замеры участка",
+    photo: "/images/stages/zamery.webp",
     icon: '<path d="M12 21s-7-5-7-11a7 7 0 1 1 14 0c0 6-7 11-7 11z" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5"/>',
     heading: "Выезд инженера и геодезиста на участок",
     badge: "Выезд по Московской и Ленинградской областям",
@@ -83,6 +85,7 @@ export const INCLUDE_STAGES: {
   },
   {
     label: "Фундамент",
+    photo: "/images/stages/fundament.webp",
     icon: '<path d="M3 17l9 4 9-4M3 12l9 4 9-4" stroke-linejoin="round"/><path d="M12 3 3 7l9 4 9-4-9-4z" stroke-linejoin="round"/>',
     heading: "Фундамент под ваш грунт и проект",
     items: [
