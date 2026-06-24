@@ -85,7 +85,7 @@ export const INCLUDE_STAGES: {
   },
   {
     label: "Фундамент",
-    photo: "/images/stages/fundament.webp",
+    photo: "/images/stages/fundament-brus.webp",
     icon: '<path d="M3 17l9 4 9-4M3 12l9 4 9-4" stroke-linejoin="round"/><path d="M12 3 3 7l9 4 9-4-9-4z" stroke-linejoin="round"/>',
     heading: "Фундамент под ваш грунт и проект",
     items: [
@@ -97,6 +97,7 @@ export const INCLUDE_STAGES: {
   },
   {
     label: "Стеновой комплект",
+    photo: "/images/stages/steny-brus.webp",
     icon: '<rect x="3" y="5" width="18" height="14" rx="1"/><path d="M3 10h18M3 14h18M10 5v14" stroke-linecap="round"/>',
     heading: "Клееный брус собственного производства",
     badge: "Свой лес — Вологодская область",
