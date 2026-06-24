@@ -110,6 +110,7 @@ export const INCLUDE_STAGES: {
   },
   {
     label: "Кровля",
+    photo: "/images/stages/krovla.webp",
     icon: '<path d="M3 12 12 4l9 8" stroke-linejoin="round"/><path d="M5 11v8h14v-8" stroke-linejoin="round"/>',
     heading: "Тёплая кровля в составе дома",
     items: [
@@ -121,6 +122,7 @@ export const INCLUDE_STAGES: {
   },
   {
     label: "Доставка",
+    photo: "/images/stages/dostavka.webp",
     icon: '<path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z" stroke-linejoin="round"/><circle cx="7.5" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/>',
     heading: "Доставка домокомплекта на участок",
     items: [
