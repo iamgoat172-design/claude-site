@@ -1,0 +1,193 @@
+---
+// Универсальный поп-ап заявки. Открывается событием `vz-lead`
+// (detail: { intent, title, subtitle, bullets?, cta? }) ИЛИ кликом по элементу
+// с data-lead="<intent>" (+ data-lead-title / -sub / -bullets(JSON) / -cta).
+// Сабмит идёт тем же путём, что основная форма (PUBLIC_LEAD_ENDPOINT; пусто → демо).
+---
+
+<div data-lead-modal hidden class="fixed inset-0 z-[130] flex items-center justify-center p-3 sm:p-6">
+  <div data-lm-overlay class="absolute inset-0 bg-ink/85 opacity-0 backdrop-blur-md transition-opacity duration-300"></div>
+  <div role="dialog" aria-modal="true" aria-labelledby="lm-title" class="glass hairline-top relative grid max-h-[94dvh] w-full max-w-3xl translate-y-4 grid-cols-1 overflow-hidden rounded-[28px] opacity-0 transition-all duration-300 lg:grid-cols-[5fr_7fr]" data-lm-dialog>
+
+    <!-- Левая ценностная панель -->
+    <div class="relative hidden flex-col justify-between bg-ink-2 p-8 lg:flex">
+      <div class="absolute inset-0 bg-[radial-gradient(120%_120%_at_50%_-10%,rgba(176,136,90,0.14),transparent_60%)]"></div>
+      <span class="relative z-10 eyebrow text-accent-soft">Вологодское Зодчество</span>
+      <div class="relative z-10">
+        <p data-lm-aside class="font-[var(--font-display)] text-2xl text-on-ink"></p>
+        <ul data-lm-bullets class="mt-5 space-y-3"></ul>
+        <p class="mt-6 text-xs text-on-ink/40">Ответим в течение 15 минут в удобном вам канале.</p>
+      </div>
+    </div>
+
+    <!-- Правая колонка: форма / успех -->
+    <div class="flex min-h-0 flex-col overflow-y-auto p-7 sm:p-9">
+      <button type="button" data-lm-close aria-label="Закрыть" class="absolute right-4 top-4 z-20 grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-ink/40 text-on-ink transition-colors hover:border-accent hover:text-accent">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+      </button>
+
+      <div data-lm-formwrap>
+        <p data-lm-kicker class="eyebrow text-accent-soft"></p>
+        <h3 id="lm-title" data-lm-title class="mt-3 font-[var(--font-display)] text-2xl text-on-ink sm:text-3xl"></h3>
+        <p data-lm-sub class="mt-2 text-sm text-on-ink/55"></p>
+
+        <form class="mt-7 space-y-5" data-lm-form novalidate>
+          <div>
+            <label for="lm-name" class="block text-sm font-medium text-on-ink">Имя <span class="text-accent">*</span></label>
+            <input id="lm-name" name="name" type="text" autocomplete="name" required class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-on-ink placeholder:text-on-ink/35 focus:border-accent focus:outline-none" placeholder="Как к вам обращаться" />
+            <p class="mt-1.5 hidden text-sm text-red-300" data-lm-error="name" role="alert"></p>
+          </div>
+          <div>
+            <label for="lm-phone" class="block text-sm font-medium text-on-ink">Телефон <span class="text-accent">*</span></label>
+            <input id="lm-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-on-ink placeholder:text-on-ink/35 focus:border-accent focus:outline-none" placeholder="+7 (___) ___-__-__" data-lm-phone />
+            <p class="mt-1.5 hidden text-sm text-red-300" data-lm-error="phone" role="alert"></p>
+          </div>
+          <fieldset>
+            <legend class="block text-sm font-medium text-on-ink">Куда вам удобнее ответить</legend>
+            <div class="mt-2 grid grid-cols-3 gap-2" role="radiogroup" aria-label="Способ связи" data-lm-methods>
+              {
+                [
+                  { id: "telegram", label: "Telegram", icon: '<path d="M22 4 11 13M22 4l-7 17-4-8-8-4 19-5z" stroke-linecap="round" stroke-linejoin="round"/>' },
+                  { id: "max", label: "МАКС", icon: '<path d="M4 5h16v11H8l-4 4z" stroke-linecap="round" stroke-linejoin="round"/>' },
+                  { id: "phone", label: "Телефон", icon: '<path d="M5 4h4l2 5-3 2a12 12 0 005 5l2-3 5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" stroke-linecap="round" stroke-linejoin="round"/>' },
+                ].map((m, i) => (
+                  <button type="button" role="radio" aria-checked={i === 2 ? "true" : "false"} data-method={m.id} class="group flex flex-col items-center gap-1.5 rounded-xl border px-3 py-3 text-xs font-medium transition-colors aria-checked:border-accent aria-checked:bg-accent/10 aria-checked:text-accent-soft border-white/15 bg-white/[0.03] text-on-ink/65 hover:border-white/30">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" set:html={m.icon} />
+                    {m.label}
+                  </button>
+                ))
+              }
+            </div>
+          </fieldset>
+          <div data-lm-tg hidden>
+            <label for="lm-tg" class="block text-sm font-medium text-on-ink">Ник в Telegram <span class="text-on-ink/40">(необязательно)</span></label>
+            <input id="lm-tg" name="telegram" type="text" class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-on-ink placeholder:text-on-ink/35 focus:border-accent focus:outline-none" placeholder="@username" />
+          </div>
+          <label class="flex items-start gap-3 text-sm text-on-ink/60">
+            <input type="checkbox" name="consent" required class="mt-0.5 h-4 w-4 shrink-0 accent-[#B0885A]" />
+            <span>Согласен на обработку персональных данных и <a href="/privacy" target="_blank" rel="noopener" class="text-accent-soft underline underline-offset-2">политику конфиденциальности</a>.</span>
+          </label>
+          <p class="hidden text-sm text-red-300" data-lm-error="consent" role="alert"></p>
+          <button type="submit" data-lm-submit class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-4 text-base font-semibold text-paper transition-transform duration-300 hover:scale-[1.02] disabled:opacity-60">
+            <span data-lm-submit-label>Отправить</span>
+            <svg class="hidden h-5 w-5 animate-spin" data-lm-spinner viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="3" stroke-opacity="0.3"/><path d="M21 12a9 9 0 00-9-9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+          </button>
+          <p class="text-center text-xs text-on-ink/40">Это бесплатно и ни к чему не обязывает.</p>
+        </form>
+      </div>
+
+      <div data-lm-success hidden class="flex flex-col items-center justify-center py-12 text-center">
+        <span class="grid h-16 w-16 place-items-center rounded-full border border-accent/40 text-accent accent-glow">
+          <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <h3 class="mt-5 font-[var(--font-display)] text-2xl text-on-ink">Заявка принята</h3>
+        <p data-lm-success-text class="mt-3 max-w-xs text-sm text-on-ink/60"></p>
+        <button type="button" data-lm-close class="mt-7 rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-on-ink transition-colors hover:border-accent hover:text-accent">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.querySelector<HTMLElement>("[data-lead-modal]");
+  if (modal) {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const overlay = modal.querySelector<HTMLElement>("[data-lm-overlay]")!;
+    const dialog = modal.querySelector<HTMLElement>("[data-lm-dialog]")!;
+    const formWrap = modal.querySelector<HTMLElement>("[data-lm-formwrap]")!;
+    const successWrap = modal.querySelector<HTMLElement>("[data-lm-success]")!;
+    const form = modal.querySelector<HTMLFormElement>("[data-lm-form]")!;
+    const phoneInput = modal.querySelector<HTMLInputElement>("[data-lm-phone]")!;
+    const tgWrap = modal.querySelector<HTMLElement>("[data-lm-tg]")!;
+    const methodBtns = Array.from(modal.querySelectorAll<HTMLButtonElement>("[data-method]"));
+    const submitBtn = modal.querySelector<HTMLButtonElement>("[data-lm-submit]")!;
+    const submitLabel = modal.querySelector<HTMLElement>("[data-lm-submit-label]")!;
+    const spinner = modal.querySelector<HTMLElement>("[data-lm-spinner]")!;
+    const asideEl = modal.querySelector<HTMLElement>("[data-lm-aside]")!;
+    const bulletsEl = modal.querySelector<HTMLElement>("[data-lm-bullets]")!;
+    const endpoint = document.querySelector<HTMLFormElement>("[data-lead-form]")?.dataset.endpoint || "";
+    const methods: Record<string, string> = { telegram: "Telegram", max: "МАКС", phone: "Телефон" };
+
+    let intent = "lead", reqTitle = "", method = "phone", lastFocus: HTMLElement | null = null;
+
+    const fmt = (v: string) => {
+      let d = v.replace(/\D/g, ""); if (d[0] === "8") d = "7" + d.slice(1); if (d[0] !== "7") d = "7" + d; d = d.slice(0, 11);
+      let r = "+7"; if (d.length > 1) r += " (" + d.slice(1, 4); if (d.length >= 4) r += ") " + d.slice(4, 7); if (d.length >= 7) r += "-" + d.slice(7, 9); if (d.length >= 9) r += "-" + d.slice(9, 11); return r;
+    };
+    phoneInput.addEventListener("input", () => { phoneInput.value = fmt(phoneInput.value); });
+    phoneInput.addEventListener("focus", () => { if (!phoneInput.value) phoneInput.value = "+7 "; });
+
+    const err = (f: string, m: string) => { const el = modal.querySelector<HTMLElement>(`[data-lm-error="${f}"]`); if (el) { el.textContent = m; el.classList.toggle("hidden", !m); } };
+    const setMethod = (m: string) => { method = m; methodBtns.forEach((b) => b.setAttribute("aria-checked", String(b.dataset.method === m))); tgWrap.hidden = m !== "telegram"; };
+    methodBtns.forEach((b) => b.addEventListener("click", () => setMethod(b.dataset.method!)));
+
+    const open = (cfg: { intent: string; title: string; subtitle?: string; bullets?: string[]; cta?: string }) => {
+      intent = cfg.intent; reqTitle = cfg.title;
+      modal.querySelector<HTMLElement>("[data-lm-kicker]")!.textContent = cfg.intent === "booking" ? "Бронь и фиксация цены" : cfg.intent === "individual" ? "Авторское проектирование" : "Заявка";
+      modal.querySelector<HTMLElement>("[data-lm-title]")!.textContent = cfg.title;
+      modal.querySelector<HTMLElement>("[data-lm-sub]")!.textContent = cfg.subtitle || "";
+      asideEl.textContent = cfg.title;
+      bulletsEl.innerHTML = (cfg.bullets || ["Фиксированная смета в договоре", "Оплата с юрлица на юрлицо", "Гарантия 25 лет"]).map((t) => `<li class="flex items-baseline gap-2.5 text-sm text-on-ink/85"><svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>${t}</span></li>`).join("");
+      submitLabel.textContent = cfg.cta || "Отправить заявку";
+      form.reset(); ["name", "phone", "consent"].forEach((f) => err(f, "")); setMethod("phone");
+      formWrap.hidden = false; successWrap.hidden = true;
+      lastFocus = document.activeElement as HTMLElement;
+      modal.hidden = false; document.body.style.overflow = "hidden";
+      requestAnimationFrame(() => { overlay.style.opacity = "1"; dialog.style.opacity = "1"; dialog.style.transform = "translateY(0)"; });
+      setTimeout(() => modal.querySelector<HTMLInputElement>("#lm-name")?.focus(), reduce ? 0 : 200);
+    };
+    const close = () => {
+      overlay.style.opacity = "0"; dialog.style.opacity = "0"; dialog.style.transform = "translateY(16px)";
+      const done = () => { modal.hidden = true; document.body.style.overflow = ""; lastFocus?.focus(); };
+      if (reduce) done(); else setTimeout(done, 280);
+    };
+    modal.querySelectorAll<HTMLButtonElement>("[data-lm-close]").forEach((b) => b.addEventListener("click", close));
+    overlay.addEventListener("click", close);
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const name = String(fd.get("name") || "").trim();
+      const phone = String(fd.get("phone") || "").trim();
+      const telegram = String(fd.get("telegram") || "").trim();
+      const consent = form.querySelector<HTMLInputElement>('[name="consent"]')!.checked;
+      let firstInvalid: HTMLElement | null = null;
+      ["name", "phone", "consent"].forEach((f) => err(f, ""));
+      if (!name) { err("name", "Укажите, как к вам обращаться"); firstInvalid ??= modal.querySelector("#lm-name"); }
+      if (phone.replace(/\D/g, "").length < 10) { err("phone", "Введите корректный номер телефона"); firstInvalid ??= phoneInput; }
+      if (!consent) { err("consent", "Нужно согласие на обработку данных"); }
+      if (firstInvalid || !consent) { firstInvalid?.focus(); return; }
+      const body = { name, phone, channel: methods[method], telegram: method === "telegram" ? telegram : "", request: reqTitle, intent };
+      submitBtn.disabled = true; spinner.classList.remove("hidden"); submitLabel.textContent = "Отправляем…";
+      try {
+        if (endpoint) { const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }); if (!res.ok) throw new Error("bad"); }
+        else { console.info("Lead (demo):", body); await new Promise((r) => setTimeout(r, 600)); }
+        modal.querySelector<HTMLElement>("[data-lm-success-text]")!.textContent = `Свяжемся по телефону или в ${methods[method]} по теме «${reqTitle}».`;
+        formWrap.hidden = true; successWrap.hidden = false;
+      } catch { err("phone", "Не удалось отправить. Позвоните: 8 (499) 113-57-63"); }
+      finally { submitBtn.disabled = false; spinner.classList.add("hidden"); submitLabel.textContent = "Отправить заявку"; }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (modal.hidden) return;
+      if (e.key === "Escape") { close(); return; }
+      if (e.key === "Tab") {
+        const f = dialog.querySelectorAll<HTMLElement>('button, a[href], input, [tabindex]:not([tabindex="-1"])');
+        const vis = Array.from(f).filter((el) => el.offsetParent !== null);
+        if (!vis.length) return; const first = vis[0], last = vis[vis.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+
+    document.addEventListener("vz-lead", (e) => { const d = (e as CustomEvent).detail || {}; open(d); });
+    document.addEventListener("click", (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLElement>("[data-lead]");
+      if (!b) return;
+      e.preventDefault();
+      let bullets: string[] = [];
+      try { bullets = JSON.parse(b.dataset.leadBullets || "[]"); } catch { bullets = []; }
+      open({ intent: b.dataset.lead || "lead", title: b.dataset.leadTitle || "Заявка", subtitle: b.dataset.leadSub || "", bullets, cta: b.dataset.leadCta || "Отправить заявку" });
+    });
+  }
+</script>

@@ -6,9 +6,17 @@
 //
 // ⚠️ Заглушки: имена команды, портреты и цифры спроса — замените реальными.
 //    Слот под фото людей помечен data-people-photo.
-import { LIFESTYLE } from "../data/projects";
+import { LIFESTYLE, PORTFOLIO } from "../data/projects";
 
 const lifestyle = LIFESTYLE.family;
+
+// Визуальные доказательства — реальные кадры объектов и сдач.
+const proofShots = [
+  { src: LIFESTYLE.ownersFinishing, cap: "Сдача объекта · МО" },
+  { src: LIFESTYLE.ownersCrew, cap: "Благоустройство · ЛО" },
+  { src: PORTFOLIO.hero, cap: "Готовый дом · Подмосковье" },
+  { src: LIFESTYLE.aerial, cap: "Участок с высоты" },
+];
 
 // Команда проекта — «лица», которые отвечают за результат.
 const team = [
@@ -67,6 +75,19 @@ const demand = [
         </button>
       </figcaption>
     </figure>
+
+    <!-- Визуальные доказательства -->
+    <div class="rise mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      {
+        proofShots.map((p) => (
+          <figure class="relative overflow-hidden rounded-[20px] border border-white/10">
+            <img src={p.src} alt={p.cap} loading="lazy" decoding="async" class="aspect-[4/3] h-full w-full object-cover" />
+            <div class="absolute inset-0 scrim-bottom"></div>
+            <figcaption class="absolute bottom-3 left-3 right-3 text-xs text-on-ink/90">{p.cap}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
 
     <!-- Почему нам доверяют — смысловые блоки -->
     <div class="mt-16">

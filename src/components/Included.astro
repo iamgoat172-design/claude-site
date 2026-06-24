@@ -1,99 +1,103 @@
 ---
-// Секция 4 — Что входит. Опенер с фото-якорем + строки-уровни на спайне.
-import { projects } from "../data/projects";
-const anchorPhoto = projects[2].image; // временно: кадр из каталога
-
+// Секция — Три уровня готовности (комплектации). Карточки с расшифровкой
+// «что входит» + поп-ап заявки под каждую комплектацию.
 const tiers = [
   {
     n: "01",
     name: "Тёплый контур",
-    lead: "Готов к внутренним работам",
-    items: "Фундамент под геологию · стены из бруса или керамики · кровля с утеплением · панорамные окна · черновые входные группы",
+    lead: "Под внутренние работы",
+    items: [
+      "Фундамент по геологии участка",
+      "Стены: клееный брус или тёплая керамика",
+      "Межэтажные перекрытия, черновая лестница",
+      "Кровля с утеплением, водосток, снегозадержание",
+      "Панорамные окна и входные двери — тёплый контур",
+      "Несущая часть террас и входных групп",
+    ],
+    result: "Дом закрыт и готов к внутренним работам.",
   },
   {
     n: "02",
     name: "White Box",
     lead: "Под чистовую отделку",
     featured: true,
-    items: "Всё из «Тёплого контура» · разводка отопления, воды, электрики · стяжка и выравнивание · вентиляция · подготовка под кухню и санузлы",
+    items: [
+      "Всё из «Тёплого контура»",
+      "Разводка отопления, воды и канализации",
+      "Электрика: щит, кабель, подрозетники",
+      "Приточно-вытяжная вентиляция",
+      "Стяжка пола и выравнивание стен",
+      "Подготовка под кухню и санузлы",
+    ],
+    result: "Инженерия готова — заходите с дизайн-проектом.",
   },
   {
     n: "03",
     name: "Под ключ",
     lead: "Заезжайте и живите",
-    items: "Всё из «White Box» · чистовая отделка по дизайн-проекту · котёл, сантехника, свет · двери, лестницы · благоустройство входа",
+    items: [
+      "Всё из «White Box»",
+      "Чистовая отделка по дизайн-проекту",
+      "Котёл, сантехника, тёплый пол, свет",
+      "Межкомнатные двери и лестницы в чистовой",
+      "Кухня и встроенная мебель по проекту",
+      "Благоустройство входной группы",
+    ],
+    result: "Дом полностью готов к заезду.",
   },
 ];
 ---
 
 <section id="included" class="relative overflow-hidden bg-ink py-20 sm:py-28">
   <div class="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-    <div class="grid grid-cols-1 gap-10 lg:grid-cols-[4fr_8fr] lg:gap-16">
-      <!-- Опенер + фото-якорь (заполняет левую зону) -->
-      <div class="flex flex-col">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
         <p class="eyebrow text-accent-soft">Что входит в дом</p>
         <h2 class="display-lg mt-5 text-on-ink">Три уровня<br />готовности</h2>
-        <p class="mt-5 max-w-xs text-[15px] leading-relaxed text-on-ink/65">
-          Берём дом на любом этапе и доводим до нужного. Состав работ — в
-          договоре и смете, без «вылезающих» строк по ходу стройки.
-        </p>
-
-        <figure class="rise relative mt-8 hidden flex-1 overflow-hidden rounded-[24px] border border-white/10 lg:block">
-          <img
-            src={anchorPhoto}
-            alt="Дом из клееного бруса — пример готового объекта"
-            loading="lazy"
-            decoding="async"
-            class="h-full min-h-[320px] w-full object-cover"
-          />
-          <div class="absolute inset-0 scrim-bottom"></div>
-          <figcaption class="glass hairline-top absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-2xl px-4 py-3 text-sm text-on-ink">
-            <span>Любой уровень — в договоре</span>
-            <span class="text-accent-soft">→</span>
-          </figcaption>
-        </figure>
       </div>
+      <p class="max-w-sm text-[15px] leading-relaxed text-on-ink/65">
+        Берём дом на любом этапе и доводим до нужного. Ниже — что именно вы
+        получаете в каждом формате. Состав фиксируем в смете и договоре.
+      </p>
+    </div>
 
-      <!-- Строки-уровни на вертикальном спайне -->
-      <div class="relative border-l border-white/12 pl-6 sm:pl-10">
-        {
-          tiers.map((t) => (
-            <article
-              class={`rise group relative -ml-6 mb-4 rounded-[20px] py-7 pl-6 pr-5 transition-colors duration-500 sm:-ml-10 sm:pl-10 ${t.featured ? "glass hairline-top" : "border border-transparent hover:bg-white/[0.02]"}`}
-            >
-              {/* Узел на спайне */}
-              <span
-                class={`absolute left-0 top-9 h-2.5 w-2.5 -translate-x-1/2 rounded-full ring-4 ring-ink ${t.featured ? "bg-accent accent-glow" : "bg-white/30"}`}
-                aria-hidden="true"
-              />
-              <div class="flex flex-wrap items-baseline gap-x-5 gap-y-1">
-                <span class="tnum font-[var(--font-display)] text-3xl text-accent-soft">
-                  {t.n}
+    <div class="mt-12 grid grid-cols-1 gap-5 lg:grid-cols-3">
+      {
+        tiers.map((t) => (
+          <article class={`rise flex flex-col rounded-[24px] p-7 sm:p-8 ${t.featured ? "glass hairline-top ring-1 ring-accent/30" : "border border-white/10 bg-white/[0.02]"}`}>
+            <div class="flex items-center justify-between gap-3">
+              <span class="tnum font-[var(--font-display)] text-2xl text-accent-soft">{t.n}</span>
+              {t.featured && (
+                <span class="rounded-full border border-accent/40 px-2.5 py-0.5 text-[10px] uppercase tracking-[0.16em] text-accent-soft">
+                  Выбирают чаще
                 </span>
-                <h3 class="font-[var(--font-display)] text-2xl text-on-ink sm:text-[1.75rem]">
-                  {t.name}
-                </h3>
-                <span class="ml-auto text-sm text-on-ink/50">{t.lead}</span>
-                {t.featured && (
-                  <span class="rounded-full border border-accent/40 px-2.5 py-0.5 text-[10px] uppercase tracking-[0.16em] text-accent-soft">
-                    Выбирают чаще
-                  </span>
-                )}
-              </div>
-              <p class="mt-4 max-w-2xl text-[15px] leading-relaxed text-on-ink/70">
-                {t.items}
-              </p>
-              <a
-                href="#lead"
-                data-quiz="complectation"
-                class="mt-4 inline-flex text-sm font-semibold text-accent transition-colors hover:text-accent-soft"
-              >
-                Рассчитать в этой комплектации →
-              </a>
-            </article>
-          ))
-        }
-      </div>
+              )}
+            </div>
+            <h3 class="mt-4 font-[var(--font-display)] text-2xl text-on-ink">{t.name}</h3>
+            <p class="mt-1 text-sm text-on-ink/50">{t.lead}</p>
+            <ul class="mt-6 flex-1 space-y-3 border-t border-white/10 pt-6">
+              {t.items.map((it) => (
+                <li class="flex gap-3 text-sm leading-relaxed text-on-ink/75">
+                  <svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <span>{it}</span>
+                </li>
+              ))}
+            </ul>
+            <p class="mt-6 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-on-ink/70">{t.result}</p>
+            <button
+              type="button"
+              data-lead="complectation"
+              data-lead-title={`Комплектация «${t.name}»`}
+              data-lead-sub={`${t.lead}. ${t.result}`}
+              data-lead-bullets={JSON.stringify(t.items)}
+              data-lead-cta={`Рассчитать «${t.name}»`}
+              class={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold transition-transform duration-300 hover:scale-[1.02] ${t.featured ? "bg-accent text-paper" : "border border-white/25 text-on-ink hover:border-accent hover:text-accent"}`}
+            >
+              Рассчитать в этой комплектации
+            </button>
+          </article>
+        ))
+      }
     </div>
   </div>
 </section>

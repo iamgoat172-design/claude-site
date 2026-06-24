@@ -1,53 +1,13 @@
 ---
-// Секция — Что входит в цену по форматам комплектации + финансирование.
-// Расшифровка: что именно получает клиент в каждом формате.
-const tiers = [
-  {
-    n: "01",
-    name: "Тёплый контур",
-    lead: "Под внутренние работы",
-    items: [
-      "Фундамент по геологии участка",
-      "Стены: клееный брус или тёплая керамика",
-      "Межэтажные перекрытия, черновая лестница",
-      "Кровля с утеплением, водосток, снегозадержание",
-      "Панорамные окна и входные двери — тёплый контур",
-      "Несущая часть террас и входных групп",
-    ],
-    result: "Дом закрыт и готов к внутренним работам.",
-  },
-  {
-    n: "02",
-    name: "White Box",
-    lead: "Под чистовую отделку",
-    featured: true,
-    items: [
-      "Всё из «Тёплого контура»",
-      "Разводка отопления, воды и канализации",
-      "Электрика: щит, кабель, подрозетники",
-      "Приточно-вытяжная вентиляция",
-      "Стяжка пола и выравнивание стен",
-      "Подготовка под кухню и санузлы",
-    ],
-    result: "Инженерия готова — заходите с дизайн-проектом.",
-  },
-  {
-    n: "03",
-    name: "Под ключ",
-    lead: "Заезжайте и живите",
-    items: [
-      "Всё из «White Box»",
-      "Чистовая отделка по дизайн-проекту",
-      "Котёл, сантехника, тёплый пол, свет",
-      "Межкомнатные двери и лестницы в чистовой",
-      "Кухня и встроенная мебель по проекту",
-      "Благоустройство входной группы",
-    ],
-    result: "Дом полностью готов к заезду.",
-  },
+// Секция — Из чего складывается цена (факторы) + финансирование и безопасность.
+const factors = [
+  ["Площадь и этажность", "Базовый объём работ и материалов"],
+  ["Материал стен", "Клееный брус или тёплая керамика"],
+  ["Фундамент", "По геологии и рельефу участка"],
+  ["Комплектация", "Тёплый контур · White Box · под ключ"],
+  ["Инженерия", "Отопление, вода, электрика, вентиляция"],
+  ["Логистика", "Удалённость участка и доступ техники"],
 ];
-
-const factors = "Площадь и этажность · материал стен · фундамент по геологии · инженерия · логистика участка";
 const finance = [
   "Фиксированная смета в договоре — до рубля",
   "Оплата с юрлица на юрлицо, поэтапно",
@@ -60,67 +20,53 @@ const finance = [
   <div class="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <p class="eyebrow text-accent-soft">Стоимость · комплектации</p>
-        <h2 class="display-lg mt-5 text-on-ink">Что входит<br />в цену</h2>
+        <p class="eyebrow text-accent-soft">Стоимость</p>
+        <h2 class="display-lg mt-5 text-on-ink">Из чего складывается&nbsp;цена</h2>
       </div>
       <p class="max-w-sm text-[15px] leading-relaxed text-on-ink/65">
-        Берём дом на любом этапе готовности. Ниже — что именно вы получаете в
-        каждом формате. Точный состав фиксируем в смете и договоре.
+        Считаем по вашему проекту и участку — без «средней температуры». Смету
+        фиксируем в договоре: сумма не меняется по ходу стройки.
       </p>
     </div>
 
-    <!-- Три формата комплектации -->
-    <div class="mt-12 grid grid-cols-1 gap-5 lg:grid-cols-3">
-      {
-        tiers.map((t) => (
-          <article class={`rise flex flex-col rounded-[24px] p-7 sm:p-8 ${t.featured ? "glass hairline-top ring-1 ring-accent/30" : "border border-white/10 bg-white/[0.02]"}`}>
-            <div class="flex items-center justify-between gap-3">
-              <span class="tnum font-[var(--font-display)] text-2xl text-accent-soft">{t.n}</span>
-              {t.featured && (
-                <span class="rounded-full border border-accent/40 px-2.5 py-0.5 text-[10px] uppercase tracking-[0.16em] text-accent-soft">
-                  Выбирают чаще
-                </span>
-              )}
+    <div class="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-[7fr_5fr] lg:gap-16">
+      <!-- Факторы как смета -->
+      <dl class="border-t border-white/12">
+        {
+          factors.map(([t, d], i) => (
+            <div class="rise group flex items-baseline justify-between gap-6 border-b border-white/10 py-5 transition-colors duration-300 hover:bg-white/[0.015]">
+              <dt class="flex items-baseline gap-5">
+                <span class="tnum text-sm text-accent-soft">{`0${i + 1}`}</span>
+                <span class="text-lg text-on-ink sm:text-xl">{t}</span>
+              </dt>
+              <dd class="max-w-[15rem] text-right text-sm text-on-ink/55">{d}</dd>
             </div>
-            <h3 class="mt-4 font-[var(--font-display)] text-2xl text-on-ink">{t.name}</h3>
-            <p class="mt-1 text-sm text-on-ink/50">{t.lead}</p>
-            <ul class="mt-6 flex-1 space-y-3 border-t border-white/10 pt-6">
-              {t.items.map((it) => (
-                <li class="flex gap-3 text-sm leading-relaxed text-on-ink/75">
-                  <svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  <span>{it}</span>
-                </li>
-              ))}
-            </ul>
-            <p class="mt-6 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-on-ink/70">{t.result}</p>
-            <button type="button" data-quiz="complectation" class={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold transition-transform duration-300 hover:scale-[1.02] ${t.featured ? "bg-accent text-paper" : "border border-white/25 text-on-ink hover:border-accent hover:text-accent"}`}>
-              Рассчитать в этой комплектации
-            </button>
-          </article>
-        ))
-      }
-    </div>
+          ))
+        }
+      </dl>
 
-    <!-- На цену влияет + финансирование/безопасность -->
-    <div class="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-[5fr_7fr]">
-      <div class="rounded-[24px] border border-white/10 bg-white/[0.02] p-7">
-        <p class="eyebrow text-on-ink/40">На итоговую цену влияет</p>
-        <p class="mt-4 text-[15px] leading-relaxed text-on-ink/70">{factors}</p>
-        <p class="mt-4 text-sm text-on-ink/50">Считаем по вашему проекту и участку — без «средней температуры».</p>
-      </div>
-      <div class="glass hairline-top rounded-[24px] p-7">
-        <p class="eyebrow text-on-ink/40">Оплата и безопасность</p>
-        <ul class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <!-- Финансирование и безопасность -->
+      <div class="glass hairline-top self-start rounded-[28px] p-8 sm:p-9">
+        <h3 class="font-[var(--font-display)] text-2xl text-on-ink">Оплата и безопасность</h3>
+        <p class="mt-4 text-[15px] leading-relaxed text-on-ink/70">
+          Платите официально и по факту этапов. Работаем с банками по ипотеке на
+          строительство частного дома — с господдержкой и семейной программой.
+        </p>
+        <ul class="mt-6 space-y-3.5 border-t border-white/10 pt-6">
           {
-            finance.map((f) => (
-              <li class="flex items-baseline gap-2.5 text-sm text-on-ink/85">
-                <span class="h-1.5 w-1.5 shrink-0 translate-y-1.5 rounded-full bg-accent" />
-                {f}
+            finance.map((it) => (
+              <li class="flex items-baseline gap-3 text-sm text-on-ink/85">
+                <span class="h-1.5 w-1.5 shrink-0 translate-y-1 rounded-full bg-accent" />
+                {it}
               </li>
             ))
           }
         </ul>
-        <button type="button" data-quiz="smeta" class="mt-7 inline-flex w-full items-center justify-center rounded-full bg-accent px-6 py-3.5 text-base font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">
+        <button
+          type="button"
+          data-quiz="smeta"
+          class="mt-7 inline-flex w-full items-center justify-center rounded-full bg-accent px-6 py-3.5 text-base font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]"
+        >
           Рассчитать стоимость дома
         </button>
       </div>
