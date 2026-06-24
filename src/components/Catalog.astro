@@ -518,7 +518,7 @@ const payload = {
   type Plan = { floor: string; src: string };
   type Img = { src: string; alt: string };
   type P = { code: string; name: string; material: string; materialLabel: string; area: number; floors: number; price: string; image: string; alt: string; description: string; summary: string; hook: string; tag?: string; specs: Spec[]; longDescription?: string[]; features?: string[]; gallery?: Img[]; plans?: Plan[] };
-  type Stage = { label: string; icon: string; heading: string; items: { t: string; d: string }[]; badge?: string; photo?: string; photoCeramic?: string };
+  type Stage = { label: string; icon: string; heading: string; items: { t: string; d: string }[]; badge?: string; photo?: string; photoCeramic?: string; photoTimber?: string };
   type Payload = { groups: { id: string; label: string; note: string; codes: string[] }[]; projects: Record<string, P>; interiors: Img[]; defaultFeatures: string[]; stages: Stage[] };
 
   const root = document.querySelector<HTMLElement>("#catalog");
@@ -860,7 +860,7 @@ const payload = {
     let stageMaterial = "timber";
     const setStage = (i: number) => {
       const s = data.stages[i];
-      const photo = stageMaterial === "ceramic" && s.photoCeramic ? s.photoCeramic : s.photo;
+      const photo = stageMaterial === "ceramic" ? (s.photoCeramic ?? s.photo) : (s.photoTimber ?? s.photo);
       stagesTabs.querySelectorAll<HTMLElement>("[data-stagetab]").forEach((b, n) => {
         const on = n === i;
         b.setAttribute("aria-selected", String(on));

@@ -55,6 +55,7 @@ export const INCLUDE_STAGES: {
   badge?: string;
   photo?: string;
   photoCeramic?: string;
+  photoTimber?: string;
 }[] = [
   {
     label: "Проектирование",
@@ -137,6 +138,7 @@ export const INCLUDE_STAGES: {
   },
   {
     label: "Сборка",
+    photoTimber: "/images/stages/sborka.webp",
     icon: '<path d="M14 7l3 3M3 21l8-8M14 7l4-4 3 3-4 4-3-3z" stroke-linecap="round" stroke-linejoin="round"/>',
     heading: "Сборка бригадой с авторским надзором",
     badge: "Гарантия 25 лет по договору",
