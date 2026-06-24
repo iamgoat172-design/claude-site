@@ -54,6 +54,7 @@ export const INCLUDE_STAGES: {
   items: { t: string; d: string }[];
   badge?: string;
   photo?: string;
+  photoCeramic?: string;
 }[] = [
   {
     label: "Проектирование",
@@ -98,6 +99,7 @@ export const INCLUDE_STAGES: {
   {
     label: "Стеновой комплект",
     photo: "/images/stages/steny-brus.webp",
+    photoCeramic: "/images/stages/steny-ceramic.webp",
     icon: '<rect x="3" y="5" width="18" height="14" rx="1"/><path d="M3 10h18M3 14h18M10 5v14" stroke-linecap="round"/>',
     heading: "Клееный брус собственного производства",
     badge: "Свой лес — Вологодская область",
@@ -111,6 +113,7 @@ export const INCLUDE_STAGES: {
   {
     label: "Кровля",
     photo: "/images/stages/krovla.webp",
+    photoCeramic: "/images/stages/krovla-ceramic.webp",
     icon: '<path d="M3 12 12 4l9 8" stroke-linejoin="round"/><path d="M5 11v8h14v-8" stroke-linejoin="round"/>',
     heading: "Тёплая кровля в составе дома",
     items: [

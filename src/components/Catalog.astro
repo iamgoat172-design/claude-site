@@ -518,7 +518,7 @@ const payload = {
   type Plan = { floor: string; src: string };
   type Img = { src: string; alt: string };
   type P = { code: string; name: string; material: string; materialLabel: string; area: number; floors: number; price: string; image: string; alt: string; description: string; summary: string; hook: string; tag?: string; specs: Spec[]; longDescription?: string[]; features?: string[]; gallery?: Img[]; plans?: Plan[] };
-  type Stage = { label: string; icon: string; heading: string; items: { t: string; d: string }[]; badge?: string; photo?: string };
+  type Stage = { label: string; icon: string; heading: string; items: { t: string; d: string }[]; badge?: string; photo?: string; photoCeramic?: string };
   type Payload = { groups: { id: string; label: string; note: string; codes: string[] }[]; projects: Record<string, P>; interiors: Img[]; defaultFeatures: string[]; stages: Stage[] };
 
   const root = document.querySelector<HTMLElement>("#catalog");
@@ -857,15 +857,17 @@ const payload = {
     const imgCard = (g: Img, cls: string) => `<figure class="overflow-hidden rounded-2xl border border-white/10 ${cls}"><img src="${g.src}" alt="${g.alt}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.04]"></figure>`;
 
     // Этапы «что входит» (табы)
+    let stageMaterial = "timber";
     const setStage = (i: number) => {
       const s = data.stages[i];
+      const photo = stageMaterial === "ceramic" && s.photoCeramic ? s.photoCeramic : s.photo;
       stagesTabs.querySelectorAll<HTMLElement>("[data-stagetab]").forEach((b, n) => {
         const on = n === i;
         b.setAttribute("aria-selected", String(on));
       });
       stagesPanel.innerHTML = `<div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
         <div class="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-2xl border border-white/10 bg-ink-2">
-          ${s.photo ? `<img src="${s.photo}" alt="${s.label}" loading="lazy" class="absolute inset-0 h-full w-full object-cover"><span class="absolute inset-0 bg-gradient-to-t from-ink/55 to-transparent"></span>` : `<div class="px-6 text-center text-on-ink/40"><svg class="mx-auto h-12 w-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">${s.icon}</svg><p class="mt-3 text-xs">Фото этапа · ${s.label} (заглушка)</p></div>`}
+          ${photo ? `<img src="${photo}" alt="${s.label}" loading="lazy" class="absolute inset-0 h-full w-full object-cover"><span class="absolute inset-0 bg-gradient-to-t from-ink/55 to-transparent"></span>` : `<div class="px-6 text-center text-on-ink/40"><svg class="mx-auto h-12 w-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">${s.icon}</svg><p class="mt-3 text-xs">Фото этапа · ${s.label} (заглушка)</p></div>`}
           ${s.badge ? `<div class="absolute inset-x-4 bottom-4 flex items-center gap-2 rounded-xl border border-accent/30 bg-accent/15 px-4 py-3 text-sm text-accent-soft backdrop-blur-md"><svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>${s.badge}</div>` : ""}
         </div>
         <div>
@@ -907,6 +909,7 @@ const payload = {
 
       const feats = p.features && p.features.length ? p.features : data.defaultFeatures;
       mFeats.innerHTML = feats.map((f) => `<li class="rounded-full border border-white/12 bg-white/[0.03] px-3.5 py-1.5 text-xs text-on-ink/75">${f}</li>`).join("");
+      stageMaterial = p.material;
       renderStages();
 
       // Визуализации — все внешние кадры (первый крупный, если их несколько)
