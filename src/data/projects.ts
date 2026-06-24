@@ -53,6 +53,7 @@ export const INCLUDE_STAGES: {
   heading: string;
   items: { t: string; d: string }[];
   badge?: string;
+  photo?: string;
 }[] = [
   {
     label: "Проектирование",
