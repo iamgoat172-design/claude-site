@@ -88,6 +88,7 @@ export const INCLUDE_STAGES: {
   {
     label: "Фундамент",
     photo: "/images/stages/fundament-brus.webp",
+    photoCeramic: "/images/stages/fundament.webp",
     icon: '<path d="M3 17l9 4 9-4M3 12l9 4 9-4" stroke-linejoin="round"/><path d="M12 3 3 7l9 4 9-4-9-4z" stroke-linejoin="round"/>',
     heading: "Фундамент под ваш грунт и проект",
     items: [
