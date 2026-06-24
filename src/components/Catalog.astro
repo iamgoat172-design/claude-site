@@ -628,11 +628,15 @@ const payload = {
     const layoutCover = (center: number) => {
       Array.from(list.querySelectorAll<HTMLElement>("[data-select]")).forEach((card, i) => {
         const off = i - center, a = Math.abs(off);
-        card.style.transform = `translate(-50%,-50%) translateX(${off * 52}%) translateZ(${-a * 220}px) rotateY(${off * -34}deg) scale(${off === 0 ? 1 : 0.86})`;
-        card.style.opacity = a > 2 ? "0" : "1";
+        card.style.transform = `translate(-50%,-50%) translateX(${off * 50}%) translateZ(${-a * 230}px) rotateY(${off * -30}deg) scale(${off === 0 ? 1.05 : 0.82})`;
+        card.style.opacity = a > 2 ? "0" : a === 0 ? "1" : a === 1 ? "0.95" : "0.78";
         card.style.zIndex = String(100 - a);
         card.style.pointerEvents = a > 2 ? "none" : "auto";
-        card.style.filter = off === 0 ? "none" : "brightness(.62)";
+        card.style.filter = off === 0 ? "none" : `brightness(${a === 1 ? 0.82 : 0.6}) saturate(0.96)`;
+        card.classList.toggle("is-active", off === 0);
+        card.style.boxShadow = off === 0
+          ? "0 36px 90px rgba(0,0,0,.62), 0 0 0 1.5px rgba(200,165,120,.55), 0 0 70px rgba(176,136,90,.4)"
+          : "0 24px 70px rgba(0,0,0,.5)";
       });
     };
     const selectProject = (code: string) => {
@@ -660,11 +664,23 @@ const payload = {
       <span class="absolute left-2 top-2 rounded-full bg-ink/50 px-2 py-0.5 text-[10px] text-on-ink/80 backdrop-blur-md">${p.code}</span>
       <span class="absolute inset-x-0 bottom-0 p-2.5"><span class="block truncate font-[var(--font-display)] text-sm text-on-ink">${p.name}</span><span class="tnum text-[11px] text-on-ink/60">${p.area} м²</span></span>
     </button>`;
-    const coverCard = (p: P, active: boolean) => `<button type="button" data-select="${p.code}" role="option" aria-selected="${active}" class="absolute left-1/2 top-1/2 aspect-[4/3] w-[clamp(240px,40vw,560px)] overflow-hidden rounded-[24px] border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,.55)] transition-[transform,opacity,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform">
-      <img src="${p.image}" alt="${p.alt}" class="absolute inset-0 h-full w-full object-cover">
-      <span class="absolute inset-0 bg-gradient-to-t from-ink/85 to-transparent"></span>
-      <span class="absolute left-3 top-3 rounded-full bg-ink/50 px-2.5 py-1 text-[10px] text-on-ink/80 backdrop-blur-md">${p.code}</span>
-      <span class="absolute inset-x-0 bottom-0 p-4"><span class="block font-[var(--font-display)] text-lg text-on-ink">${p.name}</span><span class="block text-xs text-accent-soft">${p.hook}</span></span>
+    const coverCard = (p: P, active: boolean) => `<button type="button" data-select="${p.code}" role="option" aria-selected="${active}" class="group absolute left-1/2 top-1/2 aspect-[4/3] w-[clamp(260px,42vw,580px)] cursor-pointer overflow-hidden rounded-[24px] border border-white/10 transition-[transform,opacity,filter,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform">
+      <img src="${p.image}" alt="${p.alt}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-[.is-active]:scale-[1.06]">
+      <span class="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/15 to-transparent"></span>
+      <span class="absolute left-4 top-4 flex items-center gap-2">
+        <span class="rounded-full border border-white/20 bg-ink/45 px-2.5 py-1 text-[10px] tracking-wide text-on-ink/90 backdrop-blur-md">${p.code}</span>
+        ${p.tag ? `<span class="rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold text-paper shadow-[0_4px_14px_rgba(176,136,90,.45)]">${p.tag}</span>` : ""}
+      </span>
+      <span class="absolute right-4 top-4 inline-flex translate-y-1 items-center gap-1.5 rounded-full bg-accent px-3.5 py-1.5 text-xs font-semibold text-paper opacity-0 shadow-[0_8px_24px_rgba(176,136,90,.5)] transition-all duration-300 group-[.is-active]:translate-y-0 group-[.is-active]:opacity-100">Открыть проект<svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+        <span class="flex items-end justify-between gap-3">
+          <span class="min-w-0">
+            <span class="block font-[var(--font-display)] text-xl text-on-ink sm:text-2xl">${p.name}</span>
+            <span class="mt-0.5 block truncate text-xs text-accent-soft sm:text-sm">${p.hook}</span>
+          </span>
+          <span class="tnum shrink-0 rounded-full bg-ink/45 px-3 py-1 text-xs text-on-ink/90 backdrop-blur-md">${p.area} м²</span>
+        </span>
+      </span>
     </button>`;
     const spreadCard = (p: P, i: number, total: number) => `<section data-select="${p.code}" class="relative flex h-[82vh] w-full snap-start snap-always items-end overflow-hidden">
       <img src="${p.image}" alt="${p.alt}" class="absolute inset-0 h-full w-full object-cover">
