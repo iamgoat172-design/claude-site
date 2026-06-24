@@ -48,33 +48,32 @@ const demand = [
       </p>
     </div>
 
-    <!-- 1) Lifestyle-полоса: в этих домах живут -->
-    <figure class="rise relative mt-12 overflow-hidden rounded-[28px] border border-white/10">
+    <!-- Командное фото + подпись (подпись под фото, чтобы не перекрывать лица) -->
+    <figure class="rise mt-12 overflow-hidden rounded-[28px] border border-white/10">
       <img
-        src={lifestyle}
+        src="/images/team.webp"
         data-people-photo
-        alt="Владельцы у готового дома из клееного бруса в коттеджном посёлке Подмосковья"
+        alt="Команда компании «Вологодское Зодчество»"
         loading="lazy"
         decoding="async"
-        class="h-[clamp(260px,42vh,460px)] w-full object-cover"
+        class="aspect-[16/9] w-full object-cover object-top sm:aspect-[2/1]"
       />
-      <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/45 to-transparent"></div>
-      <div class="absolute inset-0 bg-gradient-to-r from-ink/70 via-transparent to-transparent"></div>
-      <figcaption class="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-5 p-6 sm:p-10">
-        <div class="max-w-lg">
-          <p class="font-[var(--font-display)] text-2xl leading-snug text-on-ink sm:text-3xl">
-            «Дом, в котором семья живёт, а не достраивает годами»
-          </p>
-          <p class="mt-3 text-sm text-on-ink/70">
-            Сдаём готовый дом за 1–2 сезона по фиксированной смете — заезжайте и живите.
-          </p>
-        </div>
-        <button type="button" data-quiz="smeta" class="inline-flex shrink-0 items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">
-          Узнать стоимость своего дома
-          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </figcaption>
     </figure>
+    <div class="rise mt-5 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+      <div class="max-w-xl">
+        <p class="font-[var(--font-display)] text-2xl leading-snug text-on-ink sm:text-3xl">
+          Команда «Вологодского&nbsp;Зодчества»
+        </p>
+        <p class="mt-3 text-[15px] leading-relaxed text-on-ink/65">
+          Архитекторы, инженеры и прорабы, которые строят ваш дом. Вместе
+          с&nbsp;1998&nbsp;года — это и есть гарантия, что всё будет хорошо.
+        </p>
+      </div>
+      <button type="button" data-lead="individual" data-lead-title="Обсудить ваш проект" data-lead-sub="Расскажем о команде, покажем объекты и подберём решение под ваш участок." data-lead-bullets='["Закреплённая команда на ваш проект","Договор с фиксированной сметой","Оплата с юрлица на юрлицо","Гарантия 25 лет"]' data-lead-cta="Обсудить проект" class="inline-flex shrink-0 items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.02]">
+        Обсудить ваш проект
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
 
     <!-- Визуальные доказательства -->
     <div class="rise mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
