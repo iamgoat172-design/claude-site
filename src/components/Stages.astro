@@ -3,12 +3,12 @@
 import { HERO_IMAGE } from "../data/projects";
 
 const stages = [
-  { n: "01", t: "Заявка и расчёт", d: "Участок, материал, бюджет. Предварительная смета." },
-  { n: "02", t: "Проект и смета", d: "Планировки, узлы, фиксированная смета — до рубля." },
-  { n: "03", t: "Договор", d: "Сроки, этапы оплат, гарантия. Всё письменно." },
-  { n: "04", t: "Производство", d: "Брус — со своего леса, керамика — с проверенных заводов." },
-  { n: "05", t: "Стройка", d: "Фундамент, коробка, кровля, инженерия. Контроль на каждом шаге." },
-  { n: "06", t: "Сдача и ключи", d: "Проверка, документы, ключи. Гарантийное сопровождение." },
+  { n: "01", t: "Заявка и расчёт", d: "Участок, материал, бюджет. Предварительная смета.", photo: "/images/process/zayavka.webp" },
+  { n: "02", t: "Проект и смета", d: "Планировки, узлы, фиксированная смета — до рубля.", photo: "/images/process/proekt.webp" },
+  { n: "03", t: "Договор", d: "Сроки, этапы оплат, гарантия. Всё письменно.", photo: "/images/process/dogovor.webp" },
+  { n: "04", t: "Производство", d: "Брус — со своего леса, керамика — с проверенных заводов.", photo: "/images/process/proizvodstvo.webp" },
+  { n: "05", t: "Стройка", d: "Фундамент, коробка, кровля, инженерия. Контроль на каждом шаге.", photo: "/images/process/stroyka.webp" },
+  { n: "06", t: "Сдача и ключи", d: "Проверка, документы, ключи. Гарантийное сопровождение.", photo: "/images/process/sdacha.webp" },
 ];
 ---
 
@@ -34,17 +34,18 @@ const stages = [
     <ol class="mt-14 grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
       {
         stages.map((s) => (
-          <li class="rise group relative rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition-colors duration-500 hover:border-accent/30">
-            <div class="flex items-center gap-4">
-              <span class="tnum font-[var(--font-display)] text-4xl text-accent-soft sm:text-5xl">
+          <li class="rise group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] transition-colors duration-500 hover:border-accent/30">
+            <div class="relative aspect-[16/9] w-full overflow-hidden">
+              <img src={s.photo} alt={s.t} loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]" />
+              <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-transparent"></div>
+              <span class="tnum absolute left-4 top-2 font-[var(--font-display)] text-4xl text-accent-soft drop-shadow-[0_2px_8px_rgba(0,0,0,.6)] sm:text-5xl">
                 {s.n}
               </span>
-              <span class="h-px flex-1 bg-gradient-to-r from-accent/40 to-transparent" />
             </div>
-            <h3 class="mt-5 font-[var(--font-display)] text-lg text-on-ink">
-              {s.t}
-            </h3>
-            <p class="mt-2 text-sm leading-snug text-on-ink/60">{s.d}</p>
+            <div class="flex flex-1 flex-col p-6">
+              <h3 class="font-[var(--font-display)] text-lg text-on-ink">{s.t}</h3>
+              <p class="mt-2 text-sm leading-snug text-on-ink/60">{s.d}</p>
+            </div>
           </li>
         ))
       }
