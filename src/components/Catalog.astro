@@ -373,10 +373,21 @@ const payload = {
           <p class="mt-5 rounded-2xl border border-white/10 bg-white/[0.02] p-5 text-sm text-on-ink/55">Планировки по этому проекту пришлём по запросу — вместе со сметой.</p>
         </section>
 
-        <!-- Видеообзор (заглушка) -->
-        <section>
-          <h4 class="eyebrow text-on-ink/40">Видеообзор</h4>
-          <div class="relative mt-5 grid aspect-video place-items-center overflow-hidden rounded-2xl border border-white/10">
+        <!-- Видеообзор дома -->
+        <section data-modal-video-wrap>
+          <h4 class="eyebrow text-on-ink/40">Видеообзор дома</h4>
+          <!-- Реальное видео (фасад → плеер по клику) -->
+          <figure data-modal-video-real hidden class="group relative mt-5 aspect-video overflow-hidden rounded-2xl border border-white/10 bg-ink-2">
+            <img data-modal-video-poster src="" alt="" class="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]" />
+            <div class="absolute inset-0 bg-ink/35"></div>
+            <button type="button" data-modal-video-play aria-label="Смотреть видеообзор дома" class="absolute inset-0 z-10 grid place-items-center">
+              <span class="grid h-16 w-16 place-items-center rounded-full border border-white/25 bg-white/10 backdrop-blur-md transition-transform duration-300 group-hover:scale-105">
+                <svg class="ml-1 h-6 w-6 text-on-ink" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </button>
+          </figure>
+          <!-- Заглушка, если видео нет -->
+          <div data-modal-video-stub hidden class="relative mt-5 grid aspect-video place-items-center overflow-hidden rounded-2xl border border-white/10">
             <img data-modal-video-bg src="" alt="" class="absolute inset-0 h-full w-full object-cover opacity-30 blur-[2px]" />
             <div class="absolute inset-0 bg-ink/55"></div>
             <div class="relative z-10 text-center">
@@ -517,7 +528,7 @@ const payload = {
   type Spec = { label: string; value: string };
   type Plan = { floor: string; src: string };
   type Img = { src: string; alt: string };
-  type P = { code: string; name: string; material: string; materialLabel: string; area: number; floors: number; price: string; image: string; alt: string; description: string; summary: string; hook: string; tag?: string; specs: Spec[]; longDescription?: string[]; features?: string[]; gallery?: Img[]; plans?: Plan[] };
+  type P = { code: string; name: string; material: string; materialLabel: string; area: number; floors: number; price: string; image: string; alt: string; description: string; summary: string; hook: string; tag?: string; specs: Spec[]; longDescription?: string[]; features?: string[]; gallery?: Img[]; plans?: Plan[]; video?: string };
   type Stage = { label: string; icon: string; heading: string; items: { t: string; d: string }[]; badge?: string; photo?: string; photoCeramic?: string; photoTimber?: string };
   type Payload = { groups: { id: string; label: string; note: string; codes: string[] }[]; projects: Record<string, P>; interiors: Img[]; defaultFeatures: string[]; stages: Stage[] };
 
@@ -839,6 +850,11 @@ const payload = {
     const scroll = modal.querySelector<HTMLElement>("[data-modal-scroll]")!;
     const hero = modal.querySelector<HTMLImageElement>("[data-modal-hero]")!;
     const videoBg = modal.querySelector<HTMLImageElement>("[data-modal-video-bg]")!;
+    const videoReal = modal.querySelector<HTMLElement>("[data-modal-video-real]")!;
+    const videoStub = modal.querySelector<HTMLElement>("[data-modal-video-stub]")!;
+    const videoPoster = modal.querySelector<HTMLImageElement>("[data-modal-video-poster]")!;
+    const videoPlay = modal.querySelector<HTMLButtonElement>("[data-modal-video-play]")!;
+    let modalVideoSrc = "";
     const mSpecs = modal.querySelector<HTMLElement>("[data-modal-specs]")!;
     const mFeats = modal.querySelector<HTMLElement>("[data-modal-feats]")!;
     const stagesTabs = modal.querySelector<HTMLElement>("[data-stages-tabs]")!;
@@ -934,6 +950,18 @@ const payload = {
         render(0);
       } else { plansWrap.hidden = true; plansEmpty.hidden = false; }
 
+      // Видеообзор дома: реальное видео (фасад) или заглушка
+      videoReal.querySelector("video")?.remove();
+      if (p.video) {
+        modalVideoSrc = p.video;
+        videoPoster.src = exts[0].src; videoPoster.alt = `Видеообзор — ${p.name}`;
+        videoReal.hidden = false; videoStub.hidden = true;
+      } else {
+        modalVideoSrc = "";
+        videoBg.src = exts[0].src;
+        videoReal.hidden = true; videoStub.hidden = false;
+      }
+
       scroll.scrollTop = 0;
       modal.hidden = false; document.body.style.overflow = "hidden";
       requestAnimationFrame(() => { overlay.style.opacity = "1"; dialog.style.opacity = "1"; dialog.style.transform = "translateY(0)"; });
@@ -941,9 +969,21 @@ const payload = {
     };
     const closeModal = () => {
       overlay.style.opacity = "0"; dialog.style.opacity = "0"; dialog.style.transform = "translateY(16px)";
+      videoReal.querySelector("video")?.remove(); // остановить и выгрузить плеер
       const done = () => { modal.hidden = true; document.body.style.overflow = ""; lastFocused?.focus(); };
       if (reduce) done(); else setTimeout(done, 280);
     };
+
+    // Видеообзор — подгружаем <video> по клику (фасад)
+    videoPlay.addEventListener("click", () => {
+      if (!modalVideoSrc || videoReal.querySelector("video")) return;
+      const v = document.createElement("video");
+      v.src = modalVideoSrc;
+      v.controls = true; v.autoplay = true; v.playsInline = true; v.preload = "metadata";
+      v.className = "absolute inset-0 z-20 h-full w-full bg-ink object-cover";
+      videoReal.appendChild(v);
+      v.play().catch(() => {});
+    });
 
     // Делегирование: «Открыть проект» — работает и для динамических разворотов/карусели
     root.addEventListener("click", (e) => { if ((e.target as HTMLElement).closest("[data-open]")) openModal(selected); });

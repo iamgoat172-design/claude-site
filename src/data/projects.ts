@@ -33,6 +33,7 @@ export interface Project {
   features?: string[]; // комплектация/особенности
   gallery?: { src: string; alt: string }[]; // доп. внешние кадры (помимо image)
   plans?: { floor: string; src: string }[]; // планировки этажей
+  video?: string; // видеообзор дома (mp4 в /public/videos)
 }
 
 // Базовая комплектация — показываем в поп-апе, если у проекта нет своей.
@@ -274,6 +275,7 @@ export const projects: Project[] = [
       { floor: "1 этаж · 208,98 м²", src: "/images/projects/grand/plan-1.webp" },
       { floor: "2 этаж · 155,64 м²", src: "/images/projects/grand/plan-2.webp" },
     ],
+    video: "/videos/grand.mp4",
     specs: [
       { label: "Площадь по осям", value: "365 м²" },
       { label: "1 этаж", value: "208,98 м²" },
@@ -320,6 +322,7 @@ export const projects: Project[] = [
       { floor: "1 этаж · 111,15 м²", src: "/images/projects/viking/plan-1.webp" },
       { floor: "2 этаж · 83,92 м²", src: "/images/projects/viking/plan-2.webp" },
     ],
+    video: "/videos/viking.mp4",
     specs: [
       { label: "Площадь по осям", value: "195 м²" },
       { label: "1 этаж", value: "111,15 м²" },
@@ -366,6 +369,7 @@ export const projects: Project[] = [
       { floor: "1 этаж", src: "/images/projects/eli/plan-1.webp" },
       { floor: "2 этаж", src: "/images/projects/eli/plan-2.webp" },
     ],
+    video: "/videos/eli.mp4",
     specs: [
       { label: "Площадь по осям", value: "628 м²" },
       { label: "Материал стен", value: "брус «Премиум» 200 мм" },
@@ -413,6 +417,7 @@ export const projects: Project[] = [
       { floor: "1 этаж · 227,81 м²", src: "/images/projects/imperial/plan-1.webp" },
       { floor: "2 этаж · 180,11 м²", src: "/images/projects/imperial/plan-2.webp" },
     ],
+    video: "/videos/imperial.mp4",
     specs: [
       { label: "Площадь по осям", value: "408 м²" },
       { label: "Материал стен", value: "брус «Премиум» 200 мм" },
@@ -422,75 +427,6 @@ export const projects: Project[] = [
       { label: "Террасы", value: "1" },
       { label: "Этажи", value: "2" },
       { label: "Срок", value: "1–2 сезона" },
-    ],
-  },
-  {
-    code: "ВЗ-271",
-    name: "Сосновый Бор",
-    material: "timber",
-    area: 268,
-    floors: 2,
-    price: "от 18,9 млн ₽",
-    image: `${IMG_BASE}/hf_20260623_175330_bfdbd186-d6fa-4e82-b65b-4323aa4657c4_min.webp`,
-    alt: "Двухэтажный дом из клееного бруса с панорамным остеклением в сосновом лесу",
-    summary: "4 спальни · 3 санузла · клееный брус",
-    hook: "Камерный дом для леса и тишины",
-    tag: "Хит",
-    description:
-      "Дом из клееного бруса с открытой гостиной двойного света и панорамным остеклением на лес. Спальни на втором этаже, кабинет и гостевая — на первом.",
-    specs: [
-      { label: "Спальни", value: "4" },
-      { label: "Санузлы", value: "3" },
-      { label: "Потолки", value: "до 6,4 м" },
-      { label: "Терраса", value: "42 м²" },
-      { label: "Этажи", value: "2" },
-      { label: "Срок", value: "1 сезон" },
-    ],
-  },
-  {
-    code: "ВЗ-312",
-    name: "Терраса",
-    material: "timber",
-    area: 305,
-    floors: 2,
-    price: "от 23,4 млн ₽",
-    image: `${IMG_BASE}/hf_20260623_175332_3ab3b7f0-1a1e-4ae5-ba01-2ca584a13e24_min.webp`,
-    alt: "Дом из клееного бруса с большой консольной террасой в осеннем лесу",
-    summary: "5 спален · 3 санузла · клееный брус",
-    hook: "Жизнь на огромной террасе у склона",
-    tag: "С террасой",
-    description:
-      "Большая консольная терраса и второй свет над гостиной. Мастер-спальня с гардеробной и видовым остеклением, отдельная зона для гостей.",
-    specs: [
-      { label: "Спальни", value: "5" },
-      { label: "Санузлы", value: "3" },
-      { label: "Потолки", value: "до 7,2 м" },
-      { label: "Терраса", value: "68 м²" },
-      { label: "Этажи", value: "2" },
-      { label: "Срок", value: "1 сезон" },
-    ],
-  },
-  {
-    code: "ВЗ-258",
-    name: "Лесная Вилла",
-    material: "timber",
-    area: 254,
-    floors: 2,
-    price: "по запросу",
-    image: `${IMG_BASE}/hf_20260623_175732_8d3e23f2-bc69-4c59-becf-50bf230140ff_min.webp`,
-    alt: "Дом из клееного бруса с плоской кровлей и панорамным остеклением в лесу",
-    summary: "4 спальни · 4 санузла · клееный брус",
-    hook: "Стекло в пол и плоская кровля",
-    tag: "Минимализм",
-    description:
-      "Современная вилла с плоской кровлей и сплошным остеклением первого этажа. Открытый план общественной зоны, приватное крыло спален.",
-    specs: [
-      { label: "Спальни", value: "4" },
-      { label: "Санузлы", value: "4" },
-      { label: "Потолки", value: "до 3,3 м" },
-      { label: "Терраса", value: "55 м²" },
-      { label: "Этажи", value: "2" },
-      { label: "Срок", value: "по проекту" },
     ],
   },
   // — Тёплая керамика —
