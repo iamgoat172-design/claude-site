@@ -216,9 +216,9 @@ export const PORTFOLIO = {
     `${IMG_BASE}/hf_20260623_165833_7c4e9368-fc92-4dbb-bfdf-7f43159f7edc_min.webp`,
   ],
   finals: [
-    { src: `${IMG_BASE}/hf_20260623_174400_28c37db3-d21b-4865-b05b-969d940c1629_min.webp`, t: "Вечерний вид" },
-    { src: `${IMG_BASE}/hf_20260623_175403_ec81cfd3-d515-4cc5-b1ba-2950b7e1e857_min.webp`, t: "Участок с высоты" },
-    { src: `${IMG_BASE}/hf_20260623_172327_ee8ff53d-5464-4174-bd00-4fb91909d224_min.webp`, t: "Детали и материалы" },
+    { src: `${IMG_BASE}/hf_20260630_134416_059c48c0-cf58-4959-85a7-e6736c6026d6_min.webp`, t: "Вечерний вид" },
+    { src: `${IMG_BASE}/hf_20260630_134429_5694dbaf-f2fb-422d-991c-f0ba95cbf2c5_min.webp`, t: "Участок с высоты" },
+    { src: `${IMG_BASE}/hf_20260630_134437_b9dc1034-e009-4326-b6fe-cb1067c50a77_min.webp`, t: "Детали и материалы" },
   ],
 };
 
