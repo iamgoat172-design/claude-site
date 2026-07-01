@@ -445,9 +445,8 @@ export const projects: Project[] = [
     hook: "Одноэтажный дом на 5 спален у воды",
     tag: "5 спален",
     gallery: [
-      { src: "/images/projects/nordika/ext-1.webp", alt: "«Нордика» — главный фасад с террасой" },
-      { src: "/images/projects/nordika/ext-2.webp", alt: "«Нордика» — вид со стороны участка" },
-      { src: "/images/projects/nordika/ext-3.webp", alt: "«Нордика» — ракурс у воды" },
+      { src: "/images/projects/nordika/ext-1.webp", alt: "«Нордика» — главный фасад с террасой под перголой" },
+      { src: "/images/projects/nordika/ext-2.webp", alt: "«Нордика» — фронтальный вид с террасой" },
     ],
     plans: [
       { floor: "Планировка · 265,15 м²", src: "/images/projects/nordika/plan-1.webp" },
