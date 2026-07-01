@@ -521,7 +521,7 @@ export const projects: Project[] = [
     area: 491,
     floors: 2,
     price: "по запросу",
-    image: "/images/projects/poseidon/ext-1.webp",
+    image: `${IMG_BASE}/hf_20260701_132841_69eec09a-3268-4164-a8c9-328e1485de78_min.webp`,
     alt: "Большой двухэтажный дом из клееного бруса «Посейдон» с широкими свесами кровли, террасами и панорамным остеклением",
     description:
       "Большой семейный дом из клееного бруса 491 м²: спокойная горизонтальная архитектура с широкими свесами кровли, просторные террасы и панорамное остекление общественной зоны.",
@@ -542,9 +542,9 @@ export const projects: Project[] = [
       "Фундамент по геологии участка",
     ],
     gallery: [
-      { src: "/images/projects/poseidon/ext-1.webp", alt: "«Посейдон» — главный фасад" },
-      { src: "/images/projects/poseidon/ext-2.webp", alt: "«Посейдон» — боковой ракурс" },
-      { src: "/images/projects/poseidon/ext-3.webp", alt: "«Посейдон» — терраса" },
+      { src: `${IMG_BASE}/hf_20260701_132841_69eec09a-3268-4164-a8c9-328e1485de78_min.webp`, alt: "«Посейдон» — главный фасад" },
+      { src: `${IMG_BASE}/hf_20260701_132718_c8dee90e-2c35-41e8-a009-52a6cfb3a6f4_min.webp`, alt: "«Посейдон» — боковой ракурс" },
+      { src: `${IMG_BASE}/hf_20260701_132733_fb7f472e-6b7e-4599-9d3a-c2781e0cb865_min.webp`, alt: "«Посейдон» — вечерний вид с террасой" },
     ],
     specs: [
       { label: "Площадь по осям", value: "491 м²" },
