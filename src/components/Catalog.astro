@@ -614,8 +614,13 @@ const payload = {
       });
     };
     const layoutCover = (center: number) => {
-      Array.from(list.querySelectorAll<HTMLElement>("[data-select]")).forEach((card, i) => {
-        const off = i - center, a = Math.abs(off);
+      const cards = Array.from(list.querySelectorAll<HTMLElement>("[data-select]"));
+      const n = cards.length;
+      cards.forEach((card, i) => {
+        // Циклическое смещение — карусель «бесконечная»: соседи заворачиваются по кругу
+        let off = i - center;
+        if (n > 2) { if (off > n / 2) off -= n; else if (off < -n / 2) off += n; }
+        const a = Math.abs(off);
         card.style.transform = `translate(-50%,-50%) translateX(${off * 50}%) translateZ(${-a * 230}px) rotateY(${off * -30}deg) scale(${off === 0 ? 1 : 0.82})`;
         card.style.opacity = a > 2 ? "0" : a === 0 ? "1" : a === 1 ? "0.95" : "0.78";
         card.style.zIndex = String(100 - a);
