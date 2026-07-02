@@ -939,18 +939,18 @@ const payload = {
         mVis.innerHTML = exts.map((g, i) => imgCard(g, i === 0 && exts.length > 1 ? "sm:col-span-2 aspect-[16/9]" : "aspect-[4/3]")).join("");
       } else mVisWrap.hidden = true;
 
-      // Интерьеры
-      mIntWrap.hidden = false;
-      mInt.innerHTML = data.interiors.map((g) => imgCard(g, "aspect-[4/3]")).join("");
+      // Интерьеры — убраны из карточек
+      mIntWrap.hidden = true;
 
-      // Планировки
+      // Планировки. Подписи: 1 этаж → «Вариант N», 2 этажа → «Этаж N».
+      const planLabel = (idx: number) => (p.floors === 1 ? `Вариант ${idx + 1}` : `Этаж ${idx + 1}`);
       if (p.plans && p.plans.length) {
         plansWrap.hidden = false; plansEmpty.hidden = true;
         const render = (idx: number) => {
-          planImg.src = p.plans![idx].src; planImg.alt = `Планировка — ${p.plans![idx].floor}`;
+          planImg.src = p.plans![idx].src; planImg.alt = `Планировка — ${planLabel(idx)}`;
           planTabs.querySelectorAll<HTMLElement>("[data-plan]").forEach((b, i2) => { const on = i2 === idx; b.className = `rounded-full border px-4 py-2 text-sm transition-colors ${on ? "border-accent bg-accent/15 text-accent-soft" : "border-white/15 text-on-ink/60 hover:text-on-ink"}`; });
         };
-        planTabs.innerHTML = p.plans.map((pl, idx) => `<button type="button" data-plan="${idx}" class="rounded-full border px-4 py-2 text-sm transition-colors ${idx === 0 ? "border-accent bg-accent/15 text-accent-soft" : "border-white/15 text-on-ink/60"}">${pl.floor}</button>`).join("");
+        planTabs.innerHTML = p.plans.map((_pl, idx) => `<button type="button" data-plan="${idx}" class="rounded-full border px-4 py-2 text-sm transition-colors ${idx === 0 ? "border-accent bg-accent/15 text-accent-soft" : "border-white/15 text-on-ink/60"}">${planLabel(idx)}</button>`).join("");
         planTabs.querySelectorAll<HTMLButtonElement>("[data-plan]").forEach((b) => b.addEventListener("click", () => render(Number(b.dataset.plan))));
         render(0);
       } else { plansWrap.hidden = true; plansEmpty.hidden = false; }

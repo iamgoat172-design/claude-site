@@ -127,7 +127,7 @@
       modal.querySelector<HTMLElement>("[data-lm-title]")!.textContent = cfg.title;
       modal.querySelector<HTMLElement>("[data-lm-sub]")!.textContent = cfg.subtitle || "";
       asideEl.textContent = cfg.title;
-      bulletsEl.innerHTML = (cfg.bullets || ["Фиксированная смета в договоре", "Оплата с юрлица на юрлицо", "Гарантия 25 лет"]).map((t) => `<li class="flex items-baseline gap-2.5 text-sm text-on-ink/85"><svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>${t}</span></li>`).join("");
+      bulletsEl.innerHTML = (cfg.bullets || ["Фиксированная смета в договоре", "Оплата с юр. лица на юр. лицо", "Гарантия 25 лет"]).map((t) => `<li class="flex items-baseline gap-2.5 text-sm text-on-ink/85"><svg class="mt-0.5 h-4 w-4 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>${t}</span></li>`).join("");
       submitLabel.textContent = cfg.cta || "Отправить заявку";
       form.reset(); ["name", "phone", "consent"].forEach((f) => err(f, "")); setMethod("phone");
       formWrap.hidden = false; successWrap.hidden = true;

@@ -141,6 +141,7 @@ export const INCLUDE_STAGES: {
   {
     label: "Сборка",
     photoTimber: "/images/stages/sborka.webp",
+    photoCeramic: "/images/stages/sborka-ceramic.webp",
     icon: '<path d="M14 7l3 3M3 21l8-8M14 7l4-4 3 3-4 4-3-3z" stroke-linecap="round" stroke-linejoin="round"/>',
     heading: "Сборка бригадой с авторским надзором",
     badge: "Гарантия 25 лет по договору",
@@ -283,7 +284,7 @@ export const projects: Project[] = [
       { label: "Материал стен", value: "брус «Премиум» 200 мм" },
       { label: "Стиль", value: "прерийный (Райт)" },
       { label: "Этажи", value: "2" },
-      { label: "Срок", value: "1–2 сезона" },
+      { label: "Срок", value: "от 9 месяцев" },
     ],
   },
   {
@@ -330,7 +331,7 @@ export const projects: Project[] = [
       { label: "Материал стен", value: "клееный брус" },
       { label: "Стиль", value: "скандинавский" },
       { label: "Этажи", value: "2" },
-      { label: "Срок", value: "1 сезон" },
+      { label: "Срок", value: "от 6 месяцев" },
     ],
   },
   {
@@ -378,7 +379,7 @@ export const projects: Project[] = [
       { label: "Спален", value: "5" },
       { label: "Террасы", value: "1" },
       { label: "Этажи", value: "2" },
-      { label: "Срок", value: "1–2 сезона" },
+      { label: "Срок", value: "от 9 месяцев" },
     ],
   },
   {
@@ -426,7 +427,7 @@ export const projects: Project[] = [
       { label: "Спальни", value: "4" },
       { label: "Террасы", value: "1" },
       { label: "Этажи", value: "2" },
-      { label: "Срок", value: "1–2 сезона" },
+      { label: "Срок", value: "от 9 месяцев" },
     ],
   },
   {
@@ -469,6 +470,7 @@ export const projects: Project[] = [
       { label: "Санузлов", value: "2" },
       { label: "Террасы", value: "1" },
       { label: "Этажи", value: "2" },
+      { label: "Срок", value: "от 9 месяцев" },
     ],
   },
   {
@@ -511,7 +513,7 @@ export const projects: Project[] = [
       { label: "Санузлов", value: "2" },
       { label: "Террасы", value: "1" },
       { label: "Этажи", value: "2" },
-      { label: "Срок", value: "3 месяца" },
+      { label: "Срок", value: "от 6 месяцев" },
     ],
   },
   {
@@ -550,6 +552,7 @@ export const projects: Project[] = [
       { label: "Площадь по осям", value: "491 м²" },
       { label: "Материал стен", value: "клееный брус" },
       { label: "Этажи", value: "2" },
+      { label: "Срок", value: "от 9 месяцев" },
     ],
   },
   {
@@ -588,6 +591,7 @@ export const projects: Project[] = [
       { label: "Площадь по осям", value: "322 м²" },
       { label: "Материал стен", value: "клееный брус" },
       { label: "Этажи", value: "2" },
+      { label: "Срок", value: "от 9 месяцев" },
     ],
   },
   // — Тёплая керамика —
@@ -631,7 +635,7 @@ export const projects: Project[] = [
       { label: "Санузлов", value: "3" },
       { label: "Террасы", value: "2" },
       { label: "Этажи", value: "2" },
-      { label: "Срок", value: "3 месяца" },
+      { label: "Срок", value: "от 9 месяцев" },
     ],
   },
   {
@@ -670,6 +674,7 @@ export const projects: Project[] = [
       { label: "Площадь по осям", value: "922 м²" },
       { label: "Материал стен", value: "тёплая керамика" },
       { label: "Этажи", value: "2" },
+      { label: "Срок", value: "от 9 месяцев" },
     ],
   },
   {
@@ -700,7 +705,7 @@ export const projects: Project[] = [
       { label: "Спальни", value: "5" },
       { label: "Кровля", value: "фальц" },
       { label: "Этажи", value: "1" },
-      { label: "Срок", value: "2 сезона" },
+      { label: "Срок", value: "от 6 месяцев" },
     ],
   },
   {
@@ -728,7 +733,7 @@ export const projects: Project[] = [
       { label: "Материал стен", value: "тёплая керамика" },
       { label: "Кровля", value: "плоская" },
       { label: "Этажи", value: "1" },
-      { label: "Срок", value: "1–2 сезона" },
+      { label: "Срок", value: "от 6 месяцев" },
     ],
   },
   {
@@ -756,7 +761,7 @@ export const projects: Project[] = [
       { label: "Материал стен", value: "тёплая керамика" },
       { label: "Кровля", value: "плоская" },
       { label: "Этажи", value: "1" },
-      { label: "Срок", value: "2 сезона" },
+      { label: "Срок", value: "от 9 месяцев" },
     ],
   },
   {
@@ -784,7 +789,7 @@ export const projects: Project[] = [
       { label: "Материал стен", value: "тёплая керамика" },
       { label: "Фасад", value: "тёмный кирпич" },
       { label: "Этажи", value: "2" },
-      { label: "Срок", value: "2 сезона" },
+      { label: "Срок", value: "от 6 месяцев" },
     ],
   },
   {
@@ -814,7 +819,7 @@ export const projects: Project[] = [
       { label: "Материал стен", value: "тёплая керамика" },
       { label: "Фасад", value: "кирпич + штукатурка" },
       { label: "Этажи", value: "2" },
-      { label: "Срок", value: "2 сезона" },
+      { label: "Срок", value: "от 6 месяцев" },
     ],
   },
 ];

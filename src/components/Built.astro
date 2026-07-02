@@ -2,11 +2,11 @@
 // Секция 7 — Построенные дома. Асимметричная галерея.
 // Реальные фотографии сданных объектов с участков в коттеджных посёлках.
 const g = [
-  { src: "/images/built/house-1.webp", label: "Резиденция · 480 м²", place: "Одинцовский р-н, МО", cls: "sm:col-span-2 sm:row-span-2" },
+  { src: "/images/built/house-1.webp", label: "Поместье Ели · 628 м²", place: "Одинцовский р-н, МО", cls: "sm:col-span-2 sm:row-span-2" },
   { src: "/images/built/house-2.webp", label: "Семейный дом · 365 м²", place: "Истринский р-н, МО", cls: "" },
   { src: "/images/built/house-3.webp", label: "Дом из бруса · 290 м²", place: "Выборгский р-н, ЛО", cls: "" },
   { src: "/images/built/house-4.webp", label: "Современный дом · 320 м²", place: "Всеволожский р-н, ЛО", cls: "" },
-  { src: "/images/built/house-5.webp", label: "Дом в лесу · 310 м²", place: "Дмитровский р-н, МО", cls: "" },
+  { src: "/images/built/house-5.webp", label: "Монблан · 301 м²", place: "Дмитровский р-н, МО", cls: "" },
   { src: "/images/built/house-6.webp", label: "Шале · 340 м²", place: "Приозерский р-н, ЛО", cls: "" },
   { src: "/images/built/house-7.webp", label: "Дом с террасой · 410 м²", place: "Красногорский р-н, МО", cls: "" },
   { src: "/images/built/house-8.webp", label: "Одноэтажный · 265 м²", place: "Выборгский р-н, ЛО", cls: "" },
@@ -26,12 +26,17 @@ const g = [
           на ближайший к вам объект.
         </p>
       </div>
-      <a
-        href="#lead"
+      <button
+        type="button"
+        data-lead="tour"
+        data-lead-title="Тур по построенному объекту"
+        data-lead-sub="Договоримся о визите на ближайший к вам сданный объект — покажем дом вживую, с участка."
+        data-lead-bullets='["Визит на реальный сданный объект","Ближайший к вашему участку дом","Ответим в удобном мессенджере"]'
+        data-lead-cta="Запросить тур"
         class="inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-white/20 px-5 py-3 text-sm font-medium text-on-ink transition-colors hover:border-accent hover:text-accent sm:self-end"
       >
         Запросить тур по объекту
-      </a>
+      </button>
     </div>
 
     <div class="mt-12 grid auto-rows-[200px] grid-cols-1 gap-4 sm:grid-cols-3 lg:auto-rows-[240px]">
