@@ -1,34 +1,54 @@
 ---
-// Секция 10 — География. Московская и Ленинградская области.
-// Карта интерактивна и on-brand (без сторонних виджетов, чтобы не ломать
-// арт-направление). Точки-города кликабельны/наводимы → стеклянная карточка
-// с направлениями. Доступно с клавиатуры, уважает prefers-reduced-motion.
+// Секция 10 — География. Две симметричные колонки: Московская и
+// Ленинградская области, каждая — со своей интерактивной картой в стекле.
+// Карты on-brand (без сторонних виджетов). Пин города кликабелен/наводим →
+// стеклянная карточка с направлениями. Доступно с клавиатуры, уважает
+// prefers-reduced-motion.
 //
 // ▸ Когда появится готовый сайт и нужен «настоящий» интерактив — заменить
-//   блок <!-- MAP --> на embed (Яндекс.Карты / 2GIS). Разметка пинов и
-//   стеклянная рамка сохраняются как fallback.
+//   SVG-подложку на embed (Яндекс.Карты / 2GIS). Пины и стекло — как fallback.
 const regions = [
   {
     id: "msk",
     city: "Москва",
     name: "Московская область",
-    // координаты пина в % внутри рамки карты
-    pos: { x: 37.5, y: 58 },
+    cityPos: { x: 50, y: 50 },
     areas: [
       "Дмитровское, Рублёво-Успенское, Новорижское ш.",
       "Истринский, Одинцовский, Пушкинский районы",
       "Минское, Калужское, Ярославское направления",
+    ],
+    points: [
+      { l: "Дмитровское ш.", x: 46, y: 15 },
+      { l: "Ярославское ш.", x: 72, y: 22 },
+      { l: "Пушкинский р-н", x: 84, y: 42 },
+      { l: "Калужское ш.", x: 80, y: 70 },
+      { l: "Минское ш.", x: 58, y: 84 },
+      { l: "Одинцовский р-н", x: 40, y: 85 },
+      { l: "Рублёво-Успенское", x: 18, y: 73 },
+      { l: "Истринский р-н", x: 14, y: 52 },
+      { l: "Новорижское ш.", x: 16, y: 30 },
     ],
   },
   {
     id: "spb",
     city: "Санкт-Петербург",
     name: "Ленинградская область",
-    pos: { x: 75, y: 39 },
+    cityPos: { x: 52, y: 55 },
     areas: [
       "Всеволожский, Выборгский, Приозерский районы",
       "Курортное и Приозерское направления",
       "Ближний и средний радиус от КАД",
+    ],
+    points: [
+      { l: "Выборгское ш.", x: 30, y: 15 },
+      { l: "Приозерское ш.", x: 66, y: 16 },
+      { l: "Приозерский р-н", x: 84, y: 36 },
+      { l: "Всеволожский р-н", x: 84, y: 62 },
+      { l: "средний радиус КАД", x: 60, y: 84 },
+      { l: "ближний радиус КАД", x: 34, y: 84 },
+      { l: "Курортное напр.", x: 16, y: 58 },
+      { l: "Выборгский р-н", x: 16, y: 34 },
     ],
   },
 ];
@@ -36,95 +56,139 @@ const regions = [
 
 <section id="geo" class="relative overflow-hidden bg-ink py-20 sm:py-28">
   <div class="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
-    <div class="grid grid-cols-1 items-center gap-14 lg:grid-cols-[5fr_7fr] lg:gap-20">
+    <!-- Шапка секции — во всю ширину -->
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
       <div>
         <p class="eyebrow text-accent-soft">География</p>
         <h2 class="display-lg mt-5 text-on-ink">Где мы<br />строим</h2>
-        <p class="mt-5 max-w-md text-[15px] leading-relaxed text-on-ink/65">
-          Работаем в Московской и Ленинградской областях. Производство и лес —
-          в Вологодской области. Выезжаем на участок для замеров и оценки
-          логистики.
-        </p>
-
-        <div class="mt-10 grid grid-cols-1 gap-10 sm:grid-cols-2">
-          {
-            regions.map((r) => (
-              <div data-region={r.id} class="transition-opacity duration-300">
-                <h3 class="font-[var(--font-display)] text-lg text-on-ink">
-                  {r.name}
-                </h3>
-                <ul class="mt-4 border-t border-white/10">
-                  {r.areas.map((a) => (
-                    <li class="border-b border-white/10 py-3 text-sm text-on-ink/60">
-                      {a}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          }
-        </div>
       </div>
+      <p class="max-w-md text-[15px] leading-relaxed text-on-ink/65">
+        Работаем в Московской и Ленинградской областях. Производство и лес —
+        в Вологодской области. Выезжаем на участок для замеров и оценки
+        логистики.
+      </p>
+    </div>
 
-      <!-- MAP — интерактивная схема в стекле -->
-      <div
-        class="rise glass hairline-top relative aspect-[4/3] overflow-hidden rounded-[28px]"
-        data-map
-      >
-        <!-- Декоративная подложка: суша + маршруты -->
-        <svg viewBox="0 0 400 300" class="absolute inset-0 h-full w-full" fill="none" aria-hidden="true">
-          <g stroke="#F4F3F0" stroke-opacity="0.12" stroke-width="1">
-            <path d="M40 95 Q120 45 210 85 T368 112 L348 215 Q230 262 122 225 T44 196 Z" fill="#F4F3F0" fill-opacity="0.04" />
-            <path d="M210 85 Q165 145 182 205" />
-            <path d="M122 112 Q205 132 300 120" />
-            <path d="M150 175 Q230 150 300 118" stroke="#B0885A" stroke-opacity="0.4" stroke-dasharray="3 5" />
-          </g>
-        </svg>
+    <!-- Две симметричные колонки -->
+    <div class="mt-12 grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-6">
+      {
+        regions.map((r, i) => (
+          <div class={`rise ${i === 1 ? "rise-2" : ""} flex flex-col`}>
+            <h3 class="text-center font-[var(--font-display)] text-xl text-on-ink sm:text-2xl">
+              {r.name}
+            </h3>
 
-        <!-- Интерактивные точки-города (HTML поверх SVG) -->
-        {
-          regions.map((r) => (
+            <!-- Карта области в стекле -->
             <div
-              class="absolute -translate-x-1/2 -translate-y-1/2"
-              style={`left:${r.pos.x}%;top:${r.pos.y}%`}
+              class="glass hairline-top relative mt-5 aspect-[4/3] overflow-hidden rounded-[28px]"
+              data-map
             >
+              <!-- Декоративная подложка: контур области + маршруты -->
+              {r.id === "msk" ? (
+                <svg viewBox="0 0 400 300" class="absolute inset-0 h-full w-full" fill="none" aria-hidden="true">
+                  <g stroke="#F4F3F0" stroke-opacity="0.12" stroke-width="1">
+                    <path d="M60 92 Q140 48 232 78 Q332 102 352 162 Q332 236 220 252 Q108 250 58 198 Q38 140 60 92 Z" fill="#F4F3F0" fill-opacity="0.04" />
+                    <path d="M200 70 Q188 150 196 236" />
+                    <path d="M96 150 Q210 132 320 128" />
+                  </g>
+                  <g stroke="#B0885A" stroke-opacity="0.4" stroke-width="1" stroke-dasharray="3 5">
+                    <path d="M150 176 Q230 150 316 120" />
+                    <path d="M120 110 Q210 160 300 210" />
+                  </g>
+                </svg>
+              ) : (
+                <svg viewBox="0 0 400 300" class="absolute inset-0 h-full w-full" fill="none" aria-hidden="true">
+                  <g stroke="#F4F3F0" stroke-opacity="0.12" stroke-width="1">
+                    <path d="M72 80 Q156 52 252 80 Q344 104 352 172 Q326 242 210 250 Q150 250 116 214 Q150 182 112 156 Q78 150 72 118 Z" fill="#F4F3F0" fill-opacity="0.04" />
+                    <path d="M210 66 Q206 150 214 238" />
+                    <path d="M120 150 Q220 138 330 138" />
+                  </g>
+                  <g stroke="#B0885A" stroke-opacity="0.4" stroke-width="1" stroke-dasharray="3 5">
+                    <path d="M150 168 Q236 146 320 116" />
+                    <path d="M138 120 Q214 158 300 200" />
+                  </g>
+                </svg>
+              )}
+
+              <!-- Точки-направления с подписями -->
+              {r.points.map((p) =>
+                p.x < 50 ? (
+                  <div class="pointer-events-none absolute flex items-center gap-1.5" style={`left:${p.x}%;top:${p.y}%;transform:translateY(-50%)`}>
+                    <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-soft/70" />
+                    <span class="whitespace-nowrap text-[11px] text-on-ink/70">{p.l}</span>
+                  </div>
+                ) : (
+                  <div class="pointer-events-none absolute flex flex-row-reverse items-center gap-1.5" style={`right:${100 - p.x}%;top:${p.y}%;transform:translateY(-50%)`}>
+                    <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-soft/70" />
+                    <span class="whitespace-nowrap text-[11px] text-on-ink/70">{p.l}</span>
+                  </div>
+                ),
+              )}
+
+              <!-- Интерактивный пин города -->
+              <div
+                class="absolute -translate-x-1/2 -translate-y-1/2"
+                style={`left:${r.cityPos.x}%;top:${r.cityPos.y}%`}
+              >
+                <button
+                  type="button"
+                  class="pin group/pin relative grid h-9 w-9 place-items-center rounded-full focus:outline-none"
+                  data-pin={r.id}
+                  aria-expanded="false"
+                  aria-controls={`tip-${r.id}`}
+                >
+                  <span class="sr-only">{r.city} — {r.name}</span>
+                  <span class="pin-ring absolute inset-0 rounded-full bg-accent/20" aria-hidden="true" />
+                  <span class="relative h-2.5 w-2.5 rounded-full bg-accent ring-2 ring-ink transition-transform duration-300 group-hover/pin:scale-125" aria-hidden="true" />
+                </button>
+
+                <span class="pointer-events-none absolute left-1/2 top-9 -translate-x-1/2 whitespace-nowrap text-[11px] font-medium text-on-ink/80">
+                  {r.city}
+                </span>
+
+                <!-- Стеклянная карточка с направлениями -->
+                <div
+                  id={`tip-${r.id}`}
+                  role="tooltip"
+                  class="tip glass-light pointer-events-none absolute bottom-[calc(100%+14px)] left-1/2 w-60 -translate-x-1/2 rounded-2xl p-4 text-left opacity-0 shadow-[0_16px_48px_rgba(0,0,0,.28)]"
+                >
+                  <p class="text-[13px] font-semibold text-ink">{r.name}</p>
+                  <ul class="mt-2 space-y-1.5">
+                    {r.areas.map((a) => (
+                      <li class="text-[12px] leading-snug text-ink/70">{a}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <p class="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-on-ink/40">
+                Наведите или нажмите на точку
+              </p>
+            </div>
+
+            <!-- CTA -->
+            <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+              <a
+                href="#lead"
+                class="inline-flex w-full items-center justify-center rounded-full border border-white/25 px-7 py-3.5 text-sm font-semibold text-on-ink transition-colors duration-300 hover:border-accent hover:text-accent sm:w-auto"
+              >
+                Связаться с офисом
+              </a>
               <button
                 type="button"
-                class="pin group/pin relative grid h-9 w-9 place-items-center rounded-full focus:outline-none"
-                data-pin={r.id}
-                aria-expanded="false"
-                aria-controls={`tip-${r.id}`}
+                data-lead="individual"
+                data-lead-title={`Проектирование дома · ${r.name}`}
+                data-lead-sub="Авторское проектирование под ваш участок с выездом на замеры и оценкой логистики."
+                data-lead-bullets='["Индивидуальный проект под ваш участок","Выезд на замеры и оценка логистики","Фиксированная смета в договоре","Гарантия 25 лет"]'
+                data-lead-cta="Заказать проектирование"
+                class="inline-flex w-full items-center justify-center rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-paper transition-transform duration-300 hover:scale-[1.03] sm:w-auto"
               >
-                <span class="sr-only">{r.city} — {r.name}</span>
-                <span class="pin-ring absolute inset-0 rounded-full bg-accent/20" aria-hidden="true" />
-                <span class="relative h-2.5 w-2.5 rounded-full bg-accent ring-2 ring-ink transition-transform duration-300 group-hover/pin:scale-125" aria-hidden="true" />
+                Заказать проектирование
               </button>
-
-              <span class="pointer-events-none absolute left-1/2 top-9 -translate-x-1/2 whitespace-nowrap text-[11px] text-on-ink/70">
-                {r.city}
-              </span>
-
-              <!-- Стеклянная карточка с направлениями -->
-              <div
-                id={`tip-${r.id}`}
-                role="tooltip"
-                class="tip glass-light pointer-events-none absolute bottom-[calc(100%+14px)] left-1/2 w-60 -translate-x-1/2 rounded-2xl p-4 text-left opacity-0 shadow-[0_16px_48px_rgba(0,0,0,.28)]"
-              >
-                <p class="text-[13px] font-semibold text-ink">{r.name}</p>
-                <ul class="mt-2 space-y-1.5">
-                  {r.areas.map((a) => (
-                    <li class="text-[12px] leading-snug text-ink/70">{a}</li>
-                  ))}
-                </ul>
-              </div>
             </div>
-          ))
-        }
-
-        <p class="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-on-ink/40">
-          Наведите или нажмите на точку
-        </p>
-      </div>
+          </div>
+        ))
+      }
     </div>
   </div>
 </section>
@@ -161,13 +225,10 @@ const regions = [
 </style>
 
 <script>
-  // Тач/клик: переключаем карточку у точки. Hover/фокус работают на CSS.
-  const map = document.querySelector<HTMLElement>("[data-map]");
-  if (map) {
-    const pins = Array.from(map.querySelectorAll<HTMLButtonElement>(".pin"));
-    const regionBlocks = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-region]"),
-    );
+  // Тач/клик: переключаем карточку у пина города. Hover/фокус — на CSS.
+  const geo = document.querySelector<HTMLElement>("#geo");
+  if (geo) {
+    const pins = Array.from(geo.querySelectorAll<HTMLButtonElement>(".pin"));
 
     const closeAll = (except?: HTMLButtonElement) => {
       pins.forEach((p) => {
@@ -176,7 +237,6 @@ const regions = [
           p.setAttribute("aria-expanded", "false");
         }
       });
-      regionBlocks.forEach((b) => (b.style.opacity = "1"));
     };
 
     pins.forEach((pin) => {
@@ -185,13 +245,6 @@ const regions = [
         const open = pin.classList.toggle("is-open");
         pin.setAttribute("aria-expanded", String(open));
         closeAll(open ? pin : undefined);
-        if (open) {
-          // Приглушаем «не выбранную» область в списке слева
-          const id = pin.dataset.pin;
-          regionBlocks.forEach((b) => {
-            b.style.opacity = b.dataset.region === id ? "1" : "0.4";
-          });
-        }
       });
     });
 
