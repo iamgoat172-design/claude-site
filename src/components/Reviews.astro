@@ -104,24 +104,21 @@ const initials = (name: string) =>
         <h3 class="font-[var(--font-display)] text-xl text-on-ink sm:text-2xl">Видео-отзывы владельцев</h3>
         <span class="hidden text-sm text-on-ink/45 sm:block">Сняты на сданных объектах</span>
       </div>
-      <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
         {
           [
-            { id: "e01c839b6103d87400574a0754da96a9", who: "Видео-отзыв владельца", place: "построенный дом" },
-            { id: "23156a3251869386dd095cc98902b00b", who: "Видео-отзыв владельца", place: "построенный дом" },
-            { id: "cd9c111d2addd9c45c4f5ec57f87ca08", who: "Видео-отзыв владельца", place: "построенный дом" },
+            { id: "23156a3251869386dd095cc98902b00b", cover: "/images/reviews/cover-1.webp" },
+            { id: "e01c839b6103d87400574a0754da96a9", cover: "/images/reviews/cover-2.webp" },
           ].map((v) => (
-            <figure class="group relative aspect-video overflow-hidden rounded-[22px] border border-white/10 bg-ink-2" data-rutube={v.id}>
+            <figure class="group relative aspect-video overflow-hidden rounded-[22px] border border-white/10 bg-ink-2 shadow-[0_18px_50px_rgba(0,0,0,.4)] transition-transform duration-500 hover:-translate-y-0.5" data-rutube={v.id}>
+              <img src={v.cover} alt="Видео-отзыв владельца" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]" />
+              <span class="absolute inset-0 bg-ink/10 transition-colors duration-300 group-hover:bg-ink/30" aria-hidden="true" />
               <button type="button" data-rutube-play aria-label="Смотреть видео-отзыв" class="absolute inset-0 z-10 grid place-items-center">
-                <div class="absolute inset-0 bg-[radial-gradient(120%_120%_at_50%_-10%,rgba(176,136,90,0.14),transparent_60%)]" />
-                <span class="relative grid h-14 w-14 place-items-center rounded-full border border-white/25 bg-white/5 backdrop-blur-md transition-transform duration-300 group-hover:scale-105">
-                  <svg class="ml-1 h-6 w-6 text-on-ink" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                <span class="relative grid h-16 w-16 place-items-center rounded-full border border-white/40 bg-ink/40 shadow-[0_8px_28px_rgba(0,0,0,.45)] backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
+                  <span class="absolute inset-0 rounded-full bg-accent/30 blur-md transition-opacity duration-300 group-hover:opacity-100 opacity-0" aria-hidden="true" />
+                  <svg class="relative ml-1 h-7 w-7 text-on-ink" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
                 </span>
               </button>
-              <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-center justify-between gap-2 bg-gradient-to-t from-ink/80 to-transparent p-4 text-sm">
-                <span class="font-medium text-on-ink">{v.who}</span>
-                <span class="text-xs text-on-ink/55">{v.place}</span>
-              </figcaption>
             </figure>
           ))
         }
