@@ -22,10 +22,10 @@ const regions = [
       { l: "Дмитровское ш.", x: 46, y: 15 },
       { l: "Ярославское ш.", x: 72, y: 22 },
       { l: "Пушкинский р-н", x: 84, y: 42 },
-      { l: "Калужское ш.", x: 80, y: 70 },
-      { l: "Минское ш.", x: 58, y: 84 },
-      { l: "Одинцовский р-н", x: 40, y: 85 },
-      { l: "Рублёво-Успенское", x: 18, y: 73 },
+      { l: "Калужское ш.", x: 80, y: 68 },
+      { l: "Минское ш.", x: 66, y: 84 },
+      { l: "Одинцовский р-н", x: 30, y: 82 },
+      { l: "Рублёво-Успенское", x: 16, y: 70 },
       { l: "Истринский р-н", x: 14, y: 52 },
       { l: "Новорижское ш.", x: 16, y: 30 },
     ],
@@ -44,9 +44,9 @@ const regions = [
       { l: "Выборгское ш.", x: 30, y: 15 },
       { l: "Приозерское ш.", x: 66, y: 16 },
       { l: "Приозерский р-н", x: 84, y: 36 },
-      { l: "Всеволожский р-н", x: 84, y: 62 },
-      { l: "средний радиус КАД", x: 60, y: 84 },
-      { l: "ближний радиус КАД", x: 34, y: 84 },
+      { l: "Всеволожский р-н", x: 84, y: 64 },
+      { l: "средний радиус КАД", x: 72, y: 82 },
+      { l: "ближний радиус КАД", x: 20, y: 84 },
       { l: "Курортное напр.", x: 16, y: 58 },
       { l: "Выборгский р-н", x: 16, y: 34 },
     ],
@@ -168,12 +168,17 @@ const regions = [
 
             <!-- CTA -->
             <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
-              <a
-                href="#lead"
+              <button
+                type="button"
+                data-lead="office"
+                data-lead-title={`Связь с офисом · ${r.name}`}
+                data-lead-sub={`Свяжитесь с офисом в вашем регионе (${r.name}) — ответим по телефону или в мессенджере.`}
+                data-lead-bullets='["Офис в вашем регионе","Выезд на участок для замеров","Ответим в удобном мессенджере"]'
+                data-lead-cta="Связаться с офисом"
                 class="inline-flex w-full items-center justify-center rounded-full border border-white/25 px-7 py-3.5 text-sm font-semibold text-on-ink transition-colors duration-300 hover:border-accent hover:text-accent sm:w-auto"
               >
                 Связаться с офисом
-              </a>
+              </button>
               <button
                 type="button"
                 data-lead="individual"
