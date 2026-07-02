@@ -12,43 +12,24 @@ const regions = [
     id: "msk",
     city: "Москва",
     name: "Московская область",
-    cityPos: { x: 50, y: 50 },
+    map: "/images/geo/msk.webp",
+    cityPos: { x: 48, y: 46 },
     areas: [
       "Дмитровское, Рублёво-Успенское, Новорижское ш.",
       "Истринский, Одинцовский, Пушкинский районы",
       "Минское, Калужское, Ярославское направления",
-    ],
-    points: [
-      { l: "Дмитровское ш.", x: 46, y: 15 },
-      { l: "Ярославское ш.", x: 72, y: 22 },
-      { l: "Пушкинский р-н", x: 84, y: 42 },
-      { l: "Калужское ш.", x: 80, y: 68 },
-      { l: "Минское ш.", x: 66, y: 84 },
-      { l: "Одинцовский р-н", x: 30, y: 82 },
-      { l: "Рублёво-Успенское", x: 16, y: 70 },
-      { l: "Истринский р-н", x: 14, y: 52 },
-      { l: "Новорижское ш.", x: 16, y: 30 },
     ],
   },
   {
     id: "spb",
     city: "Санкт-Петербург",
     name: "Ленинградская область",
-    cityPos: { x: 52, y: 55 },
+    map: "/images/geo/spb.webp",
+    cityPos: { x: 31, y: 44 },
     areas: [
       "Всеволожский, Выборгский, Приозерский районы",
       "Курортное и Приозерское направления",
       "Ближний и средний радиус от КАД",
-    ],
-    points: [
-      { l: "Выборгское ш.", x: 30, y: 15 },
-      { l: "Приозерское ш.", x: 66, y: 16 },
-      { l: "Приозерский р-н", x: 84, y: 36 },
-      { l: "Всеволожский р-н", x: 84, y: 64 },
-      { l: "средний радиус КАД", x: 72, y: 82 },
-      { l: "ближний радиус КАД", x: 20, y: 84 },
-      { l: "Курортное напр.", x: 16, y: 58 },
-      { l: "Выборгский р-н", x: 16, y: 34 },
     ],
   },
 ];
@@ -80,50 +61,17 @@ const regions = [
 
             <!-- Карта области в стекле -->
             <div
-              class="glass hairline-top relative mt-5 aspect-[4/3] overflow-hidden rounded-[28px]"
+              class="glass hairline-top relative mt-5 aspect-[16/10] overflow-hidden rounded-[28px]"
               data-map
             >
-              <!-- Декоративная подложка: контур области + маршруты -->
-              {r.id === "msk" ? (
-                <svg viewBox="0 0 400 300" class="absolute inset-0 h-full w-full" fill="none" aria-hidden="true">
-                  <g stroke="#F4F3F0" stroke-opacity="0.12" stroke-width="1">
-                    <path d="M60 92 Q140 48 232 78 Q332 102 352 162 Q332 236 220 252 Q108 250 58 198 Q38 140 60 92 Z" fill="#F4F3F0" fill-opacity="0.04" />
-                    <path d="M200 70 Q188 150 196 236" />
-                    <path d="M96 150 Q210 132 320 128" />
-                  </g>
-                  <g stroke="#B0885A" stroke-opacity="0.4" stroke-width="1" stroke-dasharray="3 5">
-                    <path d="M150 176 Q230 150 316 120" />
-                    <path d="M120 110 Q210 160 300 210" />
-                  </g>
-                </svg>
-              ) : (
-                <svg viewBox="0 0 400 300" class="absolute inset-0 h-full w-full" fill="none" aria-hidden="true">
-                  <g stroke="#F4F3F0" stroke-opacity="0.12" stroke-width="1">
-                    <path d="M72 80 Q156 52 252 80 Q344 104 352 172 Q326 242 210 250 Q150 250 116 214 Q150 182 112 156 Q78 150 72 118 Z" fill="#F4F3F0" fill-opacity="0.04" />
-                    <path d="M210 66 Q206 150 214 238" />
-                    <path d="M120 150 Q220 138 330 138" />
-                  </g>
-                  <g stroke="#B0885A" stroke-opacity="0.4" stroke-width="1" stroke-dasharray="3 5">
-                    <path d="M150 168 Q236 146 320 116" />
-                    <path d="M138 120 Q214 158 300 200" />
-                  </g>
-                </svg>
-              )}
-
-              <!-- Точки-направления с подписями -->
-              {r.points.map((p) =>
-                p.x < 50 ? (
-                  <div class="pointer-events-none absolute flex items-center gap-1.5" style={`left:${p.x}%;top:${p.y}%;transform:translateY(-50%)`}>
-                    <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-soft/70" />
-                    <span class="whitespace-nowrap text-[11px] text-on-ink/70">{p.l}</span>
-                  </div>
-                ) : (
-                  <div class="pointer-events-none absolute flex flex-row-reverse items-center gap-1.5" style={`right:${100 - p.x}%;top:${p.y}%;transform:translateY(-50%)`}>
-                    <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-soft/70" />
-                    <span class="whitespace-nowrap text-[11px] text-on-ink/70">{p.l}</span>
-                  </div>
-                ),
-              )}
+              <!-- Реальная карта области -->
+              <img
+                src={r.map}
+                alt={`Карта — ${r.name}`}
+                loading="lazy"
+                decoding="async"
+                class="absolute inset-0 h-full w-full object-cover"
+              />
 
               <!-- Интерактивный пин города -->
               <div
@@ -138,13 +86,9 @@ const regions = [
                   aria-controls={`tip-${r.id}`}
                 >
                   <span class="sr-only">{r.city} — {r.name}</span>
-                  <span class="pin-ring absolute inset-0 rounded-full bg-accent/20" aria-hidden="true" />
-                  <span class="relative h-2.5 w-2.5 rounded-full bg-accent ring-2 ring-ink transition-transform duration-300 group-hover/pin:scale-125" aria-hidden="true" />
+                  <span class="pin-ring absolute inset-0 rounded-full bg-accent/25" aria-hidden="true" />
+                  <span class="relative h-3 w-3 rounded-full bg-accent ring-2 ring-paper shadow-[0_2px_8px_rgba(0,0,0,.4)] transition-transform duration-300 group-hover/pin:scale-125" aria-hidden="true" />
                 </button>
-
-                <span class="pointer-events-none absolute left-1/2 top-9 -translate-x-1/2 whitespace-nowrap text-[11px] font-medium text-on-ink/80">
-                  {r.city}
-                </span>
 
                 <!-- Стеклянная карточка с направлениями -->
                 <div
@@ -161,7 +105,7 @@ const regions = [
                 </div>
               </div>
 
-              <p class="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-on-ink/40">
+              <p class="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-ink/70 px-3 py-1 text-xs text-on-ink/80 backdrop-blur-sm">
                 Наведите или нажмите на точку
               </p>
             </div>
