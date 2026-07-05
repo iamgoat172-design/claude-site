@@ -330,17 +330,31 @@
     <canvas id="scene-canvas" aria-hidden="true"></canvas>
     <img id="scene-fallback" class="scene-fallback" alt="" aria-hidden="true" hidden />
     <div class="hero__content container">
-      <p class="mono-label" data-flyin="up">RIVERPOOLS_OS · STATUS: ONLINE</p>
-      <h1 class="hero__title" data-flyin="left">Свой бассейн на&nbsp;участке&nbsp;—<br />уже этим летом</h1>
-      <p class="hero__sub" data-flyin="right">Надувной жалко, капитальный пугает ценой и сливом воды на зиму? Композитная чаша европейского качества под ключ за 30&nbsp;дней — от&nbsp;640&nbsp;900&nbsp;₽, с&nbsp;гарантией 25&nbsp;лет и&nbsp;без единой доплаты сверх договора.</p>
-      <div class="hero__stats" role="list" data-flyin="up">
-        <div class="stat-chip" role="listitem"><span class="stat-chip__num">200+</span>бассейнов в Москве и МО</div>
-        <div class="stat-chip" role="listitem"><span class="stat-chip__num">30</span>дней до первого купания</div>
-        <div class="stat-chip" role="listitem"><span class="stat-chip__num">25</span>лет гарантия на чашу</div>
-      </div>
-      <div class="hero__cta" data-flyin="down">
-        <a href="#quiz" class="btn btn--primary" data-magnet>Подобрать бассейн</a>
-        <a href="#final-cta" class="btn btn--ghost" data-magnet>Получить расчёт</a>
+      <div class="hero__grid">
+        <div class="hero__copy">
+          <p class="mono-label" data-flyin="up">RIVERPOOLS_OS · STATUS: ONLINE</p>
+          <h1 class="hero__title" data-flyin="left">Свой бассейн на&nbsp;участке — уже этим летом</h1>
+          <p class="hero__sub" data-flyin="left">Композитная чаша под ключ за&nbsp;30&nbsp;дней — от&nbsp;640&nbsp;900&nbsp;₽. Цена и&nbsp;срок зафиксированы в&nbsp;договоре.</p>
+          <div class="hero__facts" role="list" data-flyin="up">
+            <div class="hero__fact" role="listitem"><span>200+</span>бассейнов<br />в Москве и МО</div>
+            <div class="hero__fact" role="listitem"><span>25 лет</span>гарантия<br />на чашу</div>
+            <div class="hero__fact" role="listitem"><span>−15%</span>на модельный<br />ряд сейчас</div>
+          </div>
+          <p class="hero__alt" data-flyin="up">Не готовы к расчёту? <a href="#quiz">Подобрать бассейн в&nbsp;квизе за&nbsp;1&nbsp;минуту&nbsp;→</a></p>
+        </div>
+        <aside class="hero__panel" data-flyin="right">
+          <p class="hero__panel-title">Расчёт под ваш участок</p>
+          <p class="hero__panel-sub">Инженер перезвонит в&nbsp;течение 30&nbsp;минут, смета — после бесплатного замера.</p>
+          <form id="hero-form" class="hero-form" novalidate>
+            <input type="text" name="hp_field" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <label>Имя<input type="text" name="name" required autocomplete="name" /></label>
+            <label>Телефон<input type="tel" name="phone" required autocomplete="tel" placeholder="+7 (___) ___-__-__" /></label>
+            <label class="checkbox"><input type="checkbox" name="consent" required /><span>Согласен с <a href="/privacy.html" target="_blank" rel="noopener" tabindex="-1">политикой обработки данных</a></span></label>
+            <button type="submit" class="btn btn--primary btn--wide">Получить расчёт</button>
+            <p class="form-risk">Бесплатно и ни к чему не обязывает.</p>
+            <p class="hero-form__success" role="status" hidden>Спасибо! Инженер свяжется с вами в течение 30 минут.</p>
+          </form>
+        </aside>
       </div>
     </div>
     <div class="hero__hud" aria-hidden="true">

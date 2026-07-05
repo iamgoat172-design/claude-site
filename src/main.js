@@ -102,6 +102,10 @@ bindForm(document.getElementById('final-form'), {
   successSel: '.final-form__success',
   extra: { source: 'final' },
 });
+bindForm(document.getElementById('hero-form'), {
+  successSel: '.hero-form__success',
+  extra: { source: 'hero' },
+});
 
 /* ---------- событийный слой (TRACKING.md) ---------- */
 document.addEventListener('click', (e) => {

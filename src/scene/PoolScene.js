@@ -586,18 +586,20 @@ export class PoolScene {
 
     if (this.copingMat) this.copingMat.emissiveIntensity = led * 0.35;
     this.dustMat.opacity = 0.12 + B(readyT, 0.8) * 0.3;
-    this.bloom.strength = 0.4 + led * 0.35 + B(readyT, 0.5) * 0.15;
+    // в hero сцена — приглушённый фон за контентом (конверсионный первый экран)
+    this.bloom.strength = (0.4 + led * 0.35 + B(readyT, 0.5) * 0.15) * (1 - hb * 0.35);
+    this.renderer.toneMappingExposure = 1.05 - hb * 0.3;
 
-    // в hero чаша уходит вправо (десктоп) / вниз (мобайл), не споря с текстом
+    // hero: чаша ниже и правее, отступает вглубь; мобайл — вниз за контент
     const wide = this.camera.aspect > 1;
-    this.root.position.x = wide ? hb * 3.4 : 0;
-    this.root.position.y = wide ? 0 : -hb * 2.3;
+    this.root.position.x = wide ? hb * 2.0 : 0;
+    this.root.position.y = wide ? -hb * 0.55 : -hb * 3.3;
 
     // камера: кинематографичный дрейф; на READY — отъезд, чаша ниже текста
     const driftA = B(-0.42 + p * 0.85, 0);
     const azimuth = driftA + this.orbitPhase * B(readyT, 1);
     const polar = 0.98 - B(readyT, 0.9) * 0.08;
-    const dist = 10.6 + readyT * (1 - hb) * 1.5 + hb * 0.9;
+    const dist = 10.6 + readyT * (1 - hb) * 1.5 + hb * 2.4;
     const lookY = -0.35 + readyT * (1 - hb) * 1.15;
     this.camera.position.set(
       Math.sin(azimuth) * Math.sin(polar) * dist,
