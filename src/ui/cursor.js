@@ -51,8 +51,9 @@ export function initCursor() {
 
     ringPos.x += (tx - ringPos.x) * 0.18;
     ringPos.y += (ty - ringPos.y) * 0.18;
-    const half = ring.offsetWidth / 2;
-    ring.style.transform = `translate(${ringPos.x - half}px, ${ringPos.y - half}px)`;
+    const half = 18; // базовый радиус кольца; рост на hover — через scale
+    const scale = ring.classList.contains('is-active') ? 56 / 36 : 1;
+    ring.style.transform = `translate(${ringPos.x - half}px, ${ringPos.y - half}px) scale(${scale})`;
 
     let px = ringPos.x;
     let py = ringPos.y;
