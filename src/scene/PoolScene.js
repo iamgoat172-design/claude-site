@@ -213,23 +213,30 @@ export class PoolScene {
         glbUrl,
         (gltf) => {
           const model = gltf.scene;
+          // ориентация: длинная сторона чаши — вдоль X
+          let bb = new THREE.Box3().setFromObject(model);
+          let size = bb.getSize(new THREE.Vector3());
+          if (size.z > size.x) {
+            model.rotation.y = Math.PI / 2;
+            bb.setFromObject(model);
+            size = bb.getSize(new THREE.Vector3());
+          }
           // нормализация под известный габарит
-          const bb = new THREE.Box3().setFromObject(model);
-          const size = bb.getSize(new THREE.Vector3());
           const scale = POOL_W / Math.max(size.x, size.z);
           model.scale.setScalar(scale);
-          bb.setFromObject(model);
+          bb = new THREE.Box3().setFromObject(model);
           const center = bb.getCenter(new THREE.Vector3());
-          model.position.sub(center);
-          model.position.y = -bb.min.y * 0 - (bb.max.y - bb.min.y) * scale * 0; // центр по Y ниже
-          model.position.y = -((bb.max.y + bb.min.y) / 2) + 0; // центрируем
-          model.position.y -= POOL_H * 0.5 - 0.12; // топ чаши чуть выше нуля
+          model.position.x -= center.x;
+          model.position.z -= center.z;
+          // топ чаши чуть выше нуля (как у процедурной: борт на y≈0.12)
+          model.position.y -= bb.max.y - 0.12;
           model.traverse((o) => {
             if (o.isMesh && o.material) {
               o.material.envMapIntensity = 0.6;
               if ('roughness' in o.material) o.material.roughness = Math.min(o.material.roughness ?? 0.4, 0.35);
             }
           });
+          this.shell.clear(); // убрать процедурный фолбэк, если успел построиться
           this.shell.add(model);
           this.usingGlb = true;
           finish();

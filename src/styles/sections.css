@@ -235,10 +235,13 @@
 }
 
 /* ================= catalog ================= */
-.section--catalog { padding: 120px 0 90px; }
+.section--catalog {
+  padding: clamp(96px, 13vh, 150px) 0 clamp(72px, 9vh, 100px);
+  background: radial-gradient(900px 360px at 50% 0%, rgba(24, 166, 201, 0.07), transparent 70%);
+}
 .catalog__grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-  margin-bottom: 56px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+  margin-bottom: 64px;
 }
 .model-card {
   position: relative;
@@ -347,7 +350,7 @@
 }
 
 /* ================= quiz ================= */
-.section--quiz { padding: 90px 0; background: var(--paper-2); }
+.section--quiz { padding: clamp(72px, 10vh, 110px) 0; background: var(--paper-2); }
 .quiz {
   background: var(--paper); border-radius: var(--radius-l);
   border: 1px solid var(--line); box-shadow: var(--shadow-card);
@@ -412,7 +415,7 @@ label.checkbox span a { color: var(--accent-dim); }
 }
 
 /* ================= why ================= */
-.section--why { padding: 120px 0 100px; }
+.section--why { padding: clamp(96px, 13vh, 150px) 0 clamp(56px, 7vh, 80px); }
 .why__grid {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px;
   margin-bottom: 40px;
@@ -449,9 +452,41 @@ label.checkbox span a { color: var(--accent-dim); }
   background: radial-gradient(circle at 35% 35%, var(--accent-bright), var(--accent-dim));
 }
 
+/* ================= compare ================= */
+.section--compare { padding: clamp(72px, 10vh, 110px) 0; }
+.compare__list { display: grid; gap: 14px; }
+.compare__row {
+  display: grid; grid-template-columns: 1fr 44px 1fr; gap: 14px;
+  align-items: stretch;
+}
+.compare__us, .compare__them {
+  border-radius: var(--radius-m); padding: 22px 24px;
+}
+.compare__us {
+  background:
+    linear-gradient(180deg, rgba(24, 166, 201, 0.08), transparent 40%),
+    var(--paper);
+  border: 1px solid rgba(24, 166, 201, 0.35);
+}
+.compare__them {
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+}
+.compare__row h3 { font-size: 16.5px; margin: 0 0 6px; }
+.compare__row p { font-size: 14.5px; color: var(--ink-2); margin: 0; }
+.compare__them h3 { color: var(--ink-2); }
+.compare__vs {
+  align-self: center; text-align: center;
+  font-family: var(--font-mono); font-size: 13px; color: var(--ink-2);
+}
+@media (max-width: 760px) {
+  .compare__row { grid-template-columns: 1fr; gap: 8px; }
+  .compare__vs { padding: 2px 0; }
+}
+
 /* ================= tech (dark insert) ================= */
 .section--tech {
-  padding: 130px 0;
+  padding: clamp(110px, 15vh, 170px) 0;
   background:
     radial-gradient(1200px 500px at 50% 0%, rgba(24, 166, 201, 0.08), transparent 70%),
     var(--near-black);
@@ -471,7 +506,7 @@ label.checkbox span a { color: var(--accent-dim); }
 .tech__card p { margin: 0 26px 26px; color: var(--dark-ink-2); font-size: 15.5px; }
 
 /* ================= life (dark) ================= */
-.section--life { padding: 0 0 130px; background: var(--near-black); }
+.section--life { padding: 0 0 clamp(110px, 15vh, 170px); background: var(--near-black); }
 .life__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 .life__item {
   border-radius: var(--radius-m); overflow: hidden; position: relative;
@@ -490,7 +525,10 @@ label.checkbox span a { color: var(--accent-dim); }
 }
 
 /* ================= works ================= */
-.section--works { padding: 120px 0 100px; }
+.section--works {
+  padding: clamp(96px, 13vh, 150px) 0 clamp(80px, 10vh, 110px);
+  background: linear-gradient(180deg, var(--paper-2), rgba(244, 247, 251, 0) 88%);
+}
 .works__grid {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
 }
@@ -514,7 +552,7 @@ label.checkbox span a { color: var(--accent-dim); }
 .work-item:hover span { opacity: 1; }
 
 /* ================= reviews ================= */
-.section--reviews { padding: 60px 0 110px; }
+.section--reviews { padding: clamp(48px, 6vh, 72px) 0 clamp(88px, 11vh, 130px); }
 .reviews__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
 .review-card {
   margin: 0; padding: 30px 28px;
@@ -528,7 +566,7 @@ label.checkbox span a { color: var(--accent-dim); }
 }
 
 /* ================= faq ================= */
-.section--faq { padding: 40px 0 120px; }
+.section--faq { padding: clamp(32px, 4vh, 56px) 0 clamp(96px, 12vh, 140px); }
 .faq__list { display: grid; gap: 12px; }
 .faq__item {
   border: 1px solid var(--line); border-radius: var(--radius-m);
@@ -554,7 +592,7 @@ label.checkbox span a { color: var(--accent-dim); }
 
 /* ================= final cta ================= */
 .section--final {
-  padding: 110px 0 130px;
+  padding: clamp(90px, 12vh, 140px) 0 clamp(100px, 13vh, 150px);
   background:
     radial-gradient(900px 420px at 50% 100%, rgba(24, 166, 201, 0.12), transparent 70%),
     var(--paper-2);

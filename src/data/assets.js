@@ -9,7 +9,7 @@ const CDN = 'https://d8j0ntlcm91z4.cloudfront.net/user_32Q9KWTtKxuO9vGsur6JRmOi1
 
 // url — CDN Higgsfield; local — путь в public/assets/
 const map = {
-  poolGlb: { url: '', local: '/assets/models/pool.glb' },
+  poolGlb: { url: 'https://d3u0tzju9qaucj.cloudfront.net/7d051b5a-7bfe-49fe-a484-24e7b3a9458a/e8c8db88-ef52-49e1-8eda-d9128f7e40cc.glb', local: '/assets/models/pool.glb' },
   heroPoster: { url: `${CDN}/hf_20260705_184001_6e9356d2-de84-44d4-b978-f68a07e8b9da_min.webp`, local: '/assets/hero_pool_terrace.webp' },
   techEcoclean: { url: `${CDN}/hf_20260705_184003_ec38aa43-a01a-4a42-b544-b6496ec7f7c0_min.webp`, local: '/assets/tech_ecoclean_water.webp' },
   techAquabiography: { url: `${CDN}/hf_20260705_184006_e629e228-a916-457e-a043-f5bf88be21aa_min.webp`, local: '/assets/tech_aquabiography_night.webp' },
