@@ -4,6 +4,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { STAGES } from '../data/models.js';
+import { track } from '../data/config.js';
 
 const N = STAGES.length;
 const AMP = 150; // амплитуда заезда, px
@@ -27,6 +28,7 @@ export function initProcess(scene, reduced) {
   if (!stageEls.length) return;
 
   let lastStage = -1;
+  const seenStages = new Set();
 
   function update(p) {
     scene?.setProgress(p);
@@ -36,6 +38,11 @@ export function initProcess(scene, reduced) {
     if (idx !== lastStage) {
       lastStage = idx;
       if (status) status.textContent = STAGES[idx].status;
+      // глубина вовлечения в сцену: каждая фаза — один раз за сессию
+      if (!seenStages.has(idx)) {
+        seenStages.add(idx);
+        track('process_stage_reached', { stage: STAGES[idx].key });
+      }
     }
 
     stageEls.forEach((el, i) => {

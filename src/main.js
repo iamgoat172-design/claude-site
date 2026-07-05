@@ -23,6 +23,7 @@ import {
   fillAssetSlots,
 } from './ui/render.js';
 import { asset } from './data/assets.js';
+import { track } from './data/config.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -100,6 +101,23 @@ initQuiz();
 bindForm(document.getElementById('final-form'), {
   successSel: '.final-form__success',
   extra: { source: 'final' },
+});
+
+/* ---------- событийный слой (TRACKING.md) ---------- */
+document.addEventListener('click', (e) => {
+  const tel = e.target.closest('a[href^="tel:"]');
+  if (tel) {
+    const zone = tel.closest('.pill-nav, .sticky-cta, .nav-drawer, .site-footer');
+    track('phone_clicked', { location: zone ? zone.className.split(' ')[0] : 'page' });
+    return;
+  }
+  const cta = e.target.closest('a.btn, .pill-nav__cta, .sticky-cta__btn');
+  if (cta) {
+    track('cta_clicked', {
+      text: cta.textContent.trim().slice(0, 40),
+      href: cta.getAttribute('href') || '',
+    });
+  }
 });
 
 /* ---------- стабильность триггеров при resize ---------- */

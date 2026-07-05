@@ -1,6 +1,6 @@
 // Отправка форм: валидация, honeypot, POST на CONFIG.formEndpoint
 // (dev-заглушка при пустом endpoint), цель Метрики.
-import { CONFIG, reachGoal } from '../data/config.js';
+import { CONFIG, reachGoal, track } from '../data/config.js';
 
 function markInvalid(field, invalid) {
   field.classList.toggle('is-invalid', invalid);
@@ -73,6 +73,7 @@ export function bindForm(form, { successSel, extra } = {}) {
     const success = form.querySelector(successSel);
     if (ok) {
       reachGoal();
+      track('form_submitted', { form: form.id });
       if (success) success.hidden = false;
       form.querySelectorAll('input:not([type="checkbox"]), select').forEach((f) => (f.value = ''));
       form.querySelectorAll('input[type="checkbox"]').forEach((f) => (f.checked = false));

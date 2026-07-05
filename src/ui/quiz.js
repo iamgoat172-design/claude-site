@@ -1,6 +1,7 @@
 // Квиз-подбор: 3 шага → рекомендация модели → сбор контакта.
 import { MODELS, fmtPrice } from '../data/models.js';
 import { bindForm } from './forms.js';
+import { track } from '../data/config.js';
 
 export function initQuiz() {
   const root = document.getElementById('quiz-root');
@@ -44,9 +45,11 @@ export function initQuiz() {
       const btn = e.target.closest('.quiz__option');
       if (!btn) return;
       answers[group.dataset.group] = btn.dataset.value;
+      track('quiz_step_completed', { step: group.dataset.group, value: btn.dataset.value });
       if (current < steps.length - 1) show(current + 1);
       else {
         picked = recommend();
+        track('quiz_result_shown', { model: picked.name });
         show(steps.length);
       }
     });

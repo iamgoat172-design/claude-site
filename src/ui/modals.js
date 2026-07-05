@@ -1,6 +1,7 @@
 // Модалка деталей модели + лайтбокс галереи. Focus-trap, Esc, клик по фону.
 import { MODELS, WORKS, fmtPrice } from '../data/models.js';
 import { asset } from '../data/assets.js';
+import { track } from '../data/config.js';
 
 let lenisRef = null;
 let lastFocused = null;
@@ -89,6 +90,7 @@ export function initModals(lenis) {
   function openModel(id) {
     const m = MODELS.find((x) => x.id === id);
     if (!m) return;
+    track('model_modal_opened', { model: m.name });
     body.innerHTML = `
       <h3>${m.name}</h3>
       <p class="model-card__tag">${m.tag}</p>

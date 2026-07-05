@@ -45,6 +45,15 @@
 .pill-nav.on-light .pill-nav__links a:hover {
   color: var(--brand); background: rgba(24, 166, 201, 0.1);
 }
+.pill-nav__phone {
+  font-family: var(--font-mono); font-size: 13.5px; white-space: nowrap;
+  color: var(--dark-ink-2); text-decoration: none;
+  transition: color 0.2s;
+}
+.pill-nav__phone:hover { color: var(--accent-bright); }
+.pill-nav.on-light .pill-nav__phone { color: var(--ink-2); }
+.pill-nav.on-light .pill-nav__phone:hover { color: var(--brand); }
+@media (max-width: 1200px) { .pill-nav__phone { display: none; } }
 .pill-nav__cta {
   padding: 10px 20px; border-radius: 999px;
   background: linear-gradient(120deg, var(--accent), var(--accent-dim));
@@ -309,6 +318,34 @@
 .addon-card h4 { margin: 0 0 6px; font-size: 16px; }
 .addon-card p { margin: 0; font-size: 14px; color: var(--ink-2); }
 
+/* ================= offer band ================= */
+.section--offer { padding: 0 0 90px; }
+.offer__inner {
+  display: grid; grid-template-columns: 1.6fr 1fr; gap: 40px;
+  align-items: center;
+  background:
+    radial-gradient(700px 300px at 85% 20%, rgba(24, 166, 201, 0.25), transparent 65%),
+    linear-gradient(120deg, var(--brand) 0%, #0a2f5a 100%);
+  border-radius: var(--radius-l);
+  padding: 46px clamp(26px, 5vw, 56px);
+  color: #fff;
+}
+.offer__title {
+  font-size: clamp(24px, 3vw, 36px); font-weight: 800;
+  line-height: 1.15; letter-spacing: -0.015em; margin: 0 0 12px;
+  text-wrap: balance;
+}
+.offer__text { margin: 0 0 10px; color: #d7e6f2; font-size: 16.5px; }
+.offer__note { margin: 0; color: #9fc0d8; font-size: 14px; }
+.offer__cta { text-align: center; }
+.offer__cta .btn { width: 100%; }
+.offer__cta .form-risk { color: #9fc0d8; margin-top: 10px; }
+@media (max-width: 900px) {
+  .offer__inner { grid-template-columns: 1fr; gap: 22px; }
+  .offer__cta { text-align: left; }
+  .offer__cta .btn { width: auto; }
+}
+
 /* ================= quiz ================= */
 .section--quiz { padding: 90px 0; background: var(--paper-2); }
 .quiz {
@@ -521,6 +558,10 @@ label.checkbox span a { color: var(--accent-dim); }
   background:
     radial-gradient(900px 420px at 50% 100%, rgba(24, 166, 201, 0.12), transparent 70%),
     var(--paper-2);
+}
+.final-form__trust {
+  font-family: var(--font-mono); font-size: 13px;
+  color: var(--accent-dim); margin: -28px 0 28px;
 }
 .final-form {
   display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
