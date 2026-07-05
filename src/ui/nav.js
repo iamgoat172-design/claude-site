@@ -1,4 +1,6 @@
 // Навбар: тема-aware pill-nav, мобайл-гамбургер + drawer, якорный скролл через Lenis.
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
 export function initNav(lenis) {
   const nav = document.querySelector('.pill-nav');
   const burger = document.querySelector('.nav-burger');
@@ -48,22 +50,18 @@ export function initNav(lenis) {
     io.observe(hero);
   }
 
-  // тема навбара: on-light когда под ним светлая секция
-  const sections = [...document.querySelectorAll('.section[data-theme]')];
-  function updateNavTheme() {
-    const y = nav.getBoundingClientRect().bottom;
-    let theme = 'dark';
-    for (const s of sections) {
-      const r = s.getBoundingClientRect();
-      if (r.top <= y && r.bottom >= y) {
-        theme = s.dataset.theme;
-        break;
-      }
-    }
-    nav.classList.toggle('on-light', theme === 'light');
-  }
-  updateNavTheme();
-  window.addEventListener('scroll', updateNavTheme, { passive: true });
+  // тема навбара: on-light когда под ним светлая секция.
+  // Через ScrollTrigger (сырые scroll-листенеры запрещены — jank).
+  document.querySelectorAll('.section[data-theme]').forEach((s) => {
+    ScrollTrigger.create({
+      trigger: s,
+      start: 'top 80px', // нижняя кромка pill-nav
+      end: 'bottom 80px',
+      onToggle(self) {
+        if (self.isActive) nav.classList.toggle('on-light', s.dataset.theme === 'light');
+      },
+    });
+  });
 
   // HUD-часы в герое
   const clock = document.getElementById('hud-clock');

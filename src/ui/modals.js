@@ -102,7 +102,7 @@ export function initModals(lenis) {
       <p class="modal__desc">В цену «под ключ» входят: чаша, земляные работы, обвязка
         и оборудование, утепление ППУ Premium Nord, монтаж и пусконаладка.
         Точная стоимость под ваш участок — после бесплатного выезда инженера.</p>
-      <a href="#quiz" class="btn btn--primary" data-close-modal>Рассчитать под мой участок</a>`;
+      <a href="#final-cta" class="btn btn--primary" data-close-modal>Получить расчёт</a>`;
     body.querySelector('[data-close-modal]').addEventListener('click', () => close(backdrop));
     open(backdrop);
     backdrop.querySelector('.modal__close').focus();

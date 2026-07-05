@@ -72,15 +72,14 @@
         <div class="stat-chip" role="listitem"><span class="stat-chip__num">25</span>лет гарантия на чашу</div>
       </div>
       <div class="hero__cta" data-flyin="down">
-        <a href="#quiz" class="btn btn--primary" data-magnet>Подобрать бассейн за 1 минуту</a>
-        <a href="#quiz" class="btn btn--ghost" data-magnet>Выезд инженера — бесплатно</a>
+        <a href="#quiz" class="btn btn--primary" data-magnet>Подобрать бассейн</a>
+        <a href="#final-cta" class="btn btn--ghost" data-magnet>Получить расчёт</a>
       </div>
-      <p class="hero__tag mono-label">Премиум линейка · Строим с 2014</p>
     </div>
     <div class="hero__hud" aria-hidden="true">
       <span>55.75° N, 37.61° E</span><span>MSK / MO</span><span id="hud-clock">--:--:--</span>
     </div>
-    <div class="scroll-hint" aria-hidden="true"><span></span>Листайте вниз</div>
+    <div class="scroll-hint" aria-hidden="true"><span></span></div>
   </section>
 
   <!-- 2. PROCESS (главная механика) -->
@@ -96,12 +95,11 @@
   <!-- 3. CATALOG -->
   <section id="catalog" class="section section--catalog" data-theme="light">
     <div class="container">
-      <p class="mono-label">MODEL_LINE · −15% ПО АКЦИИ</p>
       <h2 class="section-title">Найдите свою форму бассейна</h2>
       <p class="section-sub">6 моделей, 9 цветов гелькоута — под любой участок и бюджет. Закажете сейчас — забронируете цену на 2026 год: в договоре она зафиксирована и не меняется в&nbsp;процессе монтажа.</p>
       <div class="catalog__grid" id="catalog-grid"><!-- rendered by JS --></div>
       <div class="swatches-block">
-        <p class="mono-label">GELCOAT_COLORS · ЦВЕТА ГЕЛЬКОУТА</p>
+        <h3 class="block-title">Цвета гелькоута</h3>
         <div class="swatches" id="swatches-grid"><!-- rendered by JS --></div>
       </div>
       <div class="addons-block" id="addons-grid"><!-- rendered by JS --></div>
@@ -111,7 +109,6 @@
   <!-- 4. QUIZ -->
   <section id="quiz" class="section section--quiz" data-theme="light">
     <div class="container container--narrow">
-      <p class="mono-label">POOL_MATCH · 3 ШАГА</p>
       <h2 class="section-title">Подберём модель за 1 минуту</h2>
       <p class="section-sub">Три быстрых вопроса — получите модель, ориентир по цене и расчёт без звонков и&nbsp;обязательств.</p>
       <div class="quiz" id="quiz-root">
@@ -145,7 +142,6 @@
         </div>
 
         <div class="quiz__result" data-step="result" hidden>
-          <p class="mono-label">MATCH_RESULT · РЕКОМЕНДАЦИЯ</p>
           <h3 id="quiz-result-name">—</h3>
           <p id="quiz-result-text"></p>
           <form id="quiz-form" class="quiz__form" novalidate>
@@ -153,7 +149,7 @@
             <label>Имя<input type="text" name="name" required autocomplete="name" /></label>
             <label>Телефон<input type="tel" name="phone" required autocomplete="tel" placeholder="+7 (___) ___-__-__" /></label>
             <label class="checkbox"><input type="checkbox" name="consent" required /><span>Согласен с <a href="/privacy.html" target="_blank" rel="noopener" tabindex="-1">политикой обработки данных</a></span></label>
-            <button type="submit" class="btn btn--primary">Получить расчёт и цену</button>
+            <button type="submit" class="btn btn--primary">Получить расчёт</button>
             <p class="form-risk">Выезд инженера — бесплатно и без обязательств. Закажете — учтём его в стоимости. Цена фиксируется в договоре.</p>
             <p class="quiz__success" role="status" hidden>Спасибо! Инженер свяжется с вами в течение 30 минут.</p>
           </form>
@@ -165,11 +161,10 @@
   <!-- 5. WHY US -->
   <section id="why" class="section section--why" data-theme="light">
     <div class="container">
-      <p class="mono-label">WHY_RIVERPOOLS · ПРУФЫ</p>
       <h2 class="section-title">6 причин доверить бассейн нам</h2>
       <div class="why__grid">
-        <article class="why__card"><h3>Фиксированная цена в&nbsp;договоре</h3><p>Стоимость не меняется в процессе монтажа — никаких доплат «по&nbsp;факту».</p></article>
-        <article class="why__card"><h3>Гарантия 25&nbsp;лет на чашу</h3><p>Смола Scott Bader, защита от&nbsp;осмоса — химическая и&nbsp;механическая стойкость чаши.</p></article>
+        <article class="why__card why__card--featured"><h3>Фиксированная цена в&nbsp;договоре</h3><p>Стоимость не меняется в процессе монтажа — никаких доплат «по&nbsp;факту».</p></article>
+        <article class="why__card why__card--featured"><h3>Гарантия 25&nbsp;лет на чашу</h3><p>Смола Scott Bader, защита от&nbsp;осмоса — химическая и&nbsp;механическая стойкость чаши.</p></article>
         <article class="why__card"><h3>Утепление ППУ Premium Nord</h3><p>Единственный композит, который не нужно сливать на зиму — выдерживает российские морозы.</p></article>
         <article class="why__card"><h3>Своя бригада, не субподряд</h3><p>Монтаж выполняют штатные специалисты River Pools от начала до конца.</p></article>
         <article class="why__card"><h3>Сервис и поддержка</h3><p>Реакция сервисной службы — не более 30&nbsp;минут с момента обращения.</p></article>
@@ -217,7 +212,6 @@
   <!-- 7. WORKS -->
   <section id="works" class="section section--works" data-theme="light">
     <div class="container">
-      <p class="mono-label">OUR_PROJECTS · 200+</p>
       <h2 class="section-title">Бассейны, которыми уже наслаждаются 200+ семей</h2>
       <p class="section-sub">Реальные объекты в Москве и Московской области — не рендеры, не концепты.</p>
       <div class="works__grid" id="works-grid"><!-- rendered by JS --></div>
@@ -227,19 +221,10 @@
   <!-- 8. TESTIMONIALS -->
   <section id="reviews" class="section section--reviews" data-theme="light">
     <div class="container">
-      <p class="mono-label">REVIEWS · ЧТО ГОВОРЯТ КЛИЕНТЫ</p>
       <h2 class="section-title">Отзывы клиентов</h2>
       <div class="reviews__grid">
         <blockquote class="review-card">
-          <p>«Больше всего боялись классической истории — начнут копать, а потом „доплатите за грунт", и всё лето пройдёт в стройке вместо купания. Тут даже удивились: бригада своя, без субподряда, просто присылали фото площадки каждый день. Через 30 дней, как&nbsp;в&nbsp;договоре — уже ныряли с друзьями. LUXOR на&nbsp;8 метров теперь понятен: это чтобы плыть, а&nbsp;не плескаться.»</p>
-          <footer>— Дмитрий, Одинцовский район</footer>
-        </blockquote>
-        <blockquote class="review-card">
-          <p>«Дольше всего боялись за зиму — начиталась историй, как чаши трескаются от мороза, если воду не слить. CLASSIC взяли из-за размера — для двоих детей в самый раз. Сейчас уже вторая зима — не сливали ни разу, весной просто включили фильтрацию. А дети в этом году полезли купаться уже в мае, мы даже отговорить не успели.»</p>
-          <footer>— Наталья, Пушкинский район</footer>
-        </blockquote>
-        <blockquote class="review-card">
-          <p>«Переживал, что на участке бассейн будет смотреться „как из каталога" — дешёво и&nbsp;пластиково. С подсветкой AQUABIOGRAPHY по&nbsp;контуру RIO вечером выглядит отдельным элементом ландшафта, а не переросшей ванной. Соседи теперь спрашивают, кто строил. И самое приятное — сумма в договоре не изменилась ни на рубль до последнего дня.»</p>
+          <p>«Боялся, что бассейн будет смотреться „как из каталога". С подсветкой AQUABIOGRAPHY наш RIO вечером — отдельный элемент ландшафта, соседи спрашивают, кто строил. Сумма в договоре не изменилась ни&nbsp;на&nbsp;рубль.»</p>
           <footer>— Игорь, Ленинский район</footer>
         </blockquote>
       </div>
@@ -249,7 +234,6 @@
   <!-- 9. FAQ -->
   <section id="faq" class="section section--faq" data-theme="light">
     <div class="container container--narrow">
-      <p class="mono-label">FAQ</p>
       <h2 class="section-title">Частые вопросы</h2>
       <div class="faq__list">
         <details class="faq__item"><summary>Сколько времени занимает монтаж?</summary><p>30 дней от выезда инженера до первого купания — срок и неустойка за его нарушение прописаны в договоре.</p></details>
@@ -269,7 +253,6 @@
   <!-- 10. FINAL CTA -->
   <section id="final-cta" class="section section--final" data-theme="light">
     <div class="container container--narrow">
-      <p class="mono-label">GET_ESTIMATE · ПОСЛЕДНИЙ ШАГ</p>
       <h2 class="section-title">Получите расчёт под ваш участок</h2>
       <p class="section-sub">Бесплатный выезд инженера, без обязательств. Обсудим форму, цвет и сроки монтажа — зафиксируем цену и всё остальное в договоре.</p>
       <form id="final-form" class="final-form" novalidate>
@@ -294,7 +277,7 @@
           </select>
         </label>
         <label class="checkbox"><input type="checkbox" name="consent" required /><span>Согласен с <a href="/privacy.html" target="_blank" rel="noopener" tabindex="-1">политикой обработки данных</a></span></label>
-        <button type="submit" class="btn btn--primary btn--wide">Получить расчёт и цену</button>
+        <button type="submit" class="btn btn--primary btn--wide">Получить расчёт</button>
         <p class="form-risk">Выезд инженера — бесплатно и без обязательств. Закажете — учтём его в стоимости. Цена фиксируется в договоре.</p>
         <p class="final-form__success" role="status" hidden>Спасибо! Мы свяжемся с вами в течение 30 минут.</p>
       </form>
@@ -313,13 +296,13 @@
       <p>Пн–Вс, 9:00–21:00</p>
     </div>
     <div class="footer__links">
-      <p class="mono-label">CONTACT_CHANNELS · МЕССЕНДЖЕРЫ</p>
+      <p class="footer__heading">Мессенджеры</p>
       <a href="https://t.me/riverpools" target="_blank" rel="noopener">Telegram</a>
       <a href="https://wa.me/74951285619" target="_blank" rel="noopener">WhatsApp</a>
       <a href="https://vk.com/riverpools" target="_blank" rel="noopener">ВКонтакте</a>
     </div>
     <div class="footer__legal">
-      <p class="mono-label">LEGAL_DOCS · ДОКУМЕНТЫ</p>
+      <p class="footer__heading">Документы</p>
       <a href="/privacy.html" target="_blank" rel="noopener">Политика обработки данных</a>
       <a href="/offer.html" target="_blank" rel="noopener">Публичная оферта</a>
       <div class="footer__badges" aria-hidden="true">

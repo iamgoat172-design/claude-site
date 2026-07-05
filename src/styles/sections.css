@@ -288,6 +288,7 @@
   margin-top: 14px; font-weight: 700; font-size: 14.5px; color: var(--accent-dim);
 }
 .swatches-block { margin-bottom: 48px; }
+.block-title { font-size: 19px; font-weight: 800; margin: 0 0 16px; }
 .swatches { display: flex; flex-wrap: wrap; gap: 14px; }
 .swatch { text-align: center; width: 84px; }
 .swatch__chip {
@@ -376,9 +377,15 @@ label.checkbox span a { color: var(--accent-dim); }
 /* ================= why ================= */
 .section--why { padding: 120px 0 100px; }
 .why__grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px;
   margin-bottom: 40px;
 }
+.why__card--featured {
+  grid-column: span 2;
+  padding: 34px 30px;
+}
+.why__card--featured h3 { font-size: 23px; }
+.why__card--featured p { font-size: 16px; }
 .why__card {
   border-radius: var(--radius-l); padding: 28px 26px;
   background:
@@ -538,6 +545,10 @@ label.checkbox span a { color: var(--accent-dim); }
 .footer__brand a { color: var(--dark-ink); text-decoration: none; }
 .footer__brand a:hover { color: var(--accent-bright); }
 .footer__links, .footer__legal { display: flex; flex-direction: column; gap: 10px; }
+.footer__heading {
+  font-weight: 700; font-size: 14px; color: var(--dark-ink);
+  margin: 0 0 4px; letter-spacing: 0.02em;
+}
 .footer__links a, .footer__legal a {
   color: var(--dark-ink-2); text-decoration: none; font-size: 15px; width: fit-content;
 }
@@ -637,6 +648,7 @@ label.checkbox span a { color: var(--accent-dim); }
 /* ================= responsive ================= */
 @media (max-width: 1024px) {
   .catalog__grid, .why__grid, .reviews__grid { grid-template-columns: repeat(2, 1fr); }
+  .why__card--featured { grid-column: 1 / -1; }
   .works__grid, .life__grid { grid-template-columns: repeat(2, 1fr); }
   .addons-block { grid-template-columns: 1fr 1fr; }
   .tech__grid { grid-template-columns: 1fr; }
@@ -675,6 +687,7 @@ label.checkbox span a { color: var(--accent-dim); }
   .process__monitor { top: calc(var(--nav-h) + 22px); font-size: 10.5px; }
 
   .catalog__grid, .why__grid, .reviews__grid, .addons-block { grid-template-columns: 1fr; }
+  .why__card--featured { grid-column: auto; padding: 28px 26px; }
   .works__grid, .life__grid { grid-template-columns: 1fr 1fr; gap: 10px; }
   .final-form { grid-template-columns: 1fr; }
   .footer__grid { grid-template-columns: 1fr; gap: 28px; }
