@@ -34,30 +34,55 @@ export function initProcess(reduced) {
   let lastStage = -1;
 
   // видео-переходы (MERIDIAN-приём: скраб пред-рендеренной секвенции).
-  // Клип k морфит кадр k → k+1; стиллы остаются подложкой-фолбэком.
+  // Оптимизация: (1) seek только после завершения предыдущего (иначе очередь
+  // декодера = главный источник тормозов), (2) живут только клипы окна ±1 —
+  // не 7 декодеров 1080p разом, (3) только десктоп; мобайл/Save-Data — стиллы.
   const clipReady = new Array(clips.length).fill(false);
-  const saveData = navigator.connection?.saveData;
-  if (!reduced && !saveData) {
-    clips.forEach((v, i) => {
-      const url = asset(`clip-${i + 1}`);
-      if (!url) return;
-      v.src = url;
-      v.addEventListener('loadeddata', () => {
-        clipReady[i] = true;
-      });
+  const clipUrls = clips.map((_, i) => asset(`clip-${i + 1}`));
+  const wantClips =
+    !reduced &&
+    !navigator.connection?.saveData &&
+    window.matchMedia('(min-width: 1024px)').matches;
+
+  clips.forEach((v, i) => {
+    if (!wantClips || !clipUrls[i]) return;
+    v.addEventListener('loadeddata', () => {
+      clipReady[i] = true;
     });
-    // предзагрузка при подходе к секции
+    // seek-цепочка: пока идёт прошлый seek — новый не ставим
+    v.__target = 0;
+    v.addEventListener('seeked', () => {
+      if (Math.abs(v.currentTime - v.__target) > 0.07) v.currentTime = v.__target;
+    });
+  });
+
+  let attachedAround = -99;
+  function manageClipWindow(k) {
+    if (!wantClips || k === attachedAround) return;
+    attachedAround = k;
+    clips.forEach((v, i) => {
+      if (!clipUrls[i]) return;
+      const near = Math.abs(i - k) <= 1;
+      if (near && !v.src) {
+        v.src = clipUrls[i];
+        v.preload = 'auto';
+        v.load();
+      } else if (!near && v.src && Math.abs(i - k) >= 2) {
+        clipReady[i] = false;
+        v.removeAttribute('src');
+        v.load(); // освобождает декодер; при возврате возьмётся из кэша
+      }
+    });
+  }
+
+  if (wantClips) {
+    // подготовить первые клипы при подходе к секции
     ScrollTrigger.create({
       trigger: '.section--process',
       start: 'top 160%',
       once: true,
       onEnter() {
-        clips.forEach((v) => {
-          if (v.src) {
-            v.preload = 'auto';
-            v.load();
-          }
-        });
+        manageClipWindow(0);
       },
     });
   }
@@ -74,35 +99,38 @@ export function initProcess(reduced) {
       }
     }
 
+    // скраб видео-морфа: в окне k играет клип k-1 (кадр k-1 → k),
+    // первые 70% окна — скраб, дальше держим финальный кадр
+    const activeClip = Math.min(clips.length - 1, Math.max(0, Math.floor(p * N) - 1));
+    manageClipWindow(activeClip);
+    let clipCovering = false;
+    clips.forEach((v, i) => {
+      const k = i + 1; // окно, в котором живёт клип
+      const active = (p >= k / N && p < (k + 1) / N) || (k === N - 1 && p >= k / N);
+      if (!wantClips || !clipReady[i] || !active) {
+        v.style.opacity = 0;
+        return;
+      }
+      const win = clamp((p - k / N) * N, 0, 1);
+      const t = clamp(win / 0.7, 0, 1);
+      v.__target = t * Math.max((v.duration || 5) - 0.05, 0);
+      // новый seek — только если декодер свободен и сдвиг заметен
+      if (!v.seeking && Math.abs(v.currentTime - v.__target) > 0.07) {
+        v.currentTime = v.__target;
+      }
+      v.style.opacity = 1;
+      clipCovering = true;
+    });
+
     // кадры лежат стопкой по порядку: каждый следующий растворяется ПОВЕРХ
     // предыдущего на границе своего окна и дальше просто остаётся
     photos.forEach((ph, i) => {
       const o = i === 0 ? 1 : clamp((p - i / N) / (FADE / N), 0, 1);
       ph.style.opacity = o;
-      if (!reduced && o > 0) {
+      if (!reduced && o > 0 && !clipCovering) {
         // Ken Burns: едва заметный наезд за время жизни кадра
         const life = clamp((p - i / N) * N, 0, 1);
         ph.style.transform = `scale(${1.055 - life * 0.05})`;
-      }
-    });
-
-    // скраб видео-морфа: в окне k играет клип k-1 (кадр k-1 → k),
-    // первые 70% окна — скраб, дальше держим финальный кадр клипа
-    clips.forEach((v, i) => {
-      const k = i + 1; // окно, в котором живёт клип
-      const win = clamp((p - k / N) * N, 0, 1);
-      const active = p >= k / N && p < (k + 1) / N;
-      if (!clipReady[i] || reduced) {
-        v.style.opacity = 0;
-        return;
-      }
-      if (active || (k === N - 1 && p >= k / N)) {
-        const t = clamp(win / 0.7, 0, 1);
-        const target = t * Math.max(v.duration - 0.05, 0);
-        if (Math.abs(v.currentTime - target) > 0.034) v.currentTime = target;
-        v.style.opacity = 1;
-      } else {
-        v.style.opacity = 0;
       }
     });
 

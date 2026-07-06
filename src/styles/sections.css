@@ -268,8 +268,8 @@
   padding: 22px 26px;
   border-radius: var(--radius-m);
   background: linear-gradient(180deg, rgba(4, 7, 10, 0.6), rgba(4, 7, 10, 0.38));
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 .process-stage--tl { top: 16%; left: 6%; }
