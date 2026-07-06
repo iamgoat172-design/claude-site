@@ -44,6 +44,11 @@ export function fillAssetSlots() {
       media.style.objectFit = 'cover';
     }
   });
+  // фоновые слои: <div data-bg-asset="key"> (нет ассета — слой просто пуст)
+  document.querySelectorAll('[data-bg-asset]').forEach((el) => {
+    const url = asset(el.dataset.bgAsset);
+    if (url) el.style.backgroundImage = `url(${url})`;
+  });
 }
 
 export function renderCatalog(onCardClick) {

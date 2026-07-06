@@ -538,12 +538,24 @@ label.checkbox span a { color: var(--accent-dim); }
   .compare__vs { padding: 2px 0; }
 }
 
+/* ================= водяной фон тёмных секций ================= */
+.water-bg {
+  position: absolute; inset: 0; overflow: hidden;
+  background-size: cover; background-position: center;
+}
+.water-bg--flip { transform: scaleX(-1); } /* та же текстура, зеркально — без ощущения повтора */
+.water-bg::after {
+  content: ''; position: absolute; inset: 0;
+  /* скрим: читаемость текста + бесшовные края в чёрный */
+  background:
+    linear-gradient(180deg, var(--near-black) 0%, rgba(4, 7, 10, 0.62) 22%, rgba(4, 7, 10, 0.62) 78%, var(--near-black) 100%);
+}
+.section--tech > .container, .section--life > .container { position: relative; z-index: 1; }
+
 /* ================= tech (dark insert) ================= */
 .section--tech {
   padding: clamp(110px, 15vh, 170px) 0;
-  background:
-    radial-gradient(1200px 500px at 50% 0%, rgba(24, 166, 201, 0.08), transparent 70%),
-    var(--near-black);
+  background: var(--near-black);
 }
 .tech__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
 .tech__card {
