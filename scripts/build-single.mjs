@@ -48,7 +48,8 @@ html = html.replace(/<link rel="icon"[^>]*>/,
 // локальные реальные фото (/assets/real/…) → data-uri, чтобы одностраничник
 // работал через file:// без папки ассетов. Пути встречаются в HTML и в
 // инлайновом JS (карта ассетов).
-html = html.replace(/\/assets\/real\/[^"'`)\s\\]+\.webp/g, (m) => {
+html = html.replace(/\.?\/assets\/real\/[^"'`)\s\\]+\.webp/g, (m) => {
+  m = m.replace(/^\./, '');
   try {
     const buf = readFileSync(join(root, 'public', m));
     return `data:image/webp;base64,${buf.toString('base64')}`;
