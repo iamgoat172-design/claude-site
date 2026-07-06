@@ -327,8 +327,6 @@
 
   <!-- 1. HERO -->
   <section id="hero" class="section section--hero" data-theme="dark">
-    <canvas id="scene-canvas" aria-hidden="true"></canvas>
-    <img id="scene-fallback" class="scene-fallback" alt="" aria-hidden="true" hidden />
     <div class="hero__bg" id="hero-bg" aria-hidden="true">
       <div class="hero__bg-img" data-bg-asset="heroBg"></div>
       <div class="hero__bg-scrim"></div>
@@ -367,7 +365,17 @@
   <!-- 2. PROCESS (главная механика) -->
   <section id="process" class="section section--process" data-theme="dark">
     <div class="process__sticky">
-      <canvas id="process-canvas" aria-hidden="true"></canvas>
+      <div class="process__photos" aria-hidden="true">
+        <div class="process__photo" data-bg-asset="stage-1"></div>
+        <div class="process__photo" data-bg-asset="stage-2"></div>
+        <div class="process__photo" data-bg-asset="stage-3"></div>
+        <div class="process__photo" data-bg-asset="stage-4"></div>
+        <div class="process__photo" data-bg-asset="stage-5"></div>
+        <div class="process__photo" data-bg-asset="stage-6"></div>
+        <div class="process__photo" data-bg-asset="stage-7"></div>
+        <div class="process__photo" data-bg-asset="stage-8"></div>
+        <div class="process__scrim"></div>
+      </div>
       <div class="process__stages" id="process-stages"><!-- rendered by JS from data/models.js stages --></div>
       <div class="process__progress" aria-hidden="true"><div class="process__progress-bar" id="process-progress"></div></div>
     </div>

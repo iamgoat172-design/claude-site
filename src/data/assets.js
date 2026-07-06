@@ -15,6 +15,15 @@ const map = {
   heroBg: { url: `${CDN}/hf_20260705_235710_c92d87ee-e5d6-4bdd-b374-0da5ec671752_min.webp`, local: '/assets/hero-bg.webp' },
   // вода: фон тёмных секций (tech, life)
   waterBg: { url: `${CDN}/hf_20260706_002219_4b5976c2-0b6d-4713-8762-77f4a8cf2a26_min.webp`, local: '/assets/water-bg.webp' },
+  // фотореальная стройка (один двор, один ракурс); stage-8 = heroBg (финал = мечта)
+  'stage-1': { url: `${CDN}/hf_20260706_004238_881c2613-f738-424c-9a0c-9b165b9fd9cf_min.webp`, local: '/assets/stage-1.webp' },
+  'stage-2': { url: `${CDN}/hf_20260706_004446_13c88a5e-a600-40b3-be74-a75493d811bd_min.webp`, local: '/assets/stage-2.webp' },
+  'stage-3': { url: `${CDN}/hf_20260706_004617_1521c2f5-87ab-4c65-a3ba-7f5d06047ee0_min.webp`, local: '/assets/stage-3.webp' },
+  'stage-4': { url: `${CDN}/hf_20260706_004757_c28072b9-10ad-424a-956d-6bff00d45030_min.webp`, local: '/assets/stage-4.webp' },
+  'stage-5': { url: '', local: '/assets/stage-5.webp' },
+  'stage-6': { url: '', local: '/assets/stage-6.webp' },
+  'stage-7': { url: '', local: '/assets/stage-7.webp' },
+  'stage-8': { url: `${CDN}/hf_20260705_235710_c92d87ee-e5d6-4bdd-b374-0da5ec671752_min.webp`, local: '/assets/hero-bg.webp' },
   techEcoclean: { url: `${CDN}/hf_20260705_184003_ec38aa43-a01a-4a42-b544-b6496ec7f7c0_min.webp`, local: '/assets/tech_ecoclean_water.webp' },
   techAquabiography: { url: `${CDN}/hf_20260705_184006_e629e228-a916-457e-a043-f5bf88be21aa_min.webp`, local: '/assets/tech_aquabiography_night.webp' },
   'life-1': { url: `${CDN}/hf_20260705_184014_3d6a2044-cda4-40e3-b5dc-a69b372dc25b_min.webp`, local: '/assets/life-1.webp' },

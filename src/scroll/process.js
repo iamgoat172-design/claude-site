@@ -1,13 +1,13 @@
-// Хореография секции «Процесс»: один scrub-триггер ведёт сцену,
-// прогресс-бар, статус-монитор и fly-in текстов этапов с 4 сторон.
-// Тексты анимируются детерминированно от прогресса (без дуэли твинов).
+// Хореография секции «Процесс»: фотореальная стройка одного двора.
+// Один scrub-триггер ведёт кроссфейд 8 кадров (одна камера, один ракурс),
+// деликатный Ken Burns внутри кадра, прогресс-бар и fly-in подписей с 4 сторон.
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { STAGES } from '../data/models.js';
 import { track } from '../data/config.js';
 
 const N = STAGES.length;
-const AMP = 150; // амплитуда заезда, px
+const AMP = 150; // амплитуда заезда текста, px
 const DIR = {
   left: { x: -AMP, y: 0 },
   right: { x: AMP, y: 0 },
@@ -20,36 +20,46 @@ const easeIn = [
   gsap.parseEase('expo.out'),
   gsap.parseEase('back.out(1.3)'),
 ];
+const FADE = 0.18; // доля окна на растворение кадров
 
-export function initProcess(scene, reduced) {
+export function initProcess(reduced) {
   const stageEls = [...document.querySelectorAll('.process-stage')];
+  const photos = [...document.querySelectorAll('.process__photo')];
   const bar = document.getElementById('process-progress');
-  const status = document.getElementById('stage-status');
   if (!stageEls.length) return;
 
-  let lastStage = -1;
   const seenStages = new Set();
+  let lastStage = -1;
 
   function update(p) {
-    scene?.setProgress(p);
     if (bar) bar.style.width = `${(p * 100).toFixed(2)}%`;
 
     const idx = Math.min(N - 1, Math.floor(p * N));
     if (idx !== lastStage) {
       lastStage = idx;
-      if (status) status.textContent = STAGES[idx].status;
-      // глубина вовлечения в сцену: каждая фаза — один раз за сессию
       if (!seenStages.has(idx)) {
         seenStages.add(idx);
         track('process_stage_reached', { stage: STAGES[idx].key });
       }
     }
 
+    // кадры лежат стопкой по порядку: каждый следующий растворяется ПОВЕРХ
+    // предыдущего на границе своего окна и дальше просто остаётся
+    photos.forEach((ph, i) => {
+      const o = i === 0 ? 1 : clamp((p - i / N) / (FADE / N), 0, 1);
+      ph.style.opacity = o;
+      if (!reduced && o > 0) {
+        // Ken Burns: едва заметный наезд за время жизни кадра
+        const life = clamp((p - i / N) * N, 0, 1);
+        ph.style.transform = `scale(${1.055 - life * 0.05})`;
+      }
+    });
+
     stageEls.forEach((el, i) => {
       const start = i / N;
       const end = (i + 1) / N;
       const isLast = i === N - 1;
-      const t = (p - start) / (end - start); // локальный прогресс окна
+      const t = (p - start) / (end - start);
 
       if (t <= 0 || (t >= 1 && !isLast)) {
         el.style.opacity = 0;
@@ -58,7 +68,6 @@ export function initProcess(scene, reduced) {
       const dir = DIR[STAGES[i].from] || DIR.up;
 
       if (reduced) {
-        // упрощённый режим: только fade
         el.style.transform = 'none';
         el.style.opacity = t > 0 && (t < 1 || isLast) ? 1 : 0;
         return;
@@ -67,7 +76,7 @@ export function initProcess(scene, reduced) {
       let x = 0;
       let y = 0;
       let o = 1;
-      const IN = isLast ? 0.55 : 0.24; // READY проявляется дольше (fade-in с p≈0.94… от начала окна)
+      const IN = isLast ? 0.55 : 0.24;
       const OUT = 0.78;
       if (t < IN) {
         const k = easeIn[i % easeIn.length](t / IN);
@@ -80,7 +89,6 @@ export function initProcess(scene, reduced) {
         y = -dir.y * 0.5 * k;
         o = 1 - k;
       }
-      // transform учитывает базовое центрирование из CSS
       const baseCenter = STAGES[i].pos === 'center';
       const isMobile = window.matchMedia('(max-width: 760px)').matches;
       if (isMobile) {
@@ -105,4 +113,8 @@ export function initProcess(scene, reduced) {
   });
 
   update(0);
+}
+
+function clamp(v, a, b) {
+  return Math.min(b, Math.max(a, v));
 }

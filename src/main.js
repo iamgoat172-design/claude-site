@@ -3,7 +3,6 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 
-import { PoolScene } from './scene/PoolScene.js';
 import { initFlyin } from './scroll/flyin.js';
 import { initSnap } from './scroll/snap.js';
 import { initProcess } from './scroll/process.js';
@@ -38,30 +37,9 @@ if (!reduced) {
   gsap.ticker.lagSmoothing(0);
 }
 
-/* ---------- WebGL-сцена (с fallback) ---------- */
-let scene = null;
-const canvas = document.getElementById('scene-canvas');
-const fallback = document.getElementById('scene-fallback');
-try {
-  const test = document.createElement('canvas');
-  const gl = test.getContext('webgl2') || test.getContext('webgl');
-  if (!gl) throw new Error('no webgl');
-  scene = new PoolScene(canvas, { glbUrl: asset('poolGlb'), reduced });
-} catch (err) {
-  console.warn('[scene] WebGL недоступен, включён фолбэк:', err);
-  canvas.hidden = true;
-  if (fallback) {
-    const url = asset('heroPoster');
-    if (url) {
-      fallback.src = url;
-      fallback.hidden = false;
-    }
-  }
-}
-
 // QA-хук: ?qa=1 → window.__qa
 if (new URLSearchParams(location.search).has('qa')) {
-  window.__qa = { lenis, ScrollTrigger, poolScene: scene };
+  window.__qa = { lenis, ScrollTrigger };
 }
 
 /* ---------- статика из данных ---------- */
@@ -75,16 +53,15 @@ renderLife();
 fillAssetSlots();
 
 /* ---------- скролл-механика ---------- */
-initProcess(scene, reduced);
+initProcess(reduced);
 
-// красивый переход hero → процесс: фото растворяется, beauty-бассейн
-// разбирается к «замеру»
+// переход hero → процесс: фото героя растворяется в стройку
 const heroBg = document.getElementById('hero-bg');
 const heroBgImg = heroBg?.querySelector('.hero__bg-img');
 {
   const url = asset('heroBg');
   if (url && heroBgImg) heroBgImg.style.backgroundImage = `url(${url})`;
-  else if (heroBg) heroBg.remove(); // нет фото — чистый чёрный, WebGL за контентом
+  else if (heroBg) heroBg.remove();
 }
 ScrollTrigger.create({
   trigger: '.section--process',
@@ -93,7 +70,6 @@ ScrollTrigger.create({
   scrub: true,
   onUpdate(self) {
     const t = self.progress;
-    scene?.setHeroBlend(1 - Math.min(t / 0.7, 1));
     if (heroBg && heroBg.isConnected) {
       heroBg.style.opacity = String(1 - t);
       if (heroBgImg && !reduced) heroBgImg.style.transform = `scale(${1.02 + t * 0.06})`;
@@ -103,7 +79,7 @@ ScrollTrigger.create({
 
 initFlyin(reduced);
 initSnap(reduced);
-initTheme(scene);
+initTheme();
 
 /* ---------- UI ---------- */
 initNav(lenis);
