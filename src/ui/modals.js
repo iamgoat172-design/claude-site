@@ -152,7 +152,9 @@ export function initModals(lenis) {
     const m = MODELS.find((x) => x.id === id);
     if (!m) return;
     track('model_modal_opened', { model: m.name });
+    const photo = asset(`model-${m.id}`);
     body.innerHTML = `
+      ${photo ? `<img class="modal__photo" src="${photo}" alt="Бассейн ${m.name}" />` : ''}
       <h3>${m.name}</h3>
       <p class="model-card__tag">${m.tag}</p>
       <ul class="modal__specs">

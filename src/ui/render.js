@@ -55,11 +55,15 @@ export function renderCatalog(onCardClick) {
   const grid = document.getElementById('catalog-grid');
   if (!grid) return;
   grid.innerHTML = MODELS.map(
-    (m) => `
+    (m) => {
+      const photo = asset(`model-${m.id}`);
+      return `
     <article class="model-card" data-model="${m.id}" tabindex="0" role="button"
       aria-label="${m.name}: подробнее">
       <span class="model-card__badge">−15%</span>
-      <div class="model-card__vis">${poolSvg(m.id)}</div>
+      <div class="model-card__vis">${
+        photo ? `<img src="${photo}" alt="Бассейн ${m.name}" loading="lazy" />` : poolSvg(m.id)
+      }</div>
       <h3>${m.name}</h3>
       <p class="model-card__tag">${m.tag}</p>
       <ul class="model-card__specs">
@@ -72,7 +76,8 @@ export function renderCatalog(onCardClick) {
         <span class="now">от ${fmtPrice(m.priceNow)}</span>
       </p>
       <span class="model-card__link">Подробнее о модели →</span>
-    </article>`
+    </article>`;
+    }
   ).join('');
 
   grid.querySelectorAll('.model-card').forEach((card) => {

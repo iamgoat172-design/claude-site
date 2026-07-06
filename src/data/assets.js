@@ -33,6 +33,13 @@ const map = {
   'clip-5': { url: `${CDN}/hf_20260706_014048_ef50cfe0-d3f4-4b45-b18e-be79efd66b7e.mp4`, local: '/assets/clips/clip-5.mp4' },
   'clip-6': { url: `${CDN}/hf_20260706_014054_eeb813f0-02f8-4df8-bdea-9a6ec401546c.mp4`, local: '/assets/clips/clip-6.mp4' },
   'clip-7': { url: `${CDN}/hf_20260706_030624_d52ec698-6561-4c7e-a9de-5e3784a3e9b6.mp4`, local: '/assets/clips/clip-7.mp4' },
+  // фото моделей каталога (карточки + модалка деталей)
+  'model-luxor': { url: `${CDN}/hf_20260706_031540_cf58036b-e062-49f4-86dc-87b033906682_min.webp`, local: '/assets/model-luxor.webp' },
+  'model-minipool': { url: `${CDN}/hf_20260706_031543_12d06282-fdcf-4e0a-a0a3-7ba7e93b84b2_min.webp`, local: '/assets/model-minipool.webp' },
+  'model-classic': { url: `${CDN}/hf_20260706_031545_f7002c61-0e39-4097-ada9-2630d9f8a4d6_min.webp`, local: '/assets/model-classic.webp' },
+  'model-rio': { url: `${CDN}/hf_20260706_031548_8f78e328-a7e4-4b04-8b9b-8b212abf53fe_min.webp`, local: '/assets/model-rio.webp' },
+  'model-quick': { url: `${CDN}/hf_20260706_031550_56bef3cb-b9ee-4932-956e-d3bd78a0e794_min.webp`, local: '/assets/model-quick.webp' },
+  'model-spa': { url: `${CDN}/hf_20260706_031552_cf1c0b5f-e8d3-4d46-a1d8-3da2eb77c114_min.webp`, local: '/assets/model-spa.webp' },
   techEcoclean: { url: `${CDN}/hf_20260705_184003_ec38aa43-a01a-4a42-b544-b6496ec7f7c0_min.webp`, local: '/assets/tech_ecoclean_water.webp' },
   techAquabiography: { url: `${CDN}/hf_20260705_184006_e629e228-a916-457e-a043-f5bf88be21aa_min.webp`, local: '/assets/tech_aquabiography_night.webp' },
   'life-1': { url: `${CDN}/hf_20260705_184014_3d6a2044-cda4-40e3-b5dc-a69b372dc25b_min.webp`, local: '/assets/life-1.webp' },
