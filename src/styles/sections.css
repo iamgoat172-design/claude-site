@@ -1104,3 +1104,12 @@ label.checkbox span a { color: var(--accent-dim); }
   .process-stage__meta { justify-content: center; }
   .process-stage__track { display: none; }
 }
+
+/* --- маркетинг-аудит: подсказки лейблов и мост доверия в отзывах --- */
+.label-hint { font-weight: 400; font-size: 12px; color: var(--ink-2); margin-left: 4px; }
+.reviews__proof {
+  margin: 26px auto 0; max-width: 640px; text-align: center;
+  font-size: 14.5px; color: var(--ink-2);
+  padding: 16px 22px; border-radius: var(--radius-m);
+  background: var(--paper-2);
+}

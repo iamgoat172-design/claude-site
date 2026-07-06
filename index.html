@@ -200,6 +200,14 @@
    "mainEntity": [
     {
      "@type": "Question",
+     "name": "От чего зависит итоговая цена?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "База — модель и размер чаши: от 640 900 ₽ за купель SPA до ~1,4 млн ₽ за 10-метровый LUXOR, всё под ключ. Сверху влияют только грунт на участке и опции — подогрев, противоток, автоматика. После выезда инженера цена фиксируется в договоре и больше не меняется."
+     }
+    },
+    {
+     "@type": "Question",
      "name": "Сколько времени занимает монтаж?",
      "acceptedAnswer": {
       "@type": "Answer",
@@ -275,7 +283,7 @@
      "name": "Можно ли заказать зимой?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "Да, «Зимняя бронь»: фиксируем цену 2026 года и даём скидку до 10% на оборудование при заказе до 1 марта."
+      "text": "Да, «Зимняя бронь»: фиксируем текущую цену до весеннего монтажа и даём до 10% скидки на оборудование."
      }
     }
    ]
@@ -346,14 +354,14 @@
         </div>
         <aside class="hero__panel" data-flyin="right">
           <p class="hero__panel-title">Расчёт под ваш участок</p>
-          <p class="hero__panel-sub">Инженер перезвонит в&nbsp;течение 30&nbsp;минут. Выезд и замер — 5&nbsp;000&nbsp;₽, при заключении договора зачтём в стоимость.</p>
+          <p class="hero__panel-sub">Перезвоним за 30&nbsp;минут и посчитаем предварительную смету — бесплатно. Выезд инженера с геологией и точной сметой — 5&nbsp;000&nbsp;₽: эта сумма становится первым платежом по договору.</p>
           <form id="hero-form" class="hero-form" novalidate>
             <input type="text" name="hp_field" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
             <label>Имя<input type="text" name="name" required autocomplete="name" /></label>
             <label>Телефон<input type="tel" name="phone" required autocomplete="tel" placeholder="+7 (___) ___-__-__" /></label>
             <label class="checkbox"><input type="checkbox" name="consent" required /><span>Согласен с <a href="/privacy.html" target="_blank" rel="noopener" tabindex="-1">политикой обработки данных</a></span></label>
             <button type="submit" class="btn btn--primary btn--wide">Получить расчёт</button>
-            <p class="form-risk">Звонок ни к чему не обязывает. Смета — до подписания договора.</p>
+            <p class="form-risk">Звонок и предварительный расчёт — бесплатно и ни к чему не обязывают.</p>
             <p class="hero-form__success" role="status" hidden>Спасибо! Инженер свяжется с вами в течение 30 минут.</p>
           </form>
         </aside>
@@ -396,13 +404,13 @@
   <section id="catalog" class="section section--catalog" data-theme="light">
     <div class="container">
       <h2 class="section-title">Найдите свою форму бассейна</h2>
-      <p class="section-sub">Две линейки, 9 цветов гелькоута — под любой участок и бюджет. Закажете сейчас — забронируете цену на 2026 год: в договоре она зафиксирована и не меняется в&nbsp;процессе монтажа.</p>
+      <p class="section-sub">Две линейки, 9 цветов гелькоута — под любой участок и бюджет. Цена фиксируется в договоре в день подписания и не меняется до сдачи — что бы ни происходило с курсом и материалами.</p>
       <div class="catalog__lines" role="tablist" aria-label="Линейки бассейнов">
         <button type="button" class="catalog__line-tab is-active" role="tab" aria-selected="true" data-line="premium">
           Премиум<span>6 моделей · от 640 900 ₽</span>
         </button>
         <button type="button" class="catalog__line-tab" role="tab" aria-selected="false" data-line="eco">
-          ECO LINE<span>6 моделей · доступнее</span>
+          ECO LINE<span>6 моделей · ощутимо доступнее</span>
         </button>
       </div>
       <div class="catalog__grid" id="catalog-grid"><!-- rendered by JS --></div>
@@ -425,14 +433,14 @@
         <p class="offer__kicker">Акция июля</p>
         <h2 class="offer__title">Закажете в июле —<br />купаетесь в августе</h2>
         <ul class="offer__points">
-          <li><strong>−15%</strong> на весь модельный ряд</li>
+          <li><strong>−15%</strong> на весь модельный ряд — при договоре до 31 июля</li>
           <li><strong>30 дней</strong> — срок в договоре с неустойкой</li>
-          <li><strong>«Зимняя бронь»</strong> — цена до весны + до 10% на оборудование</li>
+          <li><strong>Купание в августе</strong> — июльские слоты бригад закрываются первыми, позже — сдача к сентябрю</li>
         </ul>
       </div>
       <div class="offer__cta">
         <a href="#final-cta" class="btn btn--primary btn--lg" data-magnet data-lead="offer">Получить расчёт</a>
-        <p class="form-risk">Инженер перезвонит в течение 30 минут.<br />Выезд — 5&nbsp;000&nbsp;₽, зачтём в стоимость договора.</p>
+        <p class="form-risk">Инженер перезвонит в течение 30 минут —<br />предварительный расчёт бесплатно.</p>
       </div>
     </div>
   </section>
@@ -480,7 +488,7 @@
       </figure>
       <div class="compare__list">
         <div class="compare__row">
-          <div class="compare__us"><h3>Договор с юрлицом и неустойка</h3><p>Срок 30 дней и штраф за просрочку закреплены на бумаге. Претензию есть кому предъявить.</p></div>
+          <div class="compare__us"><h3>Договор с юрлицом и неустойка</h3><p>Срок 30 дней и штраф за просрочку закреплены на бумаге. Договор пришлём на изучение до выезда инженера.</p></div>
           <span class="compare__vs" aria-hidden="true">vs</span>
           <div class="compare__them"><h3>Расписка или «честное слово»</h3><p>Без юрлица взыскать ущерб за долгострой практически невозможно.</p></div>
         </div>
@@ -548,17 +556,18 @@
       <div class="reviews__grid">
         <blockquote class="review-card">
           <p>«Боялись „доплатите за грунт" и лета в стройке. Вместо этого — своя бригада, фото площадки каждый день и купание через 30&nbsp;дней, как в договоре. LUXOR на&nbsp;8&nbsp;метров — чтобы плыть, а&nbsp;не плескаться.»</p>
-          <footer>— Дмитрий, Одинцовский район</footer>
+          <footer>— Дмитрий, Одинцовский район · LUXOR 8,5 м, сдан в июне 2025</footer>
         </blockquote>
         <blockquote class="review-card">
           <p>«Начиталась историй, как чаши трескаются, если не слить воду на зиму. Вторая зима — не сливали ни разу, весной просто включили фильтрацию. А дети полезли купаться уже в&nbsp;мае.»</p>
-          <footer>— Наталья, Пушкинский район</footer>
+          <footer>— Наталья, Пушкинский район · CLASSIC 8,5 м, вторая зима</footer>
         </blockquote>
         <blockquote class="review-card">
           <p>«Боялся, что бассейн будет смотреться „как из каталога". С подсветкой AQUABIOGRAPHY наш RIO вечером — отдельный элемент ландшафта, соседи спрашивают, кто строил. Сумма в договоре не изменилась ни&nbsp;на&nbsp;рубль.»</p>
-          <footer>— Игорь, Ленинский район</footer>
+          <footer>— Игорь, Ленинский район · RIO 7,7 м, сдан в августе 2025</footer>
         </blockquote>
       </div>
+      <p class="reviews__proof">Хотите поговорить с владельцем такого же бассейна? Несколько наших клиентов согласились рекомендовать нас лично — дадим контакт на выезде инженера.</p>
     </div>
   </section>
 
@@ -567,6 +576,7 @@
     <div class="container container--narrow">
       <h2 class="section-title">Частые вопросы</h2>
       <div class="faq__list">
+        <details class="faq__item"><summary>От чего зависит итоговая цена?</summary><p>База — модель и размер чаши: от 640 900 ₽ за купель SPA до ~1,4 млн ₽ за 10-метровый LUXOR, всё под ключ. Сверху влияют только грунт на участке (геологию проверяет инженер на выезде) и опции — подогрев, противоток, автоматика. После выезда цена фиксируется в договоре и больше не меняется.</p></details>
         <details class="faq__item"><summary>Сколько времени занимает монтаж?</summary><p>30 дней от выезда инженера до первого купания — срок и неустойка за его нарушение прописаны в договоре.</p></details>
         <details class="faq__item"><summary>Сложно ли ухаживать за композитным бассейном?</summary><p>Нет — гладкий гелькоут не задерживает водоросли и грязь: нужны только регулярная фильтрация и контроль химии воды.</p></details>
         <details class="faq__item"><summary>Что входит в гарантию?</summary><p>25 лет на саму чашу (защита от осмоса и разгерметизации), плюс отдельная гарантия на монтаж и оборудование.</p></details>
@@ -576,7 +586,7 @@
         <details class="faq__item"><summary>Нужно ли сливать воду на зиму?</summary><p>Нет — утепление ППУ Premium Nord держит воду в чаше даже в российские морозы, без слива на зиму.</p></details>
         <details class="faq__item"><summary>Есть ли рассрочка?</summary><p>Да — рассрочка до 24 месяцев или оплата по этапам строительства без процентов.</p></details>
         <details class="faq__item"><summary>А если на участке сложный грунт или высокие грунтовые воды?</summary><p>Решаем: усиленное основание, дренаж и технология сотового дна (Honeycomb) — бассейн ставится даже на пучинистых грунтах и при высоком УГВ.</p></details>
-        <details class="faq__item"><summary>Можно ли заказать зимой?</summary><p>Да, «Зимняя бронь»: фиксируем цену 2026 года и даём скидку до 10% на оборудование при заказе до 1 марта.</p></details>
+        <details class="faq__item"><summary>Можно ли заказать зимой?</summary><p>Да, «Зимняя бронь»: фиксируем текущую цену до весеннего монтажа и даём до 10% скидки на оборудование.</p></details>
       </div>
     </div>
   </section>
@@ -591,26 +601,24 @@
         <input type="text" name="hp_field" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
         <label>Имя<input type="text" name="name" required autocomplete="name" /></label>
         <label>Телефон<input type="tel" name="phone" required autocomplete="tel" placeholder="+7 (___) ___-__-__" /></label>
-        <label>Регион
-          <select name="region" required>
+        <label>Регион <span class="label-hint">необязательно</span>
+          <select name="region">
             <option value="">Выберите регион</option>
             <option value="msk">Москва и МО</option>
-            <option value="spb">СПб и ЛО</option>
-            <option value="other">Другой</option>
+            <option value="other">Другой (обсудим индивидуально)</option>
           </select>
         </label>
-        <label>Бюджет
-          <select name="budget" required>
+        <label>Бюджет <span class="label-hint">если уже понимаете</span>
+          <select name="budget">
             <option value="">Выберите бюджет</option>
-            <option value="lt1.5">До 1.5 млн ₽</option>
-            <option value="1.5-2.5">1.5–2.5 млн ₽</option>
-            <option value="2.5-3">2.5–3 млн ₽</option>
-            <option value="gt3">3 млн ₽ и выше</option>
+            <option value="b1">До 1 млн ₽</option>
+            <option value="b2">1–2 млн ₽</option>
+            <option value="b3">От 2 млн ₽</option>
           </select>
         </label>
         <label class="checkbox"><input type="checkbox" name="consent" required /><span>Согласен с <a href="/privacy.html" target="_blank" rel="noopener" tabindex="-1">политикой обработки данных</a></span></label>
         <button type="submit" class="btn btn--primary btn--wide">Получить расчёт</button>
-        <p class="form-risk">Выезд инженера — 5&nbsp;000&nbsp;₽, при заключении договора зачтём в стоимость. Цена фиксируется в договоре.</p>
+        <p class="form-risk">Звонок и предварительный расчёт — бесплатно. Выезд с геологией — 5&nbsp;000&nbsp;₽, становится первым платежом по договору.</p>
         <p class="final-form__success" role="status" hidden>Спасибо! Мы свяжемся с вами в течение 30 минут.</p>
       </form>
     </div>
@@ -642,7 +650,7 @@
       </div>
     </div>
   </div>
-  <p class="footer__copy container">© 2026 River Pools. Все права защищены.</p>
+  <p class="footer__copy container">© 2026 River Pools · ООО «Ривер Пулс», реквизиты — в <a href="/offer.html">оферте</a>. Все права защищены.</p>
 </footer>
 
 <div class="sticky-cta" id="sticky-cta">

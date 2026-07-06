@@ -40,27 +40,49 @@ export function initProcess(reduced) {
     if (!wantClips || !clipUrls[i]) return;
     v.addEventListener('loadeddata', () => {
       clipReady[i] = true;
+      // влетели в середину окна — сразу встать на нужный кадр
+      if (clipTarget[i] > 0) v.currentTime = clipTarget[i];
     });
   });
 
-  // перемотка-погоня: каждый тик подгоняем скорость проигрывания под
-  // расстояние до цели. Вперёд — плавное проигрывание (0.05–4×), назад
-  // или при большом отставании — один точный seek.
-  const CATCH = 3.2; // насколько агрессивно догоняем (гэп 1с → 3.2×)
+  // 1:1 сопровождение скролла: сколько проскроллено — столько промотано.
+  // Скорость видео = скорость движения цели (фид-форвард по EMA) + добор
+  // отставания (пропорциональная коррекция). Декодер всегда идёт вперёд —
+  // плавно как обычное видео; назад или дальний флик — один точный seek.
+  const clipVel = new Array(clips.length).fill(0); // EMA скорости цели, с/с
+  const clipPrev = new Array(clips.length).fill(-1);
+  let lastTick = 0;
   function chase() {
+    const now = performance.now();
+    const dt = lastTick ? Math.min((now - lastTick) / 1000, 0.1) : 1 / 60;
+    lastTick = now;
     clips.forEach((v, i) => {
       const target = clipTarget[i];
-      if (target < 0 || !clipReady[i] || v.seeking) return;
+      if (target < 0 || !clipReady[i]) {
+        clipPrev[i] = -1;
+        clipVel[i] = 0;
+        return;
+      }
+      if (clipPrev[i] >= 0 && dt > 0) {
+        const raw = (target - clipPrev[i]) / dt;
+        clipVel[i] += (raw - clipVel[i]) * 0.35;
+      }
+      clipPrev[i] = target;
+      if (v.seeking) return;
       const gap = target - v.currentTime;
-      if (gap > 1.4 || gap < -0.3) {
-        // слишком далеко (быстрый флик) или скролл назад — точный seek
-        if (!v.paused) v.pause();
+      if (gap < -0.25 || gap > 1.6) {
+        // скролл назад или сильный отрыв (флик) — точный переброс
+        v.pause();
         v.currentTime = target;
-      } else if (gap > 0.03) {
-        v.playbackRate = clamp(gap * CATCH, 0.05, 4);
+        clipVel[i] = 0;
+        return;
+      }
+      const rate = clipVel[i] + gap * 5;
+      if (rate <= 0.02 && Math.abs(gap) < 0.06) {
+        if (!v.paused) v.pause(); // цель стоит, кадр на месте
+      } else {
+        v.playbackRate = clamp(rate, 0.0625, 8);
         if (v.paused) v.play().catch(() => {});
-      } else if (!v.paused) {
-        v.pause(); // догнали — стоим, ждём скролл
       }
     });
   }
@@ -74,7 +96,8 @@ export function initProcess(reduced) {
       if (!clipUrls[i]) return;
       const near = Math.abs(i - k) <= 1;
       if (near && !v.src) {
-        v.src = clipUrls[i];
+        // __qaClipOverride — подмена источника в тестах (blob-видео)
+        v.src = window.__qaClipOverride || clipUrls[i];
         v.preload = 'auto';
         v.load();
       } else if (!near && v.src && Math.abs(i - k) >= 2) {
@@ -193,6 +216,9 @@ export function initProcess(reduced) {
       update(self.progress);
     },
   });
+
+  // метрики синхронизации для QA-прогона
+  if (window.__qa) window.__qa.process = { clips, clipTarget, clipReady };
 
   update(0);
 }

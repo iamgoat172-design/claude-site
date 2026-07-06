@@ -42,8 +42,8 @@ export const QUIZ_TEMPLATE = `
       <label>Телефон<input type="tel" name="phone" required autocomplete="tel" placeholder="+7 (___) ___-__-__" /></label>
       <label class="checkbox"><input type="checkbox" name="consent" required /><span>Согласен с <a href="/privacy.html" target="_blank" rel="noopener" tabindex="-1">политикой обработки данных</a></span></label>
       <button type="submit" class="btn btn--primary">Получить расчёт</button>
-      <p class="form-risk">Выезд инженера — 5 000 ₽, зачтём в стоимость договора. Цена фиксируется в договоре.</p>
-      <p class="quiz__success" role="status" hidden>Спасибо! Инженер свяжется с вами в течение 30 минут.</p>
+      <p class="form-risk">Пришлём расчёт в WhatsApp или Telegram — позвоним, только если попросите.</p>
+      <p class="quiz__success" role="status" hidden>Спасибо! Расчёт по вашей модели придёт в мессенджер в течение часа.</p>
     </form>
   </div>`;
 

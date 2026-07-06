@@ -107,7 +107,7 @@ export function renderEcoCatalog(onLead) {
       </div>
       <h3>${m.name}</h3>
       <p class="model-card__tag">${m.hint}</p>
-      <p class="model-card__price"><span class="now model-card__price--eco">Цена — по расчёту под участок</span></p>
+      <p class="model-card__price"><span class="now model-card__price--eco">Цену пришлём в день обращения</span></p>
       <span class="model-card__link">Узнать цену →</span>
     </article>`
   ).join('');
