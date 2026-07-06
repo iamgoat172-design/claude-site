@@ -1,5 +1,5 @@
 // Рендер повторяющихся блоков из data/: каталог, свотчи, допы, этапы, works, life.
-import { MODELS, SWATCHES, ADDONS, STAGES, WORKS, LIFE, fmtPrice } from '../data/models.js';
+import { MODELS, ECO_MODELS, SWATCHES, ADDONS, STAGES, WORKS, LIFE, fmtPrice } from '../data/models.js';
 import { asset } from '../data/assets.js';
 
 // SVG-силуэт чаши для карточки (вид сверху), форма зависит от модели
@@ -56,7 +56,8 @@ export function renderCatalog(onCardClick) {
   if (!grid) return;
   grid.innerHTML = MODELS.map(
     (m) => {
-      const photo = asset(`model-${m.id}`);
+      // приоритет: реальное фото модели (lp2) → сгенерированное → SVG-схема
+      const photo = asset(`photo-${m.id}`) || asset(`model-${m.id}`);
       return `
     <article class="model-card" data-model="${m.id}" tabindex="0" role="button"
       aria-label="${m.name}: подробнее">
@@ -92,13 +93,65 @@ export function renderCatalog(onCardClick) {
   });
 }
 
+// ECO LINE: карточки без спеков (цены линейки уточняются по заявке)
+export function renderEcoCatalog(onLead) {
+  const grid = document.getElementById('catalog-eco');
+  if (!grid) return;
+  grid.innerHTML = ECO_MODELS.map(
+    (m) => `
+    <article class="model-card model-card--eco" data-eco="${m.name}" tabindex="0" role="button"
+      aria-label="${m.name}: получить расчёт">
+      <span class="model-card__badge model-card__badge--eco">ECO LINE</span>
+      <div class="model-card__vis">
+        <img src="${asset(`eco-${m.id}`)}" alt="Бассейн ${m.name}" loading="lazy" />
+      </div>
+      <h3>${m.name}</h3>
+      <p class="model-card__tag">${m.hint}</p>
+      <p class="model-card__price"><span class="now model-card__price--eco">Цена — по расчёту под участок</span></p>
+      <span class="model-card__link">Узнать цену →</span>
+    </article>`
+  ).join('');
+  grid.querySelectorAll('.model-card--eco').forEach((card) => {
+    const open = () => onLead(`eco:${card.dataset.eco}`);
+    card.addEventListener('click', open);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        open();
+      }
+    });
+  });
+}
+
+// переключатель линеек каталога
+export function initCatalogLines() {
+  const tabs = [...document.querySelectorAll('.catalog__line-tab')];
+  const premium = document.getElementById('catalog-grid');
+  const eco = document.getElementById('catalog-eco');
+  if (!tabs.length || !premium || !eco) return;
+  tabs.forEach((tab) =>
+    tab.addEventListener('click', () => {
+      tabs.forEach((t) => {
+        const active = t === tab;
+        t.classList.toggle('is-active', active);
+        t.setAttribute('aria-selected', String(active));
+      });
+      const isEco = tab.dataset.line === 'eco';
+      premium.hidden = isEco;
+      eco.hidden = !isEco;
+    })
+  );
+}
+
 export function renderSwatches() {
   const grid = document.getElementById('swatches-grid');
   if (!grid) return;
   grid.innerHTML = SWATCHES.map(
     (s) => `
     <div class="swatch">
-      <div class="swatch__chip" style="background:${s.hex}" title="${s.name}"></div>
+      <div class="swatch__chip swatch__chip--photo" title="${s.name}">
+        <img src="${asset(s.key)}" alt="Гелькоут ${s.name}" loading="lazy" />
+      </div>
       <div class="swatch__name">${s.name}</div>
     </div>`
   ).join('');
@@ -122,7 +175,13 @@ export function renderStages() {
   wrap.innerHTML = STAGES.map(
     (s, i) => `
     <div class="process-stage process-stage--${s.pos}" data-stage="${i}">
-      <p class="mono-label">Этап ${i + 1} из 8</p>
+      <div class="process-stage__meta">
+        <span class="process-stage__num">${String(i + 1).padStart(2, '0')}</span>
+        <span class="process-stage__of">/ 08</span>
+        <span class="process-stage__track" aria-hidden="true">${STAGES.map(
+          (_, k) => `<i class="${k <= i ? 'is-on' : ''}"></i>`
+        ).join('')}</span>
+      </div>
       <h3>${s.title}</h3>
       <p>${s.text}</p>
     </div>`

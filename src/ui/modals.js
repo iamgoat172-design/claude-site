@@ -43,14 +43,14 @@ function buildLeadModal() {
     <div class="modal modal--lead" role="dialog" aria-modal="true" aria-label="Заявка на расчёт">
       <button type="button" class="modal__close" aria-label="Закрыть">&times;</button>
       <p class="hero__panel-title">Расчёт под ваш участок</p>
-      <p class="hero__panel-sub">Инженер перезвонит в течение 30 минут, смета — после бесплатного замера.</p>
+      <p class="hero__panel-sub">Инженер перезвонит в течение 30 минут. Выезд и замер — 5 000 ₽, зачтём в стоимость договора.</p>
       <form id="lead-form" class="hero-form" novalidate>
         <input type="text" name="hp_field" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
         <label>Имя<input type="text" name="name" required autocomplete="name" /></label>
         <label>Телефон<input type="tel" name="phone" required autocomplete="tel" placeholder="+7 (___) ___-__-__" /></label>
         <label class="checkbox"><input type="checkbox" name="consent" required /><span>Согласен с <a href="/privacy.html" target="_blank" rel="noopener" tabindex="-1">политикой обработки данных</a></span></label>
         <button type="submit" class="btn btn--primary btn--wide">Получить расчёт</button>
-        <p class="form-risk">Бесплатно и ни к чему не обязывает.</p>
+        <p class="form-risk">Звонок ни к чему не обязывает. Смета — до подписания договора.</p>
         <p class="lead-form__success" role="status" hidden>Спасибо! Инженер свяжется с вами в течение 30 минут.</p>
       </form>
     </div>`;
@@ -152,9 +152,11 @@ export function initModals(lenis) {
     const m = MODELS.find((x) => x.id === id);
     if (!m) return;
     track('model_modal_opened', { model: m.name });
-    const photo = asset(`model-${m.id}`);
+    const photo = asset(`photo-${m.id}`) || asset(`model-${m.id}`);
+    const top = asset(`top-${m.id}`);
     body.innerHTML = `
       ${photo ? `<img class="modal__photo" src="${photo}" alt="Бассейн ${m.name}" />` : ''}
+      ${top ? `<img class="modal__topview" src="${top}" alt="Схема чаши ${m.name} — вид сверху" loading="lazy" />` : ''}
       <h3>${m.name}</h3>
       <p class="model-card__tag">${m.tag}</p>
       <ul class="modal__specs">
@@ -166,7 +168,7 @@ export function initModals(lenis) {
       <p class="modal__desc">${m.desc}</p>
       <p class="modal__desc">В цену «под ключ» входят: чаша, земляные работы, обвязка
         и оборудование, утепление ППУ Premium Nord, монтаж и пусконаладка.
-        Точная стоимость под ваш участок — после бесплатного выезда инженера.</p>
+        Точная стоимость под ваш участок — после выезда инженера (5 000 ₽, зачтём в стоимость договора).</p>
       <a href="#final-cta" class="btn btn--primary" data-lead="model:${m.name}">Получить расчёт</a>`;
     open(backdrop);
     backdrop.querySelector('.modal__close').focus();

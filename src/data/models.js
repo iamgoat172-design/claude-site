@@ -82,17 +82,28 @@ export const MODELS = [
   },
 ];
 
-// 9 цветов гелькоута (lp2)
+// 9 цветов гелькоута — реальные фото свотчей с lp2
 export const SWATCHES = [
-  { name: 'Белый жемчуг', hex: '#e9edf0' },
-  { name: 'Голубая дымка', hex: '#a9cfdd' },
-  { name: 'Небесный', hex: '#5fa8c7' },
-  { name: 'Бирюза', hex: '#2a9db4' },
-  { name: 'Лазурь', hex: '#1478a8' },
-  { name: 'Сапфир', hex: '#0b4f86' },
-  { name: 'Синий гранит', hex: '#274a63' },
-  { name: 'Серый гранит', hex: '#5d6b74' },
-  { name: 'Чёрный оникс', hex: '#20262b' },
+  { name: 'Sandy Beach', key: 'sw-sandy-beach' },
+  { name: 'Sea Foam', key: 'sw-sea-foam' },
+  { name: 'Tiffany Blue', key: 'sw-tiffany-blue' },
+  { name: 'Blue Iridium', key: 'sw-blue-iridium' },
+  { name: 'Emerald', key: 'sw-emerald' },
+  { name: 'Coral', key: 'sw-coral' },
+  { name: 'Granite', key: 'sw-granite' },
+  { name: 'Black Galaxy', key: 'sw-black-galaxy' },
+  { name: 'Russian S-Line', key: 'sw-russian-s-line' },
+];
+
+// ECO LINE (сайт lp): доступная линейка. ⚠ Размеры/цены — уточнить у
+// заказчика, на руках только фото; карточки ведут в квиз/заявку.
+export const ECO_MODELS = [
+  { id: 'city400', name: 'CITY 400', hint: 'Компактный городской формат — 4 метра' },
+  { id: 'corso', name: 'CORSO', hint: 'Прямоугольная классика с римскими ступенями' },
+  { id: 'elegant', name: 'ELEGANT', hint: 'Мягкие линии и широкая зона входа' },
+  { id: 'eri600', name: 'ERI 600', hint: 'Полноценные 6 метров для плавания' },
+  { id: 'prestige', name: 'PRESTIGE', hint: 'Просторная чаша с зоной отдыха' },
+  { id: 'riviera', name: 'RIVIERA', hint: 'Панорамная форма для большого участка' },
 ];
 
 export const ADDONS = [
@@ -116,7 +127,7 @@ export const STAGES = [
     key: 'STAGE_01',
     status: 'MAPPING',
     title: 'Замер и проект',
-    text: 'Инженер приезжает бесплатно: геология, разметка, привязка к дому и коммуникациям. Здесь же фиксируем цену — дальше она не меняется.',
+    text: 'Инженер приезжает на участок (5 000 ₽ — зачтём в стоимость договора): геология, разметка, привязка к дому и коммуникациям. Здесь же фиксируем цену.',
     pos: 'tl',
     from: 'left',
   },
@@ -186,16 +197,20 @@ export const LIFE = [
   { key: 'life-4', caption: 'Выходные, на которые все напрашиваются в гости' },
 ];
 
-// «Наши работы»
+// «Наши работы» — реальные объекты (lp2/objects + lp/works)
 export const WORKS = [
-  { key: 'work-1', caption: 'LUXOR 8,5 м · Одинцовский район' },
-  { key: 'work-2', caption: 'CLASSIC 8,5 м · Истра' },
-  { key: 'work-3', caption: 'RIO 7,7 м · Пушкинский район' },
-  { key: 'work-4', caption: 'MINIPOOL 5,2 м · Красногорск' },
-  { key: 'work-5', caption: 'QUICK 7,0 м · Ленинский район' },
-  { key: 'work-6', caption: 'SPA 4,0 м · Дмитровский район' },
-  { key: 'work-7', caption: 'LUXOR 10,5 м · Рублёво-Успенское ш.' },
-  { key: 'work-8', caption: 'CLASSIC 8,5 м · Новая Рига' },
+  { key: 'rwork-1', caption: 'Крытый бассейн в доме — купание круглый год' },
+  { key: 'rwork-2', caption: 'Чаша с раздвижным павильоном — вид сверху' },
+  { key: 'rwork-3', caption: 'Бассейн у бани с террасой из лиственницы' },
+  { key: 'rwork-4', caption: 'Вечер: подсветка чаши и светящийся павильон' },
+  { key: 'rwork-5', caption: 'Строгая геометрия у современного дома' },
+  { key: 'rwork-6', caption: 'Низкий сдвижной павильон — вода без листвы' },
+  { key: 'rwork-7', caption: 'Чаша с белым бортом у дома из клеёного бруса' },
+  { key: 'rwork-8', caption: 'Тёплый вечер у воды — подсветка AQUABIOGRAPHY' },
+  { key: 'rwork-9', caption: 'Павильон открыт — летний режим' },
+  { key: 'rwork-10', caption: 'Компактная чаша в саду с гортензиями' },
+  { key: 'rwork-11', caption: 'Узкая дорожка вдоль каменного фасада' },
+  { key: 'rwork-12', caption: 'Полноразмерная чаша на газоне у берёз' },
 ];
 
 export const fmtPrice = (n) =>

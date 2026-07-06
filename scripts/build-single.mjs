@@ -45,6 +45,18 @@ html = html.replace(/<link rel="icon"[^>]*>/,
   `<link rel="icon" href="data:image/svg+xml;base64,${logo.toString('base64')}" type="image/svg+xml" />`
 );
 
+// локальные реальные фото (/assets/real/…) → data-uri, чтобы одностраничник
+// работал через file:// без папки ассетов. Пути встречаются в HTML и в
+// инлайновом JS (карта ассетов).
+html = html.replace(/\/assets\/real\/[^"'`)\s\\]+\.webp/g, (m) => {
+  try {
+    const buf = readFileSync(join(root, 'public', m));
+    return `data:image/webp;base64,${buf.toString('base64')}`;
+  } catch {
+    return m;
+  }
+});
+
 execSync(`mkdir -p ${JSON.stringify(outDir)}`);
 const out = join(outDir, 'riverpools.html');
 writeFileSync(out, html);

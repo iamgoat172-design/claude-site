@@ -13,7 +13,7 @@
 <meta property="og:image" content="https://d8j0ntlcm91z4.cloudfront.net/user_32Q9KWTtKxuO9vGsur6JRmOi1Zg/hf_20260705_184001_6e9356d2-de84-44d4-b978-f68a07e8b9da.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Prata&family=Tenor+Sans&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Unbounded:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/src/styles/tokens.css" />
 <link rel="stylesheet" href="/src/styles/base.css" />
 <link rel="stylesheet" href="/src/styles/sections.css" />
@@ -346,14 +346,14 @@
         </div>
         <aside class="hero__panel" data-flyin="right">
           <p class="hero__panel-title">Расчёт под ваш участок</p>
-          <p class="hero__panel-sub">Инженер перезвонит в&nbsp;течение 30&nbsp;минут, смета — после бесплатного замера.</p>
+          <p class="hero__panel-sub">Инженер перезвонит в&nbsp;течение 30&nbsp;минут. Выезд и замер — 5&nbsp;000&nbsp;₽, при заключении договора зачтём в стоимость.</p>
           <form id="hero-form" class="hero-form" novalidate>
             <input type="text" name="hp_field" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
             <label>Имя<input type="text" name="name" required autocomplete="name" /></label>
             <label>Телефон<input type="tel" name="phone" required autocomplete="tel" placeholder="+7 (___) ___-__-__" /></label>
             <label class="checkbox"><input type="checkbox" name="consent" required /><span>Согласен с <a href="/privacy.html" target="_blank" rel="noopener" tabindex="-1">политикой обработки данных</a></span></label>
             <button type="submit" class="btn btn--primary btn--wide">Получить расчёт</button>
-            <p class="form-risk">Бесплатно и ни к чему не обязывает.</p>
+            <p class="form-risk">Звонок ни к чему не обязывает. Смета — до подписания договора.</p>
             <p class="hero-form__success" role="status" hidden>Спасибо! Инженер свяжется с вами в течение 30 минут.</p>
           </form>
         </aside>
@@ -385,6 +385,10 @@
       </div>
       <div class="process__stages" id="process-stages"><!-- rendered by JS from data/models.js stages --></div>
       <div class="process__progress" aria-hidden="true"><div class="process__progress-bar" id="process-progress"></div></div>
+      <div class="process__cta" id="process-cta">
+        <a href="#final-cta" class="btn btn--primary btn--lg" data-lead="process">Заказать бассейн</a>
+        <span class="process__cta-note">30 дней · цена в договоре</span>
+      </div>
     </div>
   </section>
 
@@ -392,8 +396,17 @@
   <section id="catalog" class="section section--catalog" data-theme="light">
     <div class="container">
       <h2 class="section-title">Найдите свою форму бассейна</h2>
-      <p class="section-sub">6 моделей, 9 цветов гелькоута — под любой участок и бюджет. Закажете сейчас — забронируете цену на 2026 год: в договоре она зафиксирована и не меняется в&nbsp;процессе монтажа.</p>
+      <p class="section-sub">Две линейки, 9 цветов гелькоута — под любой участок и бюджет. Закажете сейчас — забронируете цену на 2026 год: в договоре она зафиксирована и не меняется в&nbsp;процессе монтажа.</p>
+      <div class="catalog__lines" role="tablist" aria-label="Линейки бассейнов">
+        <button type="button" class="catalog__line-tab is-active" role="tab" aria-selected="true" data-line="premium">
+          Премиум<span>6 моделей · от 640 900 ₽</span>
+        </button>
+        <button type="button" class="catalog__line-tab" role="tab" aria-selected="false" data-line="eco">
+          ECO LINE<span>6 моделей · доступнее</span>
+        </button>
+      </div>
       <div class="catalog__grid" id="catalog-grid"><!-- rendered by JS --></div>
+      <div class="catalog__grid catalog__grid--eco" id="catalog-eco" hidden><!-- rendered by JS --></div>
       <div class="swatches-block">
         <h3 class="block-title">Цвета гелькоута</h3>
         <div class="swatches" id="swatches-grid"><!-- rendered by JS --></div>
@@ -405,20 +418,28 @@
   <!-- 3.5 OFFER -->
   <section id="offer" class="section section--offer" data-theme="light">
     <div class="container offer__inner">
+      <div class="offer__person" aria-hidden="true">
+        <img src="/assets/real/lp2/engineer.webp" alt="" loading="lazy" />
+      </div>
       <div class="offer__main">
-        <h2 class="offer__title">Закажете в июле — купаетесь в августе</h2>
-        <p class="offer__text">30 дней от замера до первого купания, срок зафиксирован в договоре с неустойкой. Акция −15% действует на весь модельный ряд.</p>
-        <p class="offer__note">Планируете на следующий сезон? По «Зимней брони» зафиксируем текущую цену до весны и дадим до 10% скидки на оборудование.</p>
+        <p class="offer__kicker">Акция июля</p>
+        <h2 class="offer__title">Закажете в июле —<br />купаетесь в августе</h2>
+        <ul class="offer__points">
+          <li><strong>−15%</strong> на весь модельный ряд</li>
+          <li><strong>30 дней</strong> — срок в договоре с неустойкой</li>
+          <li><strong>«Зимняя бронь»</strong> — цена до весны + до 10% на оборудование</li>
+        </ul>
       </div>
       <div class="offer__cta">
-        <a href="#final-cta" class="btn btn--primary" data-magnet data-lead="offer">Получить расчёт</a>
-        <p class="form-risk">Выезд инженера — бесплатно и без обязательств.</p>
+        <a href="#final-cta" class="btn btn--primary btn--lg" data-magnet data-lead="offer">Получить расчёт</a>
+        <p class="form-risk">Инженер перезвонит в течение 30 минут.<br />Выезд — 5&nbsp;000&nbsp;₽, зачтём в стоимость договора.</p>
       </div>
     </div>
   </section>
 
   <!-- 4. QUIZ -->
-  <section id="quiz" class="section section--quiz" data-theme="light">
+  <section id="quiz" class="section section--quiz" data-theme="dark">
+    <div class="quiz-bg" data-bg-asset="quizBg" aria-hidden="true"></div>
     <div class="container container--narrow">
       <h2 class="section-title">Подберём модель за 1 минуту</h2>
       <p class="section-sub">Три быстрых вопроса — получите модель, ориентир по цене и расчёт без звонков и&nbsp;обязательств.</p>
@@ -431,12 +452,12 @@
     <div class="container">
       <h2 class="section-title">6 причин доверить бассейн нам</h2>
       <div class="why__grid">
-        <article class="why__card why__card--featured"><h3>Фиксированная цена в&nbsp;договоре</h3><p>Стоимость не меняется в процессе монтажа — никаких доплат «по&nbsp;факту».</p></article>
-        <article class="why__card why__card--featured"><h3>Гарантия 25&nbsp;лет на чашу</h3><p>Смола Scott Bader, защита от&nbsp;осмоса — химическая и&nbsp;механическая стойкость чаши.</p></article>
-        <article class="why__card"><h3>Утепление ППУ Premium Nord</h3><p>Единственный композит, который не нужно сливать на зиму — выдерживает российские морозы.</p></article>
-        <article class="why__card"><h3>Своя бригада, не субподряд</h3><p>Монтаж выполняют штатные специалисты River Pools от начала до конца.</p></article>
-        <article class="why__card"><h3>Сервис и поддержка</h3><p>Реакция сервисной службы — не более 30&nbsp;минут с момента обращения.</p></article>
-        <article class="why__card"><h3>Срок сдачи в договоре</h3><p>30&nbsp;дней от замера до купания. Прописана неустойка за нарушение срока.</p></article>
+        <article class="why__card why__card--featured"><div class="why__card-img"><img src="/assets/real/lp2/feature-1.webp" alt="Подписание договора с фиксированной сметой" loading="lazy" /></div><h3>Фиксированная цена в&nbsp;договоре</h3><p>Стоимость не меняется в процессе монтажа — никаких доплат «по&nbsp;факту».</p></article>
+        <article class="why__card why__card--featured"><div class="why__card-img"><img src="/assets/real/lp2/feature-2.webp" alt="Срез монолитной композитной чаши" loading="lazy" /></div><h3>Гарантия 25&nbsp;лет на чашу</h3><p>Смола Scott Bader, защита от&nbsp;осмоса — химическая и&nbsp;механическая стойкость чаши.</p></article>
+        <article class="why__card"><div class="why__card-img"><img src="/assets/real/lp2/feature-3.webp" alt="Бассейн зимует полным в снегу" loading="lazy" /></div><h3>Утепление ППУ Premium Nord</h3><p>Единственный композит, который не нужно сливать на зиму — выдерживает российские морозы.</p></article>
+        <article class="why__card"><div class="why__card-img"><img src="/assets/real/lp2/feature-4.webp" alt="Штатная бригада River Pools на монтаже" loading="lazy" /></div><h3>Своя бригада, не субподряд</h3><p>Монтаж выполняют штатные специалисты River Pools от начала до конца.</p></article>
+        <article class="why__card"><div class="why__card-img"><img src="/assets/real/lp2/feature-5.webp" alt="Сервисный инженер у оборудования" loading="lazy" /></div><h3>Сервис и поддержка</h3><p>Реакция сервисной службы — не более 30&nbsp;минут с момента обращения.</p></article>
+        <article class="why__card"><div class="why__card-img"><img src="/assets/real/lp2/feature-6.webp" alt="Сданный объект у загородного дома" loading="lazy" /></div><h3>Срок сдачи в договоре</h3><p>30&nbsp;дней от замера до купания. Прописана неустойка за нарушение срока.</p></article>
       </div>
       <ul class="why__bullets">
         <li>Без швов и острых углов</li>
@@ -449,9 +470,14 @@
 
   <!-- 5.5 COMPARE -->
   <section id="compare" class="section section--compare" data-theme="light">
-    <div class="container container--narrow">
+    <div class="container">
       <h2 class="section-title">Бассейн под ключ или «бригада подешевле»</h2>
       <p class="section-sub">Почему важно, с кем вы подписываете договор — и подписываете ли вообще.</p>
+      <div class="compare__layout">
+      <figure class="compare__media">
+        <img src="/assets/real/lp2/object-8.webp" alt="Сданный объект River Pools: строгая геометрия чаши у современного дома" loading="lazy" />
+        <figcaption>Объект в Московской области — сдан за 30 дней, цена не изменилась ни на рубль</figcaption>
+      </figure>
       <div class="compare__list">
         <div class="compare__row">
           <div class="compare__us"><h3>Договор с юрлицом и неустойка</h3><p>Срок 30 дней и штраф за просрочку закреплены на бумаге. Претензию есть кому предъявить.</p></div>
@@ -469,6 +495,7 @@
           <div class="compare__them"><h3>Бетонная чаша без гарантии</h3><p>Швы, гидроизоляция и плитка — ремонт каждые несколько сезонов за ваш счёт.</p></div>
         </div>
       </div>
+      </div>
     </div>
   </section>
 
@@ -481,12 +508,12 @@
       <p class="section-sub section-sub--dark">Две фирменные технологии, ради которых наши заказчики отказываются от «обычных» бассейнов.</p>
       <div class="tech__grid">
         <article class="tech__card">
-          <div class="tech__card-img" data-asset="techEcoclean" data-alt="Кристально чистая вода без хлора — технология ECO CLEAN"></div>
+          <div class="tech__card-img" data-asset="realEcoclean" data-alt="Кристально чистая вода без хлора — технология ECO CLEAN"></div>
           <h3>ECO CLEAN</h3>
           <p>Вода без хлора: обеззараживание ионами меди и серебра. Не щиплет глаза, не сушит кожу, не пахнет «бассейном из фитнес-клуба». Дети ныряют с открытыми глазами, купальники не выцветают.</p>
         </article>
         <article class="tech__card">
-          <div class="tech__card-img" data-asset="techAquabiography" data-alt="Контурная LED-подсветка AQUABIOGRAPHY ночью"></div>
+          <div class="tech__card-img" data-asset="realAquabio" data-alt="Контурная LED-подсветка AQUABIOGRAPHY ночью"></div>
           <h3>AQUABIOGRAPHY</h3>
           <p>Контурная LED-подсветка по периметру чаши: вечером вода светится изнутри, и бассейн становится главным объектом ландшафта. Сценарии света переключаются с пульта — от тихого ужина до вечеринки.</p>
         </article>
@@ -556,9 +583,10 @@
 
   <!-- 10. FINAL CTA -->
   <section id="final-cta" class="section section--final" data-theme="light">
+    <div class="final-bg" aria-hidden="true"><img src="/assets/real/lp2/hero-bg.webp" alt="" loading="lazy" /></div>
     <div class="container container--narrow">
       <h2 class="section-title">Получите расчёт под ваш участок</h2>
-      <p class="section-sub">Бесплатный выезд инженера, без обязательств. Обсудим форму, цвет и сроки монтажа — зафиксируем цену и всё остальное в договоре.</p>
+      <p class="section-sub">Выезд инженера с геологией и разметкой — 5 000 ₽, при заключении договора зачтём в стоимость. Обсудим форму, цвет и сроки — зафиксируем цену в договоре.</p>
       <form id="final-form" class="final-form" novalidate>
         <input type="text" name="hp_field" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
         <label>Имя<input type="text" name="name" required autocomplete="name" /></label>
@@ -582,7 +610,7 @@
         </label>
         <label class="checkbox"><input type="checkbox" name="consent" required /><span>Согласен с <a href="/privacy.html" target="_blank" rel="noopener" tabindex="-1">политикой обработки данных</a></span></label>
         <button type="submit" class="btn btn--primary btn--wide">Получить расчёт</button>
-        <p class="form-risk">Выезд инженера — бесплатно и без обязательств. Закажете — учтём его в стоимости. Цена фиксируется в договоре.</p>
+        <p class="form-risk">Выезд инженера — 5&nbsp;000&nbsp;₽, при заключении договора зачтём в стоимость. Цена фиксируется в договоре.</p>
         <p class="final-form__success" role="status" hidden>Спасибо! Мы свяжемся с вами в течение 30 минут.</p>
       </form>
     </div>

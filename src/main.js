@@ -7,13 +7,14 @@ import { initFlyin } from './scroll/flyin.js';
 import { initSnap } from './scroll/snap.js';
 import { initProcess } from './scroll/process.js';
 import { initTheme } from './ui/theme.js';
-import { initCursor } from './ui/cursor.js';
 import { initNav } from './ui/nav.js';
 import { initQuiz, QUIZ_TEMPLATE } from './ui/quiz.js';
 import { initModals } from './ui/modals.js';
 import { bindForm } from './ui/forms.js';
 import {
   renderCatalog,
+  renderEcoCatalog,
+  initCatalogLines,
   renderSwatches,
   renderAddons,
   renderStages,
@@ -46,6 +47,8 @@ if (new URLSearchParams(location.search).has('qa')) {
 renderStages();
 const modals = initModals(lenis);
 renderCatalog((id) => modals.openModel(id));
+renderEcoCatalog((ctx) => modals.openLead(ctx));
+initCatalogLines();
 renderSwatches();
 renderAddons();
 renderWorks((i) => modals.openWork(i));
@@ -77,13 +80,25 @@ ScrollTrigger.create({
   },
 });
 
+// фикс-CTA «Заказать бассейн» на время скролла стройки
+const processCta = document.getElementById('process-cta');
+if (processCta) {
+  ScrollTrigger.create({
+    trigger: '.section--process',
+    start: 'top 60%',
+    end: 'bottom 85%',
+    onToggle(self) {
+      processCta.classList.toggle('is-visible', self.isActive);
+    },
+  });
+}
+
 initFlyin(reduced);
 initSnap(reduced);
 initTheme();
 
 /* ---------- UI ---------- */
 initNav(lenis);
-initCursor();
 const quizRoot = document.getElementById('quiz-root');
 if (quizRoot) {
   quizRoot.innerHTML = QUIZ_TEMPLATE;
