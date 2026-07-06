@@ -15,7 +15,8 @@ const map = {
   heroBg: { url: `${CDN}/hf_20260705_235710_c92d87ee-e5d6-4bdd-b374-0da5ec671752_min.webp`, local: '/assets/hero-bg.webp' },
   // вода: фон тёмных секций (tech, life)
   waterBg: { url: `${CDN}/hf_20260706_002219_4b5976c2-0b6d-4713-8762-77f4a8cf2a26_min.webp`, local: '/assets/water-bg.webp' },
-  // фотореальная стройка (один двор, один ракурс); stage-8 = heroBg (финал = мечта)
+  // фотореальная стройка (один двор, один ракурс); stage-8 — финал-мечта,
+  // сгенерён цепочкой от stage-7 (та же геометрия двора, сумерки + LED)
   'stage-1': { url: `${CDN}/hf_20260706_023029_3d279d08-9eb4-4cb4-904d-b71a080dd191_min.webp`, local: '/assets/stage-1.webp' },
   'stage-2': { url: `${CDN}/hf_20260706_004446_13c88a5e-a600-40b3-be74-a75493d811bd_min.webp`, local: '/assets/stage-2.webp' },
   'stage-3': { url: `${CDN}/hf_20260706_004617_1521c2f5-87ab-4c65-a3ba-7f5d06047ee0_min.webp`, local: '/assets/stage-3.webp' },
@@ -23,7 +24,7 @@ const map = {
   'stage-5': { url: `${CDN}/hf_20260706_004903_375844fe-b559-40f3-aafe-a82ec2a3f7f9_min.webp`, local: '/assets/stage-5.webp' },
   'stage-6': { url: `${CDN}/hf_20260706_005147_40148b08-426c-42b7-9f52-642195ae6b66_min.webp`, local: '/assets/stage-6.webp' },
   'stage-7': { url: `${CDN}/hf_20260706_005619_de2639e8-025e-400b-91ef-b3b4cd15f71a_min.webp`, local: '/assets/stage-7.webp' },
-  'stage-8': { url: `${CDN}/hf_20260705_235710_c92d87ee-e5d6-4bdd-b374-0da5ec671752_min.webp`, local: '/assets/hero-bg.webp' },
+  'stage-8': { url: `${CDN}/hf_20260706_030502_7e33da65-ccbc-4d1d-9001-3282119693b7_min.webp`, local: '/assets/stage-8.webp' },
   // видео-морфы этапов (Kling 3.0 pro, start→end frame): скраб по скроллу
   'clip-1': { url: `${CDN}/hf_20260706_023245_b133fe02-fa47-4223-89a2-38098af32482.mp4`, local: '/assets/clips/clip-1.mp4' },
   'clip-2': { url: `${CDN}/hf_20260706_014009_bb8cda63-957d-4003-9e2b-b2914f81593d.mp4`, local: '/assets/clips/clip-2.mp4' },
@@ -31,7 +32,7 @@ const map = {
   'clip-4': { url: `${CDN}/hf_20260706_014031_81251c2e-b2e0-4847-810b-aedb67907595.mp4`, local: '/assets/clips/clip-4.mp4' },
   'clip-5': { url: `${CDN}/hf_20260706_014048_ef50cfe0-d3f4-4b45-b18e-be79efd66b7e.mp4`, local: '/assets/clips/clip-5.mp4' },
   'clip-6': { url: `${CDN}/hf_20260706_014054_eeb813f0-02f8-4df8-bdea-9a6ec401546c.mp4`, local: '/assets/clips/clip-6.mp4' },
-  'clip-7': { url: `${CDN}/hf_20260706_014107_b25de512-8fcb-4d67-966b-066cc27e08eb.mp4`, local: '/assets/clips/clip-7.mp4' },
+  'clip-7': { url: `${CDN}/hf_20260706_030624_d52ec698-6561-4c7e-a9de-5e3784a3e9b6.mp4`, local: '/assets/clips/clip-7.mp4' },
   techEcoclean: { url: `${CDN}/hf_20260705_184003_ec38aa43-a01a-4a42-b544-b6496ec7f7c0_min.webp`, local: '/assets/tech_ecoclean_water.webp' },
   techAquabiography: { url: `${CDN}/hf_20260705_184006_e629e228-a916-457e-a043-f5bf88be21aa_min.webp`, local: '/assets/tech_aquabiography_night.webp' },
   'life-1': { url: `${CDN}/hf_20260705_184014_3d6a2044-cda4-40e3-b5dc-a69b372dc25b_min.webp`, local: '/assets/life-1.webp' },
