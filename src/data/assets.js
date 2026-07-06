@@ -16,7 +16,7 @@ const map = {
   // вода: фон тёмных секций (tech, life)
   waterBg: { url: `${CDN}/hf_20260706_002219_4b5976c2-0b6d-4713-8762-77f4a8cf2a26_min.webp`, local: '/assets/water-bg.webp' },
   // фотореальная стройка (один двор, один ракурс); stage-8 = heroBg (финал = мечта)
-  'stage-1': { url: `${CDN}/hf_20260706_004238_881c2613-f738-424c-9a0c-9b165b9fd9cf_min.webp`, local: '/assets/stage-1.webp' },
+  'stage-1': { url: `${CDN}/hf_20260706_023029_3d279d08-9eb4-4cb4-904d-b71a080dd191_min.webp`, local: '/assets/stage-1.webp' },
   'stage-2': { url: `${CDN}/hf_20260706_004446_13c88a5e-a600-40b3-be74-a75493d811bd_min.webp`, local: '/assets/stage-2.webp' },
   'stage-3': { url: `${CDN}/hf_20260706_004617_1521c2f5-87ab-4c65-a3ba-7f5d06047ee0_min.webp`, local: '/assets/stage-3.webp' },
   'stage-4': { url: `${CDN}/hf_20260706_004757_c28072b9-10ad-424a-956d-6bff00d45030_min.webp`, local: '/assets/stage-4.webp' },
@@ -25,7 +25,7 @@ const map = {
   'stage-7': { url: `${CDN}/hf_20260706_005619_de2639e8-025e-400b-91ef-b3b4cd15f71a_min.webp`, local: '/assets/stage-7.webp' },
   'stage-8': { url: `${CDN}/hf_20260705_235710_c92d87ee-e5d6-4bdd-b374-0da5ec671752_min.webp`, local: '/assets/hero-bg.webp' },
   // видео-морфы этапов (Kling 3.0 pro, start→end frame): скраб по скроллу
-  'clip-1': { url: `${CDN}/hf_20260706_014003_370bdc9c-a610-437e-9f23-530ce6e50b0e.mp4`, local: '/assets/clips/clip-1.mp4' },
+  'clip-1': { url: `${CDN}/hf_20260706_023245_b133fe02-fa47-4223-89a2-38098af32482.mp4`, local: '/assets/clips/clip-1.mp4' },
   'clip-2': { url: `${CDN}/hf_20260706_014009_bb8cda63-957d-4003-9e2b-b2914f81593d.mp4`, local: '/assets/clips/clip-2.mp4' },
   'clip-3': { url: `${CDN}/hf_20260706_014024_14db626b-ddbc-4c2c-bb54-5f44051e2d4b.mp4`, local: '/assets/clips/clip-3.mp4' },
   'clip-4': { url: `${CDN}/hf_20260706_014031_81251c2e-b2e0-4847-810b-aedb67907595.mp4`, local: '/assets/clips/clip-4.mp4' },
