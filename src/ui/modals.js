@@ -3,6 +3,7 @@ import { MODELS, WORKS, fmtPrice } from '../data/models.js';
 import { asset } from '../data/assets.js';
 import { track } from '../data/config.js';
 import { bindForm } from './forms.js';
+import { QUIZ_TEMPLATE, initQuiz } from './quiz.js';
 
 let lenisRef = null;
 let lastFocused = null;
@@ -57,6 +58,20 @@ function buildLeadModal() {
   return backdrop;
 }
 
+function buildQuizModal() {
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="modal modal--lead modal--quiz" role="dialog" aria-modal="true" aria-label="Подбор бассейна">
+      <button type="button" class="modal__close" aria-label="Закрыть">&times;</button>
+      <p class="hero__panel-title">Подберём бассейн за 1 минуту</p>
+      <p class="hero__panel-sub">Три вопроса — модель, ориентир по цене и расчёт без обязательств.</p>
+      <div class="quiz quiz--popup">${QUIZ_TEMPLATE}</div>
+    </div>`;
+  document.body.appendChild(backdrop);
+  return backdrop;
+}
+
 function buildLightbox() {
   const lb = document.createElement('div');
   lb.className = 'lightbox';
@@ -77,6 +92,9 @@ export function initModals(lenis) {
   const lead = buildLeadModal();
   const leadModal = lead.querySelector('.modal');
   let leadContext = '';
+  const quiz = buildQuizModal();
+  const quizModal = quiz.querySelector('.modal');
+  let quizInited = false;
   const lb = buildLightbox();
   const lbImg = lb.querySelector('img');
   let lbIndex = 0;
@@ -100,6 +118,10 @@ export function initModals(lenis) {
   lead.addEventListener('click', (e) => {
     if (e.target === lead) close(lead);
   });
+  quiz.querySelector('.modal__close').addEventListener('click', () => close(quiz));
+  quiz.addEventListener('click', (e) => {
+    if (e.target === quiz) close(quiz);
+  });
   lb.querySelector('.lightbox__close').addEventListener('click', () => close(lb));
   lb.addEventListener('click', (e) => {
     if (e.target === lb) close(lb);
@@ -109,10 +131,12 @@ export function initModals(lenis) {
     if (e.key === 'Escape') {
       if (backdrop.classList.contains('is-open')) close(backdrop);
       if (lead.classList.contains('is-open')) close(lead);
+      if (quiz.classList.contains('is-open')) close(quiz);
       if (lb.classList.contains('is-open')) close(lb);
     }
     if (e.key === 'Tab' && backdrop.classList.contains('is-open')) trapFocus(modal, e);
     if (e.key === 'Tab' && lead.classList.contains('is-open')) trapFocus(leadModal, e);
+    if (e.key === 'Tab' && quiz.classList.contains('is-open')) trapFocus(quizModal, e);
     if (lb.classList.contains('is-open')) {
       if (e.key === 'ArrowRight') showWork(lbIndex + 1);
       if (e.key === 'ArrowLeft') showWork(lbIndex - 1);
@@ -176,6 +200,15 @@ export function initModals(lenis) {
 
   return {
     openModel,
+    openQuiz() {
+      if (!quizInited) {
+        quizInited = true;
+        initQuiz(quiz.querySelector('.quiz--popup'), { source: 'quiz-popup', track });
+      }
+      track('quiz_popup_opened', {});
+      open(quiz);
+      quiz.querySelector('.modal__close').focus();
+    },
     openLead(context = '') {
       leadContext = context;
       if (backdrop.classList.contains('is-open')) close(backdrop);

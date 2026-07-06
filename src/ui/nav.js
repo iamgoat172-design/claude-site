@@ -29,7 +29,7 @@ export function initNav(lenis) {
   // якоря — плавно через Lenis (учитывая fixed-nav)
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     a.addEventListener('click', (e) => {
-      if (a.hasAttribute('data-lead')) return; // заявка открывается поп-апом
+      if (a.hasAttribute('data-lead') || a.hasAttribute('data-quiz')) return; // поп-апы, не скролл
       const id = a.getAttribute('href');
       if (id.length < 2) return;
       const el = document.querySelector(id);

@@ -185,7 +185,7 @@ export function initProcess(reduced) {
     trigger: '.section--process',
     start: 'top top',
     end: 'bottom bottom',
-    scrub: true,
+    scrub: 0.6, // мягкий догон прогресса — движение маслянистее
     onUpdate(self) {
       update(self.progress);
     },

@@ -13,7 +13,7 @@
 <meta property="og:image" content="https://d8j0ntlcm91z4.cloudfront.net/user_32Q9KWTtKxuO9vGsur6JRmOi1Zg/hf_20260705_184001_6e9356d2-de84-44d4-b978-f68a07e8b9da.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Prata&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Prata&family=Tenor+Sans&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/src/styles/tokens.css" />
 <link rel="stylesheet" href="/src/styles/base.css" />
 <link rel="stylesheet" href="/src/styles/sections.css" />
@@ -304,7 +304,7 @@
     <li><a href="#faq">Вопросы</a></li>
   </ul>
   <a href="tel:+74951285619" class="pill-nav__phone">+7 (495) 128-56-19</a>
-  <a href="#quiz" class="pill-nav__cta">Подобрать бассейн</a>
+  <a href="#quiz" class="pill-nav__cta" data-quiz>Подобрать бассейн</a>
   <button type="button" class="nav-burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav-drawer">
     <span class="nav-burger__box"><span></span><span></span><span></span></span>
   </button>
@@ -320,7 +320,7 @@
     <li><a href="#faq">Вопросы</a></li>
   </ul>
   <a href="tel:+74951285619" class="nav-drawer__phone">+7 (495) 128-56-19</a>
-  <a href="#quiz" class="btn btn--primary btn--wide">Подобрать бассейн</a>
+  <a href="#quiz" class="btn btn--primary btn--wide" data-quiz>Подобрать бассейн</a>
 </div>
 
 <main id="main">
@@ -342,7 +342,7 @@
             <div class="hero__fact" role="listitem"><span>25 лет</span>гарантия<br />на чашу</div>
             <div class="hero__fact" role="listitem"><span>−15%</span>на модельный<br />ряд сейчас</div>
           </div>
-          <p class="hero__alt" data-flyin="up">Не готовы к расчёту? <a href="#quiz">Подобрать бассейн в&nbsp;квизе за&nbsp;1&nbsp;минуту&nbsp;→</a></p>
+          <p class="hero__alt" data-flyin="up">Не готовы к расчёту? <a href="#quiz" data-quiz>Подобрать бассейн в&nbsp;квизе за&nbsp;1&nbsp;минуту&nbsp;→</a></p>
         </div>
         <aside class="hero__panel" data-flyin="right">
           <p class="hero__panel-title">Расчёт под ваш участок</p>
@@ -422,50 +422,7 @@
     <div class="container container--narrow">
       <h2 class="section-title">Подберём модель за 1 минуту</h2>
       <p class="section-sub">Три быстрых вопроса — получите модель, ориентир по цене и расчёт без звонков и&nbsp;обязательств.</p>
-      <div class="quiz" id="quiz-root">
-        <div class="quiz__progress"><span data-step="1" class="active"></span><span data-step="2"></span><span data-step="3"></span></div>
-
-        <div class="quiz__step" data-step="1">
-          <h3>Где будет бассейн?</h3>
-          <div class="quiz__options" data-group="location">
-            <button type="button" class="quiz__option" data-value="outdoor">Уличный, на участке</button>
-            <button type="button" class="quiz__option" data-value="indoor">В помещении / у бани</button>
-            <button type="button" class="quiz__option" data-value="advice">Нужен совет</button>
-          </div>
-        </div>
-
-        <div class="quiz__step" data-step="2" hidden>
-          <h3>Какой размер подойдёт?</h3>
-          <div class="quiz__options" data-group="size">
-            <button type="button" class="quiz__option" data-value="s">До 4 м</button>
-            <button type="button" class="quiz__option" data-value="m">5–6 м</button>
-            <button type="button" class="quiz__option" data-value="l">7 м и больше</button>
-          </div>
-        </div>
-
-        <div class="quiz__step" data-step="3" hidden>
-          <h3>Бюджет проекта</h3>
-          <div class="quiz__options" data-group="budget">
-            <button type="button" class="quiz__option" data-value="b1">До 1 млн ₽</button>
-            <button type="button" class="quiz__option" data-value="b2">1–2 млн ₽</button>
-            <button type="button" class="quiz__option" data-value="b3">2 млн ₽ и выше</button>
-          </div>
-        </div>
-
-        <div class="quiz__result" data-step="result" hidden>
-          <h3 id="quiz-result-name">—</h3>
-          <p id="quiz-result-text"></p>
-          <form id="quiz-form" class="quiz__form" novalidate>
-            <input type="text" name="hp_field" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
-            <label>Имя<input type="text" name="name" required autocomplete="name" /></label>
-            <label>Телефон<input type="tel" name="phone" required autocomplete="tel" placeholder="+7 (___) ___-__-__" /></label>
-            <label class="checkbox"><input type="checkbox" name="consent" required /><span>Согласен с <a href="/privacy.html" target="_blank" rel="noopener" tabindex="-1">политикой обработки данных</a></span></label>
-            <button type="submit" class="btn btn--primary">Получить расчёт</button>
-            <p class="form-risk">Выезд инженера — бесплатно и без обязательств. Закажете — учтём его в стоимости. Цена фиксируется в договоре.</p>
-            <p class="quiz__success" role="status" hidden>Спасибо! Инженер свяжется с вами в течение 30 минут.</p>
-          </form>
-        </div>
-      </div>
+      <div class="quiz" id="quiz-root"><!-- rendered by JS --></div>
     </div>
   </section>
 
@@ -665,7 +622,7 @@
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.7 3.6.7.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3c0-.6.4-1 1-1h3.3c.6 0 1 .4 1 1 0 1.3.2 2.5.7 3.6.1.3 0 .7-.2 1L6.6 10.8Z" fill="currentColor"/></svg>
     +7 (495) 128-56-19
   </a>
-  <a href="#quiz" class="sticky-cta__btn btn btn--primary">Подобрать бассейн</a>
+  <a href="#quiz" class="sticky-cta__btn btn btn--primary" data-quiz>Подобрать бассейн</a>
 </div>
 
 <script type="module" src="/src/main.js"></script>

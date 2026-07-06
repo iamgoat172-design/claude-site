@@ -9,7 +9,7 @@ import { initProcess } from './scroll/process.js';
 import { initTheme } from './ui/theme.js';
 import { initCursor } from './ui/cursor.js';
 import { initNav } from './ui/nav.js';
-import { initQuiz } from './ui/quiz.js';
+import { initQuiz, QUIZ_TEMPLATE } from './ui/quiz.js';
 import { initModals } from './ui/modals.js';
 import { bindForm } from './ui/forms.js';
 import {
@@ -67,7 +67,7 @@ ScrollTrigger.create({
   trigger: '.section--process',
   start: 'top bottom',
   end: 'top 35%',
-  scrub: true,
+  scrub: 0.6,
   onUpdate(self) {
     const t = self.progress;
     if (heroBg && heroBg.isConnected) {
@@ -84,7 +84,11 @@ initTheme();
 /* ---------- UI ---------- */
 initNav(lenis);
 initCursor();
-initQuiz();
+const quizRoot = document.getElementById('quiz-root');
+if (quizRoot) {
+  quizRoot.innerHTML = QUIZ_TEMPLATE;
+  initQuiz(quizRoot, { source: 'quiz', track });
+}
 bindForm(document.getElementById('final-form'), {
   successSel: '.final-form__success',
   extra: { source: 'final' },
@@ -94,12 +98,18 @@ bindForm(document.getElementById('hero-form'), {
   extra: { source: 'hero' },
 });
 
-/* ---------- поп-ап заявки: кнопки «Получить расчёт» не скроллят ---------- */
+/* ---------- поп-апы заявки и квиза: кнопки не скроллят ---------- */
 document.addEventListener('click', (e) => {
-  const trigger = e.target.closest('[data-lead]');
-  if (trigger) {
+  const leadTrigger = e.target.closest('[data-lead]');
+  if (leadTrigger) {
     e.preventDefault();
-    modals.openLead(trigger.dataset.lead || '');
+    modals.openLead(leadTrigger.dataset.lead || '');
+    return;
+  }
+  const quizTrigger = e.target.closest('[data-quiz]');
+  if (quizTrigger) {
+    e.preventDefault();
+    modals.openQuiz();
   }
 });
 

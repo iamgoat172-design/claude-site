@@ -245,6 +245,7 @@
 .process__clip {
   position: absolute; inset: 0; width: 100%; height: 100%;
   object-fit: cover; opacity: 0;
+  transition: opacity 0.22s linear;
 }
 .process__scrim {
   position: absolute; inset: 0;
@@ -283,16 +284,21 @@
   background: radial-gradient(closest-side, rgba(4, 7, 10, 0.72), rgba(4, 7, 10, 0.35) 70%, transparent);
   border-radius: 50%;
 }
-.process-stage .mono-label { margin-bottom: 8px; color: var(--accent-bright); }
+.process-stage .mono-label {
+  font-family: 'Tenor Sans', var(--font-body);
+  font-weight: 400; letter-spacing: 0.3em; font-size: 10.5px;
+  margin-bottom: 10px; color: var(--accent-bright);
+}
 .process-stage h3 {
-  font-family: var(--font-display);
-  font-size: clamp(24px, 2.9vw, 38px); font-weight: 400;
-  line-height: 1.18; letter-spacing: 0.005em; text-wrap: balance;
+  font-family: 'Tenor Sans', var(--font-body);
+  font-size: clamp(22px, 2.6vw, 34px); font-weight: 400;
+  line-height: 1.24; letter-spacing: 0.035em; text-wrap: balance;
   color: #fff; margin: 0 0 10px;
   text-shadow: 0 2px 40px rgba(4, 7, 10, 0.9);
 }
 .process-stage p {
-  font-size: 15.5px; color: #c3d3df; margin: 0; line-height: 1.68;
+  font-weight: 300;
+  font-size: 15.5px; color: #d4e2ec; margin: 0; line-height: 1.72;
   text-shadow: 0 1px 20px rgba(4, 7, 10, 0.9);
 }
 .process-stage--center h3 { font-size: clamp(32px, 4.2vw, 54px); }
@@ -488,6 +494,36 @@ label.checkbox span a { color: var(--accent-dim); }
 .quiz__success, .final-form__success {
   font-weight: 700; color: #17805c; margin: 8px 0 0;
 }
+
+
+/* квиз в поп-апе: тёмная люкс-тема поверх светлых стилей квиза */
+.modal--quiz { width: min(560px, 100%); }
+.modal--quiz .quiz {
+  background: transparent; border: 0; box-shadow: none; padding: 0;
+}
+.modal--quiz .quiz__progress span { background: rgba(53, 200, 234, 0.15); }
+.modal--quiz .quiz__progress span.active { background: var(--accent); }
+.modal--quiz .quiz__step h3, .modal--quiz .quiz__result h3 { color: #fff; }
+.modal--quiz .quiz__option {
+  background: rgba(11, 21, 32, 0.9);
+  border-color: rgba(53, 200, 234, 0.22);
+  color: var(--dark-ink);
+}
+.modal--quiz .quiz__option:hover {
+  border-color: var(--accent);
+  background: rgba(24, 166, 201, 0.12);
+}
+.modal--quiz .quiz__result p { color: var(--dark-ink-2); }
+.modal--quiz .quiz__form label { color: var(--dark-ink-2); }
+.modal--quiz .quiz__form input:not([type='checkbox']) {
+  background: rgba(11, 21, 32, 0.9);
+  border-color: rgba(53, 200, 234, 0.22);
+  color: var(--dark-ink);
+}
+.modal--quiz .quiz__form input:focus { border-color: var(--accent); }
+.modal--quiz label.checkbox span a { color: var(--accent-bright); }
+.modal--quiz .form-risk { color: var(--dark-ink-2); }
+.modal--quiz .quiz__success { color: #5fd9a6; }
 
 /* ================= why ================= */
 .section--why { padding: clamp(96px, 13vh, 150px) 0 clamp(56px, 7vh, 80px); }
