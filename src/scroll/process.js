@@ -1,6 +1,8 @@
 // Хореография секции «Процесс»: фотореальная стройка одного двора.
 // Один scrub-триггер ведёт кроссфейд 8 кадров (одна камера, один ракурс),
-// деликатный Ken Burns внутри кадра, прогресс-бар и fly-in подписей с 4 сторон.
+// деликатный Ken Burns внутри кадра, прогресс-бар и смену плашек на месте.
+// Видео-морфы НЕ скрабятся: при входе в окно этапа клип просто проигрывается
+// с нативной скоростью (максимальная плавность), при выходе — пауза и сброс.
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { STAGES } from '../data/models.js';
@@ -8,19 +10,7 @@ import { asset } from '../data/assets.js';
 import { track } from '../data/config.js';
 
 const N = STAGES.length;
-const AMP = 150; // амплитуда заезда текста, px
-const DIR = {
-  left: { x: -AMP, y: 0 },
-  right: { x: AMP, y: 0 },
-  up: { x: 0, y: -AMP * 0.85 },
-  down: { x: 0, y: AMP * 0.85 },
-};
-const easeIn = [
-  gsap.parseEase('power3.out'),
-  gsap.parseEase('power4.out'),
-  gsap.parseEase('expo.out'),
-  gsap.parseEase('back.out(1.3)'),
-];
+const easeIn = [gsap.parseEase('power3.out')];
 const FADE = 0.18; // доля окна на растворение кадров
 
 export function initProcess(reduced) {
@@ -32,12 +22,13 @@ export function initProcess(reduced) {
 
   const seenStages = new Set();
   let lastStage = -1;
+  const mqMobile = window.matchMedia('(max-width: 760px)');
 
-  // видео-переходы (MERIDIAN-приём: скраб пред-рендеренной секвенции).
-  // Оптимизация: (1) seek только после завершения предыдущего (иначе очередь
-  // декодера = главный источник тормозов), (2) живут только клипы окна ±1 —
-  // не 7 декодеров 1080p разом, (3) только десктоп; мобайл/Save-Data — стиллы.
+  // видео-переходы (MERIDIAN-приём): клип k живёт в окне этапа k+1.
+  // Плавность: не скрабим currentTime (это дёргает декодер), а играем клип
+  // целиком при входе в окно. Живут только клипы окна ±1; только десктоп.
   const clipReady = new Array(clips.length).fill(false);
+  const playedFor = new Array(clips.length).fill(false);
   const clipUrls = clips.map((_, i) => asset(`clip-${i + 1}`));
   const wantClips =
     !reduced &&
@@ -48,11 +39,6 @@ export function initProcess(reduced) {
     if (!wantClips || !clipUrls[i]) return;
     v.addEventListener('loadeddata', () => {
       clipReady[i] = true;
-    });
-    // seek-цепочка: пока идёт прошлый seek — новый не ставим
-    v.__target = 0;
-    v.addEventListener('seeked', () => {
-      if (Math.abs(v.currentTime - v.__target) > 0.07) v.currentTime = v.__target;
     });
   });
 
@@ -69,6 +55,7 @@ export function initProcess(reduced) {
         v.load();
       } else if (!near && v.src && Math.abs(i - k) >= 2) {
         clipReady[i] = false;
+        playedFor[i] = false;
         v.removeAttribute('src');
         v.load(); // освобождает декодер; при возврате возьмётся из кэша
       }
@@ -99,8 +86,8 @@ export function initProcess(reduced) {
       }
     }
 
-    // скраб видео-морфа: в окне k играет клип k-1 (кадр k-1 → k),
-    // первые 70% окна — скраб, дальше держим финальный кадр
+    // play-on-enter: в окне k показывается клип k-1 (морф кадра k-1 → k);
+    // он проигрывается с нативной скоростью и остаётся на финальном кадре
     const activeClip = Math.min(clips.length - 1, Math.max(0, Math.floor(p * N) - 1));
     manageClipWindow(activeClip);
     let clipCovering = false;
@@ -109,14 +96,16 @@ export function initProcess(reduced) {
       const active = (p >= k / N && p < (k + 1) / N) || (k === N - 1 && p >= k / N);
       if (!wantClips || !clipReady[i] || !active) {
         v.style.opacity = 0;
+        if (playedFor[i]) {
+          playedFor[i] = false;
+          v.pause();
+        }
         return;
       }
-      const win = clamp((p - k / N) * N, 0, 1);
-      const t = clamp(win / 0.7, 0, 1);
-      v.__target = t * Math.max((v.duration || 5) - 0.05, 0);
-      // новый seek — только если декодер свободен и сдвиг заметен
-      if (!v.seeking && Math.abs(v.currentTime - v.__target) > 0.07) {
-        v.currentTime = v.__target;
+      if (!playedFor[i]) {
+        playedFor[i] = true;
+        v.currentTime = 0;
+        v.play().catch(() => {});
       }
       v.style.opacity = 1;
       clipCovering = true;
@@ -134,6 +123,7 @@ export function initProcess(reduced) {
       }
     });
 
+    // плашки этапов: все в одной точке, сменяют друг друга на месте
     stageEls.forEach((el, i) => {
       const start = i / N;
       const end = (i + 1) / N;
@@ -144,39 +134,29 @@ export function initProcess(reduced) {
         el.style.opacity = 0;
         return;
       }
-      const dir = DIR[STAGES[i].from] || DIR.up;
 
       if (reduced) {
-        el.style.transform = 'none';
-        el.style.opacity = t > 0 && (t < 1 || isLast) ? 1 : 0;
+        el.style.transform = mqMobile.matches ? 'translateX(-50%)' : 'none';
+        el.style.opacity = 1;
         return;
       }
 
-      let x = 0;
+      // смена на месте: короткий подъезд снизу + fade, уход — растворением
       let y = 0;
       let o = 1;
-      const IN = isLast ? 0.55 : 0.24;
-      const OUT = 0.78;
+      const IN = 0.16;
+      const OUT = 0.86;
       if (t < IN) {
-        const k = easeIn[i % easeIn.length](t / IN);
-        x = dir.x * (1 - k);
-        y = dir.y * (1 - k);
-        o = Math.min(1, (t / IN) * 1.4);
+        const k = easeIn[0](t / IN);
+        y = 28 * (1 - k);
+        o = t / IN;
       } else if (!isLast && t > OUT) {
-        const k = gsap.parseEase('power2.in')((t - OUT) / (1 - OUT));
-        x = -dir.x * 0.5 * k;
-        y = -dir.y * 0.5 * k;
-        o = 1 - k;
+        o = 1 - (t - OUT) / (1 - OUT);
       }
-      const baseCenter = STAGES[i].pos === 'center';
-      const isMobile = window.matchMedia('(max-width: 760px)').matches;
-      if (isMobile) {
-        el.style.transform = `translate(calc(-50% + ${x}px), ${y}px)`;
-      } else if (baseCenter) {
-        el.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
-      } else {
-        el.style.transform = `translate(${x}px, ${y}px)`;
-      }
+      // mobile-CSS центрирует плашку через translateX(-50%) — сохраняем
+      el.style.transform = mqMobile.matches
+        ? `translate(-50%, ${y}px)`
+        : `translateY(${y}px)`;
       el.style.opacity = o;
     });
   }
