@@ -36,7 +36,7 @@ export function initNav(lenis) {
       if (!el) return;
       e.preventDefault();
       closeDrawer();
-      if (lenis) lenis.scrollTo(el, { offset: 0, duration: 1.2 });
+      if (lenis) lenis.scrollTo(el, { offset: -90, duration: 1.2 });
       else el.scrollIntoView({ behavior: 'smooth' });
     });
   });
