@@ -1,8 +1,10 @@
 // Хореография секции «Процесс»: фотореальная стройка одного двора.
 // Один scrub-триггер ведёт кроссфейд 8 кадров (одна камера, один ракурс),
 // деликатный Ken Burns внутри кадра, прогресс-бар и смену плашек на месте.
-// Видео-морфы НЕ скрабятся: при входе в окно этапа клип просто проигрывается
-// с нативной скоростью (максимальная плавность), при выходе — пауза и сброс.
+// Видео-морфы — ПЛАВНАЯ перемотка по скроллу: не сикаем currentTime
+// (прыжки между ключевыми кадрами дёргают декодер), а догоняем цель
+// через playbackRate — декодер всегда идёт вперёд по кадрам, как при
+// обычном проигрывании. Назад — редкий точный seek.
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { STAGES } from '../data/models.js';
@@ -25,10 +27,9 @@ export function initProcess(reduced) {
   const mqMobile = window.matchMedia('(max-width: 760px)');
 
   // видео-переходы (MERIDIAN-приём): клип k живёт в окне этапа k+1.
-  // Плавность: не скрабим currentTime (это дёргает декодер), а играем клип
-  // целиком при входе в окно. Живут только клипы окна ±1; только десктоп.
+  // Живут только клипы окна ±1; только десктоп.
   const clipReady = new Array(clips.length).fill(false);
-  const playedFor = new Array(clips.length).fill(false);
+  const clipTarget = new Array(clips.length).fill(-1); // -1 = вне окна
   const clipUrls = clips.map((_, i) => asset(`clip-${i + 1}`));
   const wantClips =
     !reduced &&
@@ -41,6 +42,29 @@ export function initProcess(reduced) {
       clipReady[i] = true;
     });
   });
+
+  // перемотка-погоня: каждый тик подгоняем скорость проигрывания под
+  // расстояние до цели. Вперёд — плавное проигрывание (0.05–4×), назад
+  // или при большом отставании — один точный seek.
+  const CATCH = 3.2; // насколько агрессивно догоняем (гэп 1с → 3.2×)
+  function chase() {
+    clips.forEach((v, i) => {
+      const target = clipTarget[i];
+      if (target < 0 || !clipReady[i] || v.seeking) return;
+      const gap = target - v.currentTime;
+      if (gap > 1.4 || gap < -0.3) {
+        // слишком далеко (быстрый флик) или скролл назад — точный seek
+        if (!v.paused) v.pause();
+        v.currentTime = target;
+      } else if (gap > 0.03) {
+        v.playbackRate = clamp(gap * CATCH, 0.05, 4);
+        if (v.paused) v.play().catch(() => {});
+      } else if (!v.paused) {
+        v.pause(); // догнали — стоим, ждём скролл
+      }
+    });
+  }
+  if (wantClips && clips.length) gsap.ticker.add(chase);
 
   let attachedAround = -99;
   function manageClipWindow(k) {
@@ -55,7 +79,7 @@ export function initProcess(reduced) {
         v.load();
       } else if (!near && v.src && Math.abs(i - k) >= 2) {
         clipReady[i] = false;
-        playedFor[i] = false;
+        clipTarget[i] = -1;
         v.removeAttribute('src');
         v.load(); // освобождает декодер; при возврате возьмётся из кэша
       }
@@ -86,8 +110,9 @@ export function initProcess(reduced) {
       }
     }
 
-    // play-on-enter: в окне k показывается клип k-1 (морф кадра k-1 → k);
-    // он проигрывается с нативной скоростью и остаётся на финальном кадре
+    // перемотка по скроллу: в окне k показывается клип k-1 (морф кадра
+    // k-1 → k). Первые 78% окна отданы под перемотку (позиция скролла →
+    // время видео), дальше держим финальный кадр — пауза перед сменой плашки.
     const activeClip = Math.min(clips.length - 1, Math.max(0, Math.floor(p * N) - 1));
     manageClipWindow(activeClip);
     let clipCovering = false;
@@ -96,17 +121,15 @@ export function initProcess(reduced) {
       const active = (p >= k / N && p < (k + 1) / N) || (k === N - 1 && p >= k / N);
       if (!wantClips || !clipReady[i] || !active) {
         v.style.opacity = 0;
-        if (playedFor[i]) {
-          playedFor[i] = false;
+        if (clipTarget[i] >= 0) {
+          clipTarget[i] = -1;
           v.pause();
         }
         return;
       }
-      if (!playedFor[i]) {
-        playedFor[i] = true;
-        v.currentTime = 0;
-        v.play().catch(() => {});
-      }
+      const win = clamp((p - k / N) * N, 0, 1);
+      const t = clamp(win / 0.78, 0, 1);
+      clipTarget[i] = t * Math.max((v.duration || 5) - 0.06, 0);
       v.style.opacity = 1;
       clipCovering = true;
     });
