@@ -28,7 +28,9 @@
 
   /* type */
   --font-body: 'Manrope', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+  --font-display: 'Prata', 'Georgia', serif;
+  /* люкс-тон: моно-грамматика выведена, цифры и метки — в Manrope */
+  --font-mono: 'Manrope', system-ui, sans-serif;
 
   /* geometry */
   --radius-s: 10px;

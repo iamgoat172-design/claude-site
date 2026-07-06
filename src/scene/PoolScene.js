@@ -524,7 +524,9 @@ export class PoolScene {
   _applyState() {
     if (!this.built) return;
     const p = this.progress;
-    const hb = this.heroBlend; // 1 = beauty-герой, 0 = таймлайн постройки
+    // hb=1 — фото-режим героя: сцена ПУСТАЯ (мечту показывает фото),
+    // при растворении фото стройка материализуется с «замера».
+    const F = 1 - this.heroBlend;
     const { h, topY } = this.dims;
 
     // фазовые параметры постройки
@@ -539,19 +541,16 @@ export class PoolScene {
     const ledT = _map(p, 0.765, 0.845);
     const readyT = _map(p, 0.875, 1);
 
-    // бленд с beauty-состоянием героя (всё построено, вода+LED включены)
-    const B = (build, hero) => build * (1 - hb) + hero * hb;
-
-    const grid = B(gridT, 0);
-    const pit = B(pitT, 0);
+    const grid = gridT * F;
+    const pit = pitT * F;
     // чаша опускается краном; без прозрачности — чистый reveal движением
-    const shellY = B((1 - THREE.MathUtils.smoothstep(shellDrop, 0, 1)) * 4.2, 0);
-    const shellOn = B(shellVis, 1) > 0.5;
-    const equip = B(equipT * orbFade, 0);
-    const foam = B(foamT, 0);
-    const water = B(waterT, 1);
-    const led = B(Math.max(ledT, readyT * 0.9), 1);
-    const glowK = B(Math.max(ledT * 0.65, readyT * 0.75), 0.7);
+    const shellY = (1 - THREE.MathUtils.smoothstep(shellDrop, 0, 1)) * 4.2;
+    const shellOn = shellVis > 0.5 && F > 0.35;
+    const equip = equipT * orbFade * F;
+    const foam = foamT * F;
+    const water = waterT * F;
+    const led = Math.max(ledT, readyT * 0.9) * F;
+    const glowK = Math.max(ledT * 0.65, readyT * 0.75) * F;
 
     this.surveyMats[0].opacity = grid * 0.5;
     this.surveyMats[1].opacity = grid * 0.28;
@@ -585,22 +584,17 @@ export class PoolScene {
     for (const s of this.glowSprites) s.position.y = waterLevel + 0.05;
 
     if (this.copingMat) this.copingMat.emissiveIntensity = led * 0.35;
-    this.dustMat.opacity = 0.12 + B(readyT, 0.8) * 0.3;
-    // в hero сцена — приглушённый фон за контентом (конверсионный первый экран)
-    this.bloom.strength = (0.4 + led * 0.35 + B(readyT, 0.5) * 0.15) * (1 - hb * 0.35);
-    this.renderer.toneMappingExposure = 1.05 - hb * 0.3;
+    this.dustMat.opacity = (0.12 + readyT * 0.24) * (0.4 + F * 0.6);
+    this.bloom.strength = 0.4 + led * 0.35 + readyT * 0.08;
 
-    // hero: чаша ниже и правее, отступает вглубь; мобайл — вниз за контент
-    const wide = this.camera.aspect > 1;
-    this.root.position.x = wide ? hb * 2.0 : 0;
-    this.root.position.y = wide ? -hb * 0.55 : -hb * 3.3;
+    this.root.position.set(0, 0, 0);
 
     // камера: кинематографичный дрейф; на READY — отъезд, чаша ниже текста
-    const driftA = B(-0.42 + p * 0.85, 0);
-    const azimuth = driftA + this.orbitPhase * B(readyT, 1);
-    const polar = 0.98 - B(readyT, 0.9) * 0.08;
-    const dist = 10.6 + readyT * (1 - hb) * 1.5 + hb * 2.4;
-    const lookY = -0.35 + readyT * (1 - hb) * 1.15;
+    const driftA = -0.42 + p * 0.85;
+    const azimuth = driftA + this.orbitPhase * readyT;
+    const polar = 0.98 - readyT * 0.07;
+    const dist = 10.6 + readyT * 1.5;
+    const lookY = -0.35 + readyT * 1.15;
     this.camera.position.set(
       Math.sin(azimuth) * Math.sin(polar) * dist,
       Math.cos(polar) * dist,

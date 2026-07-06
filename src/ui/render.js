@@ -112,7 +112,7 @@ export function renderStages() {
   wrap.innerHTML = STAGES.map(
     (s, i) => `
     <div class="process-stage process-stage--${s.pos}" data-stage="${i}">
-      <p class="mono-label">${s.key} · ${String(i + 1).padStart(2, '0')}/08</p>
+      <p class="mono-label">Этап ${i + 1} из 8</p>
       <h3>${s.title}</h3>
       <p>${s.text}</p>
     </div>`
