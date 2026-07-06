@@ -744,6 +744,15 @@ label.checkbox span a { color: var(--accent-dim); }
   transform: translateY(16px); transition: transform 0.3s var(--ease-out);
 }
 .modal-backdrop.is-open .modal { transform: translateY(0); }
+.modal--lead {
+  width: min(440px, 100%);
+  background: rgba(9, 18, 28, 0.97);
+  border: 1px solid rgba(53, 200, 234, 0.2);
+  color: var(--dark-ink);
+  padding: 34px 30px 30px;
+}
+.modal--lead .modal__close { color: var(--dark-ink-2); }
+.modal--lead .modal__close:hover { color: #fff; }
 .modal__close {
   position: absolute; top: 14px; right: 16px;
   background: none; border: 0; font-size: 34px; line-height: 1;

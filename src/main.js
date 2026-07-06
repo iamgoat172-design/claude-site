@@ -118,6 +118,15 @@ bindForm(document.getElementById('hero-form'), {
   extra: { source: 'hero' },
 });
 
+/* ---------- поп-ап заявки: кнопки «Получить расчёт» не скроллят ---------- */
+document.addEventListener('click', (e) => {
+  const trigger = e.target.closest('[data-lead]');
+  if (trigger) {
+    e.preventDefault();
+    modals.openLead(trigger.dataset.lead || '');
+  }
+});
+
 /* ---------- событийный слой (TRACKING.md) ---------- */
 document.addEventListener('click', (e) => {
   const tel = e.target.closest('a[href^="tel:"]');

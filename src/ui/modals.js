@@ -2,6 +2,7 @@
 import { MODELS, WORKS, fmtPrice } from '../data/models.js';
 import { asset } from '../data/assets.js';
 import { track } from '../data/config.js';
+import { bindForm } from './forms.js';
 
 let lenisRef = null;
 let lastFocused = null;
@@ -34,6 +35,28 @@ function buildModal() {
   return backdrop;
 }
 
+function buildLeadModal() {
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="modal modal--lead" role="dialog" aria-modal="true" aria-label="Заявка на расчёт">
+      <button type="button" class="modal__close" aria-label="Закрыть">&times;</button>
+      <p class="hero__panel-title">Расчёт под ваш участок</p>
+      <p class="hero__panel-sub">Инженер перезвонит в течение 30 минут, смета — после бесплатного замера.</p>
+      <form id="lead-form" class="hero-form" novalidate>
+        <input type="text" name="hp_field" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <label>Имя<input type="text" name="name" required autocomplete="name" /></label>
+        <label>Телефон<input type="tel" name="phone" required autocomplete="tel" placeholder="+7 (___) ___-__-__" /></label>
+        <label class="checkbox"><input type="checkbox" name="consent" required /><span>Согласен с <a href="/privacy.html" target="_blank" rel="noopener" tabindex="-1">политикой обработки данных</a></span></label>
+        <button type="submit" class="btn btn--primary btn--wide">Получить расчёт</button>
+        <p class="form-risk">Бесплатно и ни к чему не обязывает.</p>
+        <p class="lead-form__success" role="status" hidden>Спасибо! Инженер свяжется с вами в течение 30 минут.</p>
+      </form>
+    </div>`;
+  document.body.appendChild(backdrop);
+  return backdrop;
+}
+
 function buildLightbox() {
   const lb = document.createElement('div');
   lb.className = 'lightbox';
@@ -51,6 +74,9 @@ export function initModals(lenis) {
   const backdrop = buildModal();
   const modal = backdrop.querySelector('.modal');
   const body = backdrop.querySelector('.modal__body');
+  const lead = buildLeadModal();
+  const leadModal = lead.querySelector('.modal');
+  let leadContext = '';
   const lb = buildLightbox();
   const lbImg = lb.querySelector('img');
   let lbIndex = 0;
@@ -70,6 +96,10 @@ export function initModals(lenis) {
   backdrop.addEventListener('click', (e) => {
     if (e.target === backdrop) close(backdrop);
   });
+  lead.querySelector('.modal__close').addEventListener('click', () => close(lead));
+  lead.addEventListener('click', (e) => {
+    if (e.target === lead) close(lead);
+  });
   lb.querySelector('.lightbox__close').addEventListener('click', () => close(lb));
   lb.addEventListener('click', (e) => {
     if (e.target === lb) close(lb);
@@ -78,13 +108,20 @@ export function initModals(lenis) {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (backdrop.classList.contains('is-open')) close(backdrop);
+      if (lead.classList.contains('is-open')) close(lead);
       if (lb.classList.contains('is-open')) close(lb);
     }
     if (e.key === 'Tab' && backdrop.classList.contains('is-open')) trapFocus(modal, e);
+    if (e.key === 'Tab' && lead.classList.contains('is-open')) trapFocus(leadModal, e);
     if (lb.classList.contains('is-open')) {
       if (e.key === 'ArrowRight') showWork(lbIndex + 1);
       if (e.key === 'ArrowLeft') showWork(lbIndex - 1);
     }
+  });
+
+  bindForm(lead.querySelector('#lead-form'), {
+    successSel: '.lead-form__success',
+    extra: () => ({ source: 'popup', context: leadContext }),
   });
 
   function openModel(id) {
@@ -104,8 +141,7 @@ export function initModals(lenis) {
       <p class="modal__desc">В цену «под ключ» входят: чаша, земляные работы, обвязка
         и оборудование, утепление ППУ Premium Nord, монтаж и пусконаладка.
         Точная стоимость под ваш участок — после бесплатного выезда инженера.</p>
-      <a href="#final-cta" class="btn btn--primary" data-close-modal>Получить расчёт</a>`;
-    body.querySelector('[data-close-modal]').addEventListener('click', () => close(backdrop));
+      <a href="#final-cta" class="btn btn--primary" data-lead="model:${m.name}">Получить расчёт</a>`;
     open(backdrop);
     backdrop.querySelector('.modal__close').focus();
   }
@@ -140,6 +176,13 @@ export function initModals(lenis) {
 
   return {
     openModel,
+    openLead(context = '') {
+      leadContext = context;
+      if (backdrop.classList.contains('is-open')) close(backdrop);
+      track('lead_popup_opened', { context });
+      open(lead);
+      lead.querySelector('input[name="name"]').focus();
+    },
     openWork(i) {
       showWork(i);
       open(lb);
