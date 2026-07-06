@@ -1113,3 +1113,66 @@ label.checkbox span a { color: var(--accent-dim); }
   padding: 16px 22px; border-radius: var(--radius-m);
   background: var(--paper-2);
 }
+
+/* ============ УТП над каталогом + тёмный квиз + tech-ссылки ============ */
+
+/* допы-УТП над моделями: приподнятые карточки с акцентом */
+.section--catalog .addons-block { margin: 0 0 8px; }
+.section--catalog .addon-card {
+  background: var(--paper); box-shadow: var(--shadow-card);
+  border-color: var(--line); position: relative; overflow: hidden;
+  padding-top: 24px;
+}
+.section--catalog .addon-card::before {
+  content: ''; position: absolute; left: 0; top: 0; width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-dim));
+}
+.catalog__pools {
+  margin-top: 64px; padding-top: 52px; border-top: 1px solid var(--line);
+}
+.block-title--lead {
+  font-family: var(--font-display); font-weight: 500;
+  font-size: clamp(22px, 3vw, 34px); margin-bottom: 8px;
+}
+.section-sub--tight { margin-bottom: 30px; }
+
+/* «Подробнее» в карточках технологий */
+.tech__more {
+  display: inline-block; margin: 0 26px 26px;
+  font-weight: 700; font-size: 14.5px; color: var(--accent-bright);
+  text-decoration: none;
+  transition: color var(--dur-fast), transform var(--dur-fast) var(--ease-out);
+}
+.tech__more:hover { color: #fff; transform: translateX(3px); }
+
+/* тёмный стильный квиз в секции (по образцу поп-ап-квиза) */
+.section--quiz .quiz {
+  background: rgba(9, 18, 28, 0.68);
+  border: 1px solid rgba(53, 200, 234, 0.18);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  color: var(--dark-ink);
+  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.5);
+}
+.section--quiz .quiz__progress span { background: rgba(53, 200, 234, 0.15); }
+.section--quiz .quiz__progress span.active { background: var(--accent); }
+.section--quiz .quiz__step h3, .section--quiz .quiz__result h3 { color: #fff; }
+.section--quiz .quiz__option {
+  background: rgba(11, 21, 32, 0.66);
+  border: 1.5px solid rgba(53, 200, 234, 0.18);
+  color: var(--dark-ink);
+}
+.section--quiz .quiz__option:hover {
+  border-color: var(--accent); background: rgba(24, 166, 201, 0.14);
+}
+.section--quiz .quiz__result p { color: var(--dark-ink-2); }
+.section--quiz .quiz__back { color: var(--dark-ink-2); }
+.section--quiz .quiz__form label { color: var(--dark-ink-2); }
+.section--quiz .quiz__form input:not([type='checkbox']),
+.section--quiz .quiz__form select {
+  background: rgba(11, 21, 32, 0.9);
+  border: 1.5px solid rgba(53, 200, 234, 0.22); color: var(--dark-ink);
+}
+.section--quiz .quiz__form input:focus,
+.section--quiz .quiz__form select:focus { border-color: var(--accent); }
+.section--quiz .quiz__success { color: #5fd9a6; }
+.section--quiz .quiz__form label.checkbox span a { color: var(--accent-bright); }

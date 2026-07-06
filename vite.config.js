@@ -9,6 +9,8 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         privacy: resolve(__dirname, 'privacy.html'),
         offer: resolve(__dirname, 'offer.html'),
+        ecoclean: resolve(__dirname, 'eco-clean.html'),
+        aquabiography: resolve(__dirname, 'aquabiography.html'),
       },
       output: {
         manualChunks: {
