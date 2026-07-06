@@ -77,18 +77,29 @@ fillAssetSlots();
 /* ---------- скролл-механика ---------- */
 initProcess(scene, reduced);
 
-// красивый переход hero → процесс: beauty-бассейн разбирается к «замеру»
-if (scene) {
-  ScrollTrigger.create({
-    trigger: '.section--process',
-    start: 'top bottom',
-    end: 'top top',
-    scrub: true,
-    onUpdate(self) {
-      scene.setHeroBlend(1 - self.progress);
-    },
-  });
+// красивый переход hero → процесс: фото растворяется, beauty-бассейн
+// разбирается к «замеру»
+const heroBg = document.getElementById('hero-bg');
+const heroBgImg = heroBg?.querySelector('.hero__bg-img');
+{
+  const url = asset('heroBg');
+  if (url && heroBgImg) heroBgImg.style.backgroundImage = `url(${url})`;
+  else if (heroBg) heroBg.remove(); // нет фото — чистый чёрный, WebGL за контентом
 }
+ScrollTrigger.create({
+  trigger: '.section--process',
+  start: 'top bottom',
+  end: 'top 35%',
+  scrub: true,
+  onUpdate(self) {
+    const t = self.progress;
+    scene?.setHeroBlend(1 - Math.min(t / 0.7, 1));
+    if (heroBg && heroBg.isConnected) {
+      heroBg.style.opacity = String(1 - t);
+      if (heroBgImg && !reduced) heroBgImg.style.transform = `scale(${1.02 + t * 0.06})`;
+    }
+  },
+});
 
 initFlyin(reduced);
 initSnap(reduced);
