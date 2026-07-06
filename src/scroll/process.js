@@ -4,6 +4,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { STAGES } from '../data/models.js';
+import { asset } from '../data/assets.js';
 import { track } from '../data/config.js';
 
 const N = STAGES.length;
@@ -25,11 +26,41 @@ const FADE = 0.18; // доля окна на растворение кадров
 export function initProcess(reduced) {
   const stageEls = [...document.querySelectorAll('.process-stage')];
   const photos = [...document.querySelectorAll('.process__photo')];
+  const clips = [...document.querySelectorAll('.process__clip')];
   const bar = document.getElementById('process-progress');
   if (!stageEls.length) return;
 
   const seenStages = new Set();
   let lastStage = -1;
+
+  // видео-переходы (MERIDIAN-приём: скраб пред-рендеренной секвенции).
+  // Клип k морфит кадр k → k+1; стиллы остаются подложкой-фолбэком.
+  const clipReady = new Array(clips.length).fill(false);
+  const saveData = navigator.connection?.saveData;
+  if (!reduced && !saveData) {
+    clips.forEach((v, i) => {
+      const url = asset(`clip-${i + 1}`);
+      if (!url) return;
+      v.src = url;
+      v.addEventListener('loadeddata', () => {
+        clipReady[i] = true;
+      });
+    });
+    // предзагрузка при подходе к секции
+    ScrollTrigger.create({
+      trigger: '.section--process',
+      start: 'top 160%',
+      once: true,
+      onEnter() {
+        clips.forEach((v) => {
+          if (v.src) {
+            v.preload = 'auto';
+            v.load();
+          }
+        });
+      },
+    });
+  }
 
   function update(p) {
     if (bar) bar.style.width = `${(p * 100).toFixed(2)}%`;
@@ -52,6 +83,26 @@ export function initProcess(reduced) {
         // Ken Burns: едва заметный наезд за время жизни кадра
         const life = clamp((p - i / N) * N, 0, 1);
         ph.style.transform = `scale(${1.055 - life * 0.05})`;
+      }
+    });
+
+    // скраб видео-морфа: в окне k играет клип k-1 (кадр k-1 → k),
+    // первые 70% окна — скраб, дальше держим финальный кадр клипа
+    clips.forEach((v, i) => {
+      const k = i + 1; // окно, в котором живёт клип
+      const win = clamp((p - k / N) * N, 0, 1);
+      const active = p >= k / N && p < (k + 1) / N;
+      if (!clipReady[i] || reduced) {
+        v.style.opacity = 0;
+        return;
+      }
+      if (active || (k === N - 1 && p >= k / N)) {
+        const t = clamp(win / 0.7, 0, 1);
+        const target = t * Math.max(v.duration - 0.05, 0);
+        if (Math.abs(v.currentTime - target) > 0.034) v.currentTime = target;
+        v.style.opacity = 1;
+      } else {
+        v.style.opacity = 0;
       }
     });
 
