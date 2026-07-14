@@ -364,6 +364,35 @@
   }
 
   /* ============================================================
+     GALLERY CAROUSEL — arrow navigation
+     ============================================================ */
+  function initGallery(){
+    var track = document.getElementById("gallery-track");
+    var prev = document.getElementById("gallery-prev");
+    var next = document.getElementById("gallery-next");
+    if (!track || !prev || !next) return;
+
+    function step(){
+      var card = track.querySelector(".gallery-item");
+      if (!card) return track.clientWidth * 0.8;
+      var styles = getComputedStyle(track);
+      var gap = parseInt(styles.columnGap || styles.gap || "22", 10) || 22;
+      return card.getBoundingClientRect().width + gap;
+    }
+    prev.addEventListener("click", function(){ track.scrollBy({ left: -step(), behavior: reduceMotion ? "auto" : "smooth" }); });
+    next.addEventListener("click", function(){ track.scrollBy({ left: step(), behavior: reduceMotion ? "auto" : "smooth" }); });
+
+    function updateArrows(){
+      var maxScroll = track.scrollWidth - track.clientWidth;
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= maxScroll - 2;
+    }
+    track.addEventListener("scroll", updateArrows, { passive: true });
+    window.addEventListener("resize", updateArrows);
+    updateArrows();
+  }
+
+  /* ============================================================
      SEASON SWITCHER (three seasons showcase)
      ============================================================ */
   function initSeasonSwitcher(){
@@ -540,6 +569,7 @@
     initBuildBar();
     initCalculator();
     initSeasonSwitcher();
+    initGallery();
     initHouseMap();
     initTimelineProgress();
     initFaq();
