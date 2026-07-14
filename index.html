@@ -592,30 +592,43 @@
     <p class="section-lead" data-reveal="up" data-delay="120">Без давления и звонков-роботов. Начните с того, что комфортно — остальное подскажем.</p>
 
     <div class="formats-grid">
-      <a class="format-card" href="assets/smeta-dom45.pdf" download data-reveal="up" data-delay="0">
+      <button type="button" class="format-card" data-reveal="up" data-delay="0"
+        data-title="Смета PDF"
+        data-desc="Пришлём полную смету по этапам — до рубля, как в договоре. Или скачайте прямо сейчас."
+        data-cta="Прислать смету"
+        data-download="assets/smeta-dom45.pdf" data-download-label="Скачать смету PDF">
         <span class="format-icon" aria-hidden="true">📄</span>
         <h3>Смета PDF</h3>
         <p>Полная смета по этапам — до рубля, как в договоре.</p>
         <span class="format-link">Скачать →</span>
-      </a>
-      <a class="format-card" href="#calculator" data-scroll data-reveal="up" data-delay="80">
+      </button>
+      <button type="button" class="format-card" data-reveal="up" data-delay="80"
+        data-title="Расчёт под ключ"
+        data-desc="Пришлём персональный расчёт ипотечного платежа и суммы кредита под ваш участок."
+        data-cta="Получить расчёт">
         <span class="format-icon" aria-hidden="true">🧮</span>
         <h3>Расчёт под ключ</h3>
         <p>Посчитайте ипотечный платёж и сумму кредита за минуту.</p>
-        <span class="format-link">Открыть калькулятор →</span>
-      </a>
-      <a class="format-card" href="#final-cta" data-scroll data-reveal="up" data-delay="160">
+        <span class="format-link">Получить расчёт →</span>
+      </button>
+      <button type="button" class="format-card" data-reveal="up" data-delay="160"
+        data-title="Звонок архитектора"
+        data-desc="Запишем на 15-минутный видеозвонок: обсудим планировку, участок и сроки."
+        data-cta="Записаться на звонок">
         <span class="format-icon" aria-hidden="true">👷</span>
         <h3>Звонок архитектора</h3>
         <p>15 минут по видеосвязи: планировка, участок, сроки.</p>
         <span class="format-link">Записаться →</span>
-      </a>
-      <a class="format-card" href="#final-cta" data-scroll data-reveal="up" data-delay="240">
+      </button>
+      <button type="button" class="format-card" data-reveal="up" data-delay="240"
+        data-title="Экскурсия на стройку"
+        data-desc="Согласуем удобное время и покажем готовый дом и стройплощадку вживую."
+        data-cta="Записаться на экскурсию">
         <span class="format-icon" aria-hidden="true">🏗</span>
         <h3>Экскурсия на стройку</h3>
         <p>Посмотрите готовый дом и стройплощадку вживую.</p>
         <span class="format-link">Договориться →</span>
-      </a>
+      </button>
     </div>
   </div>
 </section>
@@ -774,6 +787,30 @@
     <span>Рассчитать под ключ</span>
   </a>
 </div>
+
+<!-- ============ FORMAT MODAL ============ -->
+<dialog class="format-modal" id="format-modal" aria-labelledby="fm-title">
+  <button class="thanks-close" id="fm-close" aria-label="Закрыть">✕</button>
+  <h3 id="fm-title">Первый шаг</h3>
+  <p id="fm-desc"></p>
+  <a class="btn btn-outline btn-pill fm-download" id="fm-download" href="#" download hidden>Скачать смету PDF</a>
+  <form class="fm-form" id="fm-form" novalidate>
+    <label class="form-field">
+      <span>Ваше имя</span>
+      <input type="text" name="name" required autocomplete="name" placeholder="Как к вам обращаться">
+    </label>
+    <label class="form-field">
+      <span>Телефон</span>
+      <input type="tel" name="phone" required autocomplete="tel" placeholder="+7 (___) ___-__-__">
+    </label>
+    <label class="form-consent">
+      <input type="checkbox" name="consent" required>
+      <span>Согласен(-на) на обработку персональных данных.</span>
+    </label>
+    <button type="submit" class="btn btn-primary btn-pill btn-lg btn-full" id="fm-submit">Отправить заявку</button>
+    <p class="form-micro">Ответим за 15 минут, без спама и звонков-роботов.</p>
+  </form>
+</dialog>
 
 <!-- ============ THANK YOU MODAL ============ -->
 <dialog class="thanks-modal" id="thanks-modal">

@@ -1279,6 +1279,13 @@ input[type="range"]::-moz-range-thumb{
 .format-card{
   display: flex;
   flex-direction: column;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
   background: var(--paper-2);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
@@ -1293,6 +1300,22 @@ input[type="range"]::-moz-range-thumb{
 .format-link{ font-weight: 700; font-size: 14.5px; color: var(--terracotta-dark); }
 @media (max-width: 900px){ .formats-grid{ grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 460px){ .formats-grid{ grid-template-columns: 1fr; } }
+
+/* Format popup modal */
+.format-modal{
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 36px 34px;
+  max-width: 460px;
+  width: calc(100% - 48px);
+  background: var(--paper-2);
+  box-shadow: 0 40px 90px -30px rgba(0,0,0,0.4);
+}
+.format-modal::backdrop{ background: rgba(20,26,20,0.55); backdrop-filter: blur(4px); }
+.format-modal h3{ font-size: 24px; font-weight: 700; margin-bottom: 8px; padding-right: 30px; }
+.format-modal > p{ color: var(--muted); font-size: 15px; margin-bottom: 22px; }
+.fm-download{ width: 100%; margin-bottom: 20px; }
+.fm-form{ display: flex; flex-direction: column; gap: 16px; }
 
 /* ============================================================
    FORM: email hint + consent checkbox

@@ -538,14 +538,74 @@
 
     closeBtn.addEventListener("click", closeModal);
     okBtn.addEventListener("click", closeModal);
-    modal.addEventListener("click", function(e){
-      var rect = modal.getBoundingClientRect();
-      var inDialog = (
-        e.clientX >= rect.left && e.clientX <= rect.right &&
-        e.clientY >= rect.top && e.clientY <= rect.bottom
-      );
-      if (!inDialog) closeModal();
+    // Close only when the backdrop (the dialog element itself) is clicked, not its content
+    modal.addEventListener("click", function(e){ if (e.target === modal) closeModal(); });
+  }
+
+  /* ============================================================
+     FORMAT CARDS → POPUP (no jarring scroll)
+     ============================================================ */
+  function initFormatsModal(){
+    var cards = document.querySelectorAll(".format-card");
+    var modal = document.getElementById("format-modal");
+    if (!cards.length || !modal) return;
+
+    var titleEl = document.getElementById("fm-title");
+    var descEl = document.getElementById("fm-desc");
+    var downloadEl = document.getElementById("fm-download");
+    var submitEl = document.getElementById("fm-submit");
+    var form = document.getElementById("fm-form");
+    var closeBtn = document.getElementById("fm-close");
+    var thanks = document.getElementById("thanks-modal");
+
+    function openModal(){
+      if (typeof modal.showModal === "function") modal.showModal();
+      else modal.setAttribute("open", "");
+    }
+    function closeModal(){ modal.close ? modal.close() : modal.removeAttribute("open"); }
+
+    cards.forEach(function(card){
+      card.addEventListener("click", function(){
+        titleEl.textContent = card.getAttribute("data-title") || "Первый шаг";
+        descEl.textContent = card.getAttribute("data-desc") || "";
+        if (submitEl) submitEl.textContent = card.getAttribute("data-cta") || "Отправить заявку";
+
+        var dl = card.getAttribute("data-download");
+        if (dl) {
+          downloadEl.href = dl;
+          downloadEl.textContent = card.getAttribute("data-download-label") || "Скачать PDF";
+          downloadEl.hidden = false;
+        } else {
+          downloadEl.hidden = true;
+        }
+        form.classList.remove("consent-missing");
+        openModal();
+      });
     });
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var nameEl = form.querySelector('[name="name"]');
+      var phoneEl = form.querySelector('[name="phone"]');
+      var consentEl = form.querySelector('[name="consent"]');
+      if (!nameEl.value.trim()) { nameEl.focus(); return; }
+      if (!phoneEl.value.trim()) { phoneEl.focus(); return; }
+      if (consentEl && !consentEl.checked) { form.classList.add("consent-missing"); consentEl.focus(); return; }
+      closeModal();
+      form.reset();
+      // Reuse the shared thank-you modal
+      if (thanks) {
+        thanks.style.opacity = ""; thanks.style.transform = "";
+        if (typeof thanks.showModal === "function") thanks.showModal();
+        else thanks.setAttribute("open", "");
+      }
+    });
+    var consentBox = form.querySelector('[name="consent"]');
+    if (consentBox) consentBox.addEventListener("change", function(){ if (consentBox.checked) form.classList.remove("consent-missing"); });
+
+    closeBtn.addEventListener("click", closeModal);
+    // Close only when the backdrop (the dialog element itself) is clicked, not its content
+    modal.addEventListener("click", function(e){ if (e.target === modal) closeModal(); });
   }
 
   /* ============================================================
@@ -579,6 +639,7 @@
     initFaq();
     initMobileMenu();
     initForm();
+    initFormatsModal();
     initHeaderScrollState();
 
     if (window.ScrollTrigger) {
