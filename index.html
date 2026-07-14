@@ -850,17 +850,21 @@ input[type="range"]::-moz-range-thumb{
 .timeline::before{
   content: "";
   position: absolute;
-  top: 26px; left: 26px; right: 26px;
+  /* span exactly from the centre of the first node to the centre of the last:
+     each of 5 columns is (100% - 4*24px gap)/5 wide; a node sits 26px into its column */
+  top: 26px; left: 26px;
+  width: calc(100% - (100% - 96px) / 5);
   height: 3px;
   background: var(--line-strong);
   border-radius: var(--radius-pill);
+  z-index: 0;
 }
 .timeline-progress{
   position: absolute;
   top: 26px; left: 26px;
   height: 3px;
   width: 0%;
-  max-width: calc(100% - 52px);
+  max-width: calc(100% - (100% - 96px) / 5);
   background: var(--terracotta);
   border-radius: var(--radius-pill);
   transition: width 0.3s ease;
