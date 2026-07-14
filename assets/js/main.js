@@ -31,16 +31,15 @@
       easing: function(t){ return 1 - Math.pow(1 - t, 3); },
       smoothWheel: true,
     });
-    function raf(time){
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
+    // Drive Lenis exactly once per frame: via GSAP's ticker when available,
+    // otherwise a standalone rAF loop. Driving it from both corrupts Lenis'
+    // delta math and causes janky "jumping" scroll.
     if (window.gsap && window.ScrollTrigger) {
       lenis.on("scroll", ScrollTrigger.update);
       gsap.ticker.add(function(time){ lenis.raf(time * 1000); });
       gsap.ticker.lagSmoothing(0);
+    } else {
+      (function raf(time){ lenis.raf(time); requestAnimationFrame(raf); })(0);
     }
   }
 
@@ -546,7 +545,7 @@
      FORMAT CARDS → POPUP (no jarring scroll)
      ============================================================ */
   function initFormatsModal(){
-    var cards = document.querySelectorAll(".format-card");
+    var cards = document.querySelectorAll(".format-card, [data-lead]");
     var modal = document.getElementById("format-modal");
     if (!cards.length || !modal) return;
 
