@@ -872,6 +872,9 @@ input[type="range"]::-moz-range-thumb{
 }
 .timeline-step{
   position: relative;
+  /* reveal animation leaves an inline transform on the step, creating a stacking
+     context that would otherwise trap the node's z-index below the progress line */
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
