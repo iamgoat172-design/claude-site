@@ -881,15 +881,15 @@ input[type="range"]::-moz-range-thumb{
    HONESTY (dark band)
    ============================================================ */
 .honesty-section{
-  background: linear-gradient(160deg, #1B2A1E 0%, #142016 100%);
+  background: linear-gradient(160deg, var(--forest) 0%, var(--forest-dark) 100%);
   color: var(--paper);
 }
 .honesty-inner{ display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: center; }
 .honesty-lead{ color: rgba(245,247,243,0.78); font-size: 17px; margin-top: 18px; max-width: 460px; }
 .honesty-grid{ display: grid; gap: 20px; }
 .honesty-card{
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.09);
+  border: 1px solid rgba(255,255,255,0.18);
   border-radius: var(--radius-lg);
   padding: 26px 28px;
 }
