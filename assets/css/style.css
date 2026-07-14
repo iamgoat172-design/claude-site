@@ -735,14 +735,13 @@ input[type="range"]::-moz-range-thumb{
   max-width: 1020px;
   display: grid;
   grid-template-columns: 1.55fr 1fr;
-  min-height: 460px;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-soft);
   border: 1px solid var(--line);
   text-align: left;
 }
-.seasons-media{ position: relative; min-height: 300px; }
+.seasons-media{ position: relative; min-height: 360px; }
 .season-photo{
   position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: cover;
@@ -789,11 +788,24 @@ input[type="range"]::-moz-range-thumb{
   box-shadow: var(--shadow-warm);
 }
 
+/* Metrics row — merged into the seasons card as a full-width bottom strip */
+.seasons-metrics{
+  grid-column: 1 / -1;
+  background: var(--forest-dark);
+  border-top: 1px solid rgba(255,255,255,0.15);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 32px 40px;
+}
+.seasons-metrics .metric-num{ font-size: clamp(26px, 2.6vw, 36px); }
+
 @media (max-width: 780px){
-  .seasons-widget{ grid-template-columns: 1fr; min-height: 0; }
+  .seasons-widget{ grid-template-columns: 1fr; }
   .seasons-media{ aspect-ratio: 16/10; min-height: 0; }
   .seasons-panel{ padding: 32px 28px; }
   .seasons-tabs{ padding-top: 24px; }
+  .seasons-metrics{ grid-template-columns: repeat(2, 1fr); gap: 26px 16px; padding: 28px 24px; }
 }
 
 /* ============================================================
@@ -839,7 +851,7 @@ input[type="range"]::-moz-range-thumb{
   background: linear-gradient(160deg, var(--forest) 0%, var(--forest-dark) 100%);
   color: #fff;
   display: flex; align-items: center; justify-content: center;
-  border: 4px solid var(--paper);
+  border: none;
   box-shadow: 0 8px 20px -8px rgba(44,110,55,0.5);
   position: relative;
   z-index: 2;
@@ -1233,18 +1245,8 @@ input[type="range"]::-moz-range-thumb{
 }
 
 /* ============================================================
-   METRICS BAND
+   METRICS (used inside the seasons card as a bottom strip)
    ============================================================ */
-.metrics-section{
-  background: linear-gradient(160deg, var(--forest) 0%, var(--forest-dark) 100%);
-  color: #fff;
-  padding: 64px 0;
-}
-.metrics-grid{
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-}
 .metric-item{ text-align: center; display: flex; flex-direction: column; gap: 6px; }
 .metric-num{
   font-family: var(--font-display);
@@ -1255,7 +1257,6 @@ input[type="range"]::-moz-range-thumb{
   font-variant-numeric: tabular-nums;
 }
 .metric-label{ font-size: 14.5px; color: rgba(255,255,255,0.82); }
-@media (max-width: 700px){ .metrics-grid{ grid-template-columns: repeat(2, 1fr); gap: 32px 24px; } }
 
 /* ============================================================
    CUSTOMIZATION
