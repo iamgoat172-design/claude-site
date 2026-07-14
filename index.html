@@ -320,23 +320,69 @@
   </div>
 </section>
 
-<!-- ============ SPECS ============ -->
+<!-- ============ SPECS — INTERACTIVE HOUSE MAP ============ -->
 <section class="section specs-section" id="specs">
   <div class="container">
     <p class="eyebrow" data-reveal="up">характеристики дома</p>
-    <h2 class="h2" data-reveal="up" data-delay="60">Из чего состоит дом</h2>
+    <h2 class="h2" data-reveal="up" data-delay="60">Разберём дом по деталям</h2>
+    <p class="section-lead" data-reveal="up" data-delay="120">Наведите на точку — расскажем, из чего состоит дом. На телефоне просто коснитесь точки.</p>
 
-    <div class="specs-grid">
-      <div class="spec-item" data-reveal="up" data-delay="0"><span class="spec-label">Тип дома</span><span class="spec-value">Одноэтажный, СИП-панели</span></div>
-      <div class="spec-item" data-reveal="up" data-delay="40"><span class="spec-label">Площадь</span><span class="spec-value">84 м²</span></div>
-      <div class="spec-item" data-reveal="up" data-delay="80"><span class="spec-label">Спальни</span><span class="spec-value">2</span></div>
-      <div class="spec-item" data-reveal="up" data-delay="120"><span class="spec-label">Терраса</span><span class="spec-value">ДПК, 20,6 м²</span></div>
-      <div class="spec-item" data-reveal="up" data-delay="160"><span class="spec-label">Окна</span><span class="spec-value">Rehau GRAZIO 70 мм, 9 шт</span></div>
-      <div class="spec-item" data-reveal="up" data-delay="200"><span class="spec-label">Фасад</span><span class="spec-value">Сайдинг Grand Line, графит</span></div>
-      <div class="spec-item" data-reveal="up" data-delay="240"><span class="spec-label">Кровля</span><span class="spec-value">Металлочерепица, 135 м²</span></div>
-      <div class="spec-item" data-reveal="up" data-delay="280"><span class="spec-label">Отопление</span><span class="spec-value">Газовый котёл + бойлер</span></div>
-      <div class="spec-item" data-reveal="up" data-delay="320"><span class="spec-label">Вода</span><span class="spec-value">Скважина + кессон</span></div>
-      <div class="spec-item" data-reveal="up" data-delay="360"><span class="spec-label">Канализация</span><span class="spec-value">ЛОС Аэробокс А-410-8</span></div>
+    <div class="housemap" id="housemap" data-reveal="up" data-delay="160">
+      <div class="hm-stage">
+        <img src="assets/img/rakurs-golden-hour.webp" alt="Одноэтажный дом из СИП-панелей с графитовым фасадом в сосновом лесу" loading="lazy" width="1200" height="675">
+        <button class="hm-pin" data-point="roof" style="left:50%;top:38%" aria-label="Кровля"><span aria-hidden="true">1</span><span class="hm-tip">Кровля</span></button>
+        <button class="hm-pin" data-point="walls" style="left:28%;top:55%" aria-label="Стены из СИП"><span aria-hidden="true">2</span><span class="hm-tip">Стены СИП</span></button>
+        <button class="hm-pin" data-point="windows" style="left:46%;top:60%" aria-label="Панорамные окна"><span aria-hidden="true">3</span><span class="hm-tip">Панорамные окна</span></button>
+        <button class="hm-pin" data-point="facade" style="left:73%;top:56%" aria-label="Фасад"><span aria-hidden="true">4</span><span class="hm-tip">Фасад</span></button>
+        <button class="hm-pin" data-point="soffit" style="left:62%;top:45%" aria-label="Софиты и освещение"><span aria-hidden="true">5</span><span class="hm-tip">Софиты и свет</span></button>
+        <button class="hm-pin" data-point="terrace" style="left:31%;top:83%" aria-label="Терраса"><span aria-hidden="true">6</span><span class="hm-tip">Терраса</span></button>
+        <button class="hm-pin" data-point="foundation" style="left:52%;top:90%" aria-label="Фундамент на сваях"><span aria-hidden="true">7</span><span class="hm-tip">Фундамент</span></button>
+        <button class="hm-pin" data-point="forest" style="left:13%;top:30%" aria-label="Участок в лесу"><span aria-hidden="true">8</span><span class="hm-tip">Участок в лесу</span></button>
+      </div>
+
+      <div class="hm-list">
+        <article class="hm-card" data-point="roof">
+          <span class="hm-num">1</span>
+          <div><h3>Кровля</h3><p>Металлочерепица Grand Line Satin, графит — 135 м² с утеплением. Тихая в дождь, не выгорает и служит десятилетиями.</p></div>
+        </article>
+        <article class="hm-card" data-point="walls">
+          <span class="hm-num">2</span>
+          <div><h3>Стены из СИП-панелей</h3><p>Коробка собирается за считанные дни. СИП держит тепло: зимой топить дёшево, летом внутри прохладно.</p></div>
+        </article>
+        <article class="hm-card" data-point="windows">
+          <span class="hm-num">3</span>
+          <div><h3>Панорамное остекление</h3><p>9 окон Rehau GRAZIO 70 мм: двухкамерные, ламинация, 50% открывания. Много света и вид на лес — без потерь тепла.</p></div>
+        </article>
+        <article class="hm-card" data-point="facade">
+          <span class="hm-num">4</span>
+          <div><h3>Фасад</h3><p>Сайдинг Grand Line Акрил в цвете графит — вентилируемый фасад, устойчив к выцветанию и перепадам температур.</p></div>
+        </article>
+        <article class="hm-card" data-point="soffit">
+          <span class="hm-num">5</span>
+          <div><h3>Софиты и освещение</h3><p>Подшивка свесов софитами и уличный свет по периметру — аккуратный контур дома и подсветка у входа круглый год.</p></div>
+        </article>
+        <article class="hm-card" data-point="terrace">
+          <span class="hm-num">6</span>
+          <div><h3>Терраса</h3><p>20,6 м² из ДПК с выходом из гостиной. Не гниёт и не требует покраски — готовое место для вечеров с семьёй.</p></div>
+        </article>
+        <article class="hm-card" data-point="foundation">
+          <span class="hm-num">7</span>
+          <div><h3>Фундамент на сваях</h3><p>35 забивных ж/б свай 150×150 мм, длина 3 м. Надёжно на пучинистых грунтах — дом не «ведёт» со временем.</p></div>
+        </article>
+        <article class="hm-card" data-point="forest">
+          <span class="hm-num">8</span>
+          <div><h3>Участок в лесу</h3><p>Дом ставится прямо среди сосен: приватность, чистый воздух и вид из панорамных окон вместо соседского забора.</p></div>
+        </article>
+      </div>
+
+      <div class="hm-specs">
+        <span><b>84 м²</b> площадь</span>
+        <span><b>2</b> спальни</span>
+        <span><b>Газовый котёл</b> + бойлер</span>
+        <span><b>Скважина</b> + кессон</span>
+        <span><b>ЛОС</b> Аэробокс А-410-8</span>
+        <span><b>45</b> дней до заезда</span>
+      </div>
     </div>
   </div>
 </section>

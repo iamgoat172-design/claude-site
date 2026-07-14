@@ -318,6 +318,52 @@
   }
 
   /* ============================================================
+     INTERACTIVE HOUSE MAP (pins <-> detail cards cross-highlight)
+     ============================================================ */
+  function initHouseMap(){
+    var map = document.getElementById("housemap");
+    if (!map) return;
+    var pins = map.querySelectorAll(".hm-pin");
+    var cards = map.querySelectorAll(".hm-card");
+    if (!pins.length) return;
+
+    // stuck = id pinned by click/tap; hover only previews on top of it.
+    var stuck = null;
+
+    function apply(id){ // id = the point to show as active (or null)
+      pins.forEach(function(p){ p.classList.toggle("is-active", p.getAttribute("data-point") === id); });
+      cards.forEach(function(c){ c.classList.toggle("is-active", c.getAttribute("data-point") === id); });
+    }
+    function preview(id){ apply(id); }        // on hover/focus
+    function restore(){ apply(stuck); }       // on hover-out: fall back to pinned
+
+    pins.forEach(function(pin){
+      var id = pin.getAttribute("data-point");
+      pin.addEventListener("mouseenter", function(){ preview(id); });
+      pin.addEventListener("mouseleave", restore);
+      pin.addEventListener("focus", function(){ preview(id); });
+      pin.addEventListener("blur", restore);
+      // Tap / click: sticky toggle — independent of transient hover state
+      pin.addEventListener("click", function(){
+        stuck = (stuck === id) ? null : id;
+        apply(stuck);
+        if (stuck) {
+          var card = map.querySelector('.hm-card[data-point="' + id + '"]');
+          if (card && window.matchMedia("(max-width: 980px)").matches) {
+            card.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+          }
+        }
+      });
+    });
+
+    cards.forEach(function(card){
+      var id = card.getAttribute("data-point");
+      card.addEventListener("mouseenter", function(){ preview(id); });
+      card.addEventListener("mouseleave", restore);
+    });
+  }
+
+  /* ============================================================
      SEASON SWITCHER (three seasons showcase)
      ============================================================ */
   function initSeasonSwitcher(){
@@ -494,6 +540,7 @@
     initBuildBar();
     initCalculator();
     initSeasonSwitcher();
+    initHouseMap();
     initTimelineProgress();
     initFaq();
     initMobileMenu();
