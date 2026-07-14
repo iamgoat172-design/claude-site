@@ -399,6 +399,8 @@
     var tabs = document.querySelectorAll(".season-tab");
     var photos = document.querySelectorAll(".season-photo");
     if (!tabs.length) return;
+    var nameEl = document.getElementById("season-name");
+    var descEl = document.getElementById("season-desc");
     tabs.forEach(function(tab){
       tab.addEventListener("click", function(){
         var season = tab.getAttribute("data-season-tab");
@@ -408,6 +410,8 @@
         photos.forEach(function(p){
           p.classList.toggle("is-active", p.getAttribute("data-season-img") === season);
         });
+        if (nameEl && tab.getAttribute("data-title")) nameEl.textContent = tab.getAttribute("data-title");
+        if (descEl && tab.getAttribute("data-desc")) descEl.textContent = tab.getAttribute("data-desc");
       });
     });
   }

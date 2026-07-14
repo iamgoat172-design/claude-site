@@ -429,10 +429,19 @@
         <img class="season-photo" src="assets/img/season-osen-1200.webp" alt="Дом осенью" data-season-img="osen" width="1200" height="670">
         <img class="season-photo" src="assets/img/season-zima-1200.webp" alt="Дом зимой" data-season-img="zima" width="1200" height="670">
       </div>
-      <div class="seasons-tabs" role="tablist" aria-label="Выбор сезона">
-        <button class="season-tab is-active" data-season-tab="leto" role="tab" aria-selected="true">Лето</button>
-        <button class="season-tab" data-season-tab="osen" role="tab" aria-selected="false">Осень</button>
-        <button class="season-tab" data-season-tab="zima" role="tab" aria-selected="false">Зима</button>
+
+      <div class="seasons-panel">
+        <p class="eyebrow eyebrow--light">сезон</p>
+        <h3 class="seasons-name" id="season-name">Лето</h3>
+        <p class="seasons-desc" id="season-desc">Терраса, барбекю и длинные вечера на свежем воздухе. Панорамные окна впускают весь свет и вид на лес.</p>
+        <div class="seasons-tabs" role="tablist" aria-label="Выбор сезона">
+          <button class="season-tab is-active" data-season-tab="leto" role="tab" aria-selected="true"
+            data-title="Лето" data-desc="Терраса, барбекю и длинные вечера на свежем воздухе. Панорамные окна впускают весь свет и вид на лес.">Лето</button>
+          <button class="season-tab" data-season-tab="osen" role="tab" aria-selected="false"
+            data-title="Осень" data-desc="Тёплый контур и газовое отопление держат уют, пока за окном золото и дожди.">Осень</button>
+          <button class="season-tab" data-season-tab="zima" role="tab" aria-selected="false"
+            data-title="Зима" data-desc="СИП-панели держат тепло — в доме комфортно, а топить дёшево даже в морозы.">Зима</button>
+        </div>
       </div>
     </div>
   </div>
