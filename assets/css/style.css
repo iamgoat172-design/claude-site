@@ -939,64 +939,81 @@ input[type="range"]::-moz-range-thumb{
 @media (max-width: 760px){ .compare-grid{ grid-template-columns: 1fr; } }
 
 /* ============================================================
-   PACKAGES LADDER
+   PACKAGES / PRICE BUILD-UP BAR
    ============================================================ */
 .packages-section{ background: var(--paper-2); }
-.package-ladder{
-  margin-top: 48px;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 18px;
-  align-items: stretch;
+.build{ margin-top: 48px; }
+.build-track{
+  display: flex;
+  height: 84px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
 }
-.package-step{
-  position: relative;
-  background: var(--paper-2);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  padding: 28px 22px;
+.build-seg{
   display: flex;
   flex-direction: column;
-  transition: transform .3s ease, box-shadow .3s ease;
-}
-.package-step:hover{ transform: translateY(-6px); box-shadow: var(--shadow-soft); }
-.package-rung{
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 13px;
-  color: var(--forest);
-  background: var(--forest-tint);
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  display: inline-flex; align-items: center; justify-content: center;
-  margin-bottom: 16px;
-}
-.package-step h3{ font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-.package-step p{ color: var(--muted); font-size: 14px; margin-bottom: 20px; flex: 1; }
-.package-price{ font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--ink); }
-.package-price--accent{ color: var(--terracotta); font-size: 22px; }
-.package-step--active{
-  background: linear-gradient(160deg, #FFF6EF 0%, var(--terracotta-tint) 100%);
-  border-color: var(--terracotta);
-  box-shadow: var(--shadow-warm);
-}
-.package-step--active .package-rung{ background: var(--terracotta); color: #fff; }
-.package-badge{
-  position: absolute;
-  top: -11px; left: 22px;
-  background: var(--terracotta-dark);
+  justify-content: center;
+  gap: 4px;
+  padding: 0 22px;
   color: #fff;
-  font-size: 11px; font-weight: 800;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  padding: 5px 12px;
-  border-radius: var(--radius-pill);
+  min-width: 0;
+  overflow: hidden;
 }
-.package-step--soft{ background: var(--paper-3); border-style: dashed; }
-.package-step--soft .package-rung{ background: var(--line-strong); color: var(--muted); }
-.packages-note{ margin-top: 28px; font-size: 14px; color: var(--muted); max-width: 640px; }
-@media (max-width: 980px){ .package-ladder{ grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 520px){ .package-ladder{ grid-template-columns: 1fr; } }
+.build-seg small{
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.82);
+  white-space: nowrap;
+}
+.build-seg b{ font-family: var(--font-display); font-size: 18px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.build-seg--1{ background: #3C7A45; }
+.build-seg--2{ background: #347A3E; }
+.build-seg--3{ background: var(--forest); }
+.build-seg--4{ background: linear-gradient(120deg, var(--terracotta) 0%, var(--terracotta-dark) 100%); }
+
+.build-legend{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 26px;
+  margin-top: 28px;
+}
+.build-item h3{ font-size: 16px; font-weight: 700; margin-bottom: 5px; display: flex; align-items: flex-start; gap: 9px; }
+.build-item p{ color: var(--muted); font-size: 14px; }
+.build-dot{ width: 12px; height: 12px; border-radius: 4px; flex-shrink: 0; margin-top: 5px; }
+.build-dot--1{ background: #3C7A45; }
+.build-dot--2{ background: #347A3E; }
+.build-dot--3{ background: var(--forest); }
+.build-dot--4{ background: var(--terracotta); }
+
+.build-total{
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+  padding: 28px 32px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+.build-total-text{ display: flex; flex-direction: column; gap: 4px; max-width: 640px; }
+.build-total-label{ font-size: 13px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--terracotta-dark); }
+.build-total-num{ font-family: var(--font-display); font-weight: 800; font-size: clamp(30px, 4vw, 40px); color: var(--terracotta); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.build-total-sub{ font-size: 14px; color: var(--muted); margin-top: 4px; }
+.build-total .btn{ flex-shrink: 0; }
+
+@media (max-width: 860px){ .build-legend{ grid-template-columns: repeat(2, 1fr); gap: 22px; } }
+@media (max-width: 680px){
+  .build-track{ flex-direction: column; height: auto; }
+  .build-seg{ flex-direction: row; align-items: baseline; justify-content: space-between; padding: 15px 20px; }
+  .build-total{ flex-direction: column; align-items: flex-start; padding: 24px; }
+  .build-total .btn{ width: 100%; }
+}
 
 /* ============================================================
    METRICS BAND

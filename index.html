@@ -223,47 +223,57 @@
   </div>
 </section>
 
-<!-- ============ PACKAGES LADDER ============ -->
+<!-- ============ PACKAGES / PRICE BUILD-UP BAR ============ -->
 <section class="section packages-section" id="packages">
   <div class="container">
     <p class="eyebrow" data-reveal="up">комплектации</p>
-    <h2 class="h2" data-reveal="up" data-delay="60">От тёплого контура — до «под тапочки»</h2>
-    <p class="section-lead" data-reveal="up" data-delay="120">Можно въехать сразу «под ключ», а можно взять дом этапами — цена наращивается прозрачно, каждая ступень включает предыдущую.</p>
+    <h2 class="h2" data-reveal="up" data-delay="60">Цена растёт прозрачно — этап за этапом</h2>
+    <p class="section-lead" data-reveal="up" data-delay="120">Можно въехать сразу «под ключ», а можно взять дом этапами и остановиться на любой ступени. Каждый следующий этап включает предыдущий.</p>
 
-    <div class="package-ladder">
-      <article class="package-step" data-reveal="up" data-delay="0">
-        <span class="package-rung">01</span>
-        <h3>Тёплый контур</h3>
-        <p>Сваи, коробка из СИП-панелей, кровля — герметичный контур под отделку.</p>
-        <span class="package-price">от 3 320 012 ₽</span>
-      </article>
-      <article class="package-step" data-reveal="up" data-delay="80">
-        <span class="package-rung">02</span>
-        <h3>+ Внешняя отделка</h3>
-        <p>Фасад, окна Rehau, металлочерепица, терраса, утепление кровли.</p>
-        <span class="package-price">+ 2 006 716 ₽</span>
-      </article>
-      <article class="package-step" data-reveal="up" data-delay="160">
-        <span class="package-rung">03</span>
-        <h3>+ Инженерка</h3>
-        <p>Котельная, скважина с кессоном, ЛОС, электрика и вентиляция.</p>
-        <span class="package-price">+ 2 141 120 ₽</span>
-      </article>
-      <article class="package-step package-step--active" data-reveal="up" data-delay="240">
-        <span class="package-rung">04</span>
-        <span class="package-badge">рекомендуем</span>
-        <h3>Под ключ</h3>
-        <p>Готов к заезду: чистовая отделка потолка, пола, стен и проёмов включена.</p>
-        <span class="package-price package-price--accent">10 221 638 ₽</span>
-      </article>
-      <article class="package-step package-step--soft" data-reveal="up" data-delay="320">
-        <span class="package-rung">05</span>
-        <h3>«Под тапочки»</h3>
-        <p>Мебель, техника, текстиль — заезжайте налегке. Опция, считаем по запросу.</p>
-        <span class="package-price">по запросу</span>
-      </article>
+    <div class="build" data-reveal="up" data-delay="160">
+      <div class="build-track" role="img" aria-label="Стоимость по этапам: тёплый контур 3,32 млн, внешняя отделка +2,01 млн, инженерка и электрика +2,14 млн, чистовая отделка +2,91 млн">
+        <div class="build-seg build-seg--1" style="flex:3.32">
+          <small>01 · контур</small><b>3,32 млн ₽</b>
+        </div>
+        <div class="build-seg build-seg--2" style="flex:2.01">
+          <small>02 · отделка</small><b>+2,01</b>
+        </div>
+        <div class="build-seg build-seg--3" style="flex:2.14">
+          <small>03 · инженерка</small><b>+2,14</b>
+        </div>
+        <div class="build-seg build-seg--4" style="flex:2.91">
+          <small>04 · чистовая</small><b>+2,91</b>
+        </div>
+      </div>
+
+      <div class="build-legend">
+        <div class="build-item" data-reveal="up" data-delay="0">
+          <h3><span class="build-dot build-dot--1"></span>Тёплый контур</h3>
+          <p>Сваи, коробка СИП, кровля — герметичный контур под отделку.</p>
+        </div>
+        <div class="build-item" data-reveal="up" data-delay="80">
+          <h3><span class="build-dot build-dot--2"></span>+ Внешняя отделка</h3>
+          <p>Фасад, окна Rehau, металлочерепица, терраса, утепление кровли.</p>
+        </div>
+        <div class="build-item" data-reveal="up" data-delay="160">
+          <h3><span class="build-dot build-dot--3"></span>+ Инженерка и электрика</h3>
+          <p>Котельная, скважина с кессоном, ЛОС, вентиляция, разводка.</p>
+        </div>
+        <div class="build-item" data-reveal="up" data-delay="240">
+          <h3><span class="build-dot build-dot--4"></span>+ Чистовая отделка</h3>
+          <p>Потолок, пол, стены и проёмы — дом готов к заезду.</p>
+        </div>
+      </div>
+
+      <div class="build-total" data-reveal="up">
+        <div class="build-total-text">
+          <span class="build-total-label">Итого «под ключ» со скидкой</span>
+          <span class="build-total-num">10 221 638 ₽</span>
+          <span class="build-total-sub">Персональная скидка при поэтапной оплате уже учтена. «Под тапочки» (мебель и техника) — опция, считаем по запросу.</span>
+        </div>
+        <a href="#calculator" class="btn btn-primary btn-pill btn-lg" data-scroll>Рассчитать платёж</a>
+      </div>
     </div>
-    <p class="packages-note" data-reveal="up">Ступени 01–03 складываются в полный «под ключ» за вычетом персональной скидки при поэтапной оплате.</p>
   </div>
 </section>
 
