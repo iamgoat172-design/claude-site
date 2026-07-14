@@ -234,6 +234,26 @@
   }
 
   /* ============================================================
+     BUILD-UP BAR — left-to-right fill on scroll (clip-path wipe)
+     ============================================================ */
+  function initBuildBar(){
+    var track = document.querySelector(".build-track");
+    if (!track) return;
+    // Fallback: fully visible when motion is off or libs are missing
+    if (reduceMotion || !window.gsap || !window.ScrollTrigger) return;
+
+    gsap.fromTo(track,
+      { clipPath: "inset(0 100% 0 0)" },
+      {
+        clipPath: "inset(0 0% 0 0)",
+        duration: 1.2,
+        ease: "power3.out",
+        scrollTrigger: { trigger: track, start: "top 82%" }
+      }
+    );
+  }
+
+  /* ============================================================
      MORTGAGE CALCULATOR
      ============================================================ */
   function initCalculator(){
@@ -466,6 +486,7 @@
     initReveals();
     initPriceCounter();
     initMetrics();
+    initBuildBar();
     initCalculator();
     initSeasonSwitcher();
     initTimelineProgress();
