@@ -300,12 +300,19 @@
           </div>
           <input type="range" id="term" min="5" max="30" step="1" value="15" aria-describedby="term-value">
         </div>
+        <div class="calc-field">
+          <div class="calc-field-head">
+            <label for="rate">Ставка, % годовых</label>
+            <span class="calc-value" id="rate-value">6,0%</span>
+          </div>
+          <input type="range" id="rate" min="6" max="20" step="0.1" value="6" aria-describedby="rate-value">
+        </div>
       </div>
 
       <div class="calc-result">
         <span class="calc-result-label">Ежемесячный платёж</span>
         <span class="calc-result-number"><span id="monthly-payment">0</span> ₽<span class="calc-per-month">/мес</span></span>
-        <span class="calc-result-sub" id="calc-sub">Ставка 6% годовых · сумма кредита 7 155 147 ₽</span>
+        <span class="calc-result-sub" id="calc-sub">Сумма кредита 7 155 147 ₽ · переплата 3 713 113 ₽</span>
         <a href="#final-cta" class="btn btn-primary btn-pill" data-scroll>Получить точный расчёт</a>
         <p class="cta-micro">Ответим за 15 минут · без давления и звонков-роботов</p>
       </div>

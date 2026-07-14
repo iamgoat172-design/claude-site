@@ -259,24 +259,26 @@
   function initCalculator(){
     var downSlider = document.getElementById("downpayment");
     var termSlider = document.getElementById("term");
+    var rateSlider = document.getElementById("rate");
     var downValueEl = document.getElementById("downpayment-value");
     var termValueEl = document.getElementById("term-value");
+    var rateValueEl = document.getElementById("rate-value");
     var monthlyEl = document.getElementById("monthly-payment");
     var subEl = document.getElementById("calc-sub");
     if (!downSlider || !termSlider) return;
 
     var PRICE = window.__DOM45_PRICE__ || 10221638;
-    var RATE = 0.06; // 6% годовых, семейная ипотека — ориентир
 
     var displayed = { val: 0 };
 
     function compute(){
       var downPct = parseInt(downSlider.value, 10);
       var years = parseInt(termSlider.value, 10);
+      var rate = rateSlider ? parseFloat(rateSlider.value) / 100 : 0.06;
       var downSum = Math.round(PRICE * downPct / 100);
       var loan = PRICE - downSum;
       var months = years * 12;
-      var r = RATE / 12;
+      var r = rate / 12;
 
       var payment;
       if (r === 0) {
@@ -285,10 +287,12 @@
         var pow = Math.pow(1 + r, months);
         payment = loan * r * pow / (pow - 1);
       }
+      var overpay = Math.round(payment * months - loan);
 
       downValueEl.textContent = downPct + "% · " + formatNumber(downSum) + " ₽";
       termValueEl.textContent = years + (years === 1 ? " год" : (years < 5 ? " года" : " лет"));
-      subEl.textContent = "Ставка " + (RATE*100).toFixed(0) + "% годовых · сумма кредита " + formatNumber(loan) + " ₽";
+      if (rateValueEl) rateValueEl.textContent = rate === 0.06 ? "6,0%" : (rate * 100).toFixed(1).replace(".", ",") + "%";
+      subEl.textContent = "Сумма кредита " + formatNumber(loan) + " ₽ · переплата " + formatNumber(overpay) + " ₽";
 
       animateMonthly(payment);
     }
@@ -309,6 +313,7 @@
 
     downSlider.addEventListener("input", compute);
     termSlider.addEventListener("input", compute);
+    if (rateSlider) rateSlider.addEventListener("input", compute);
     compute();
   }
 
