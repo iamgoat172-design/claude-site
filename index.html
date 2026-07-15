@@ -368,26 +368,21 @@ ul{ margin: 0; padding: 0; list-style: none; }
   padding: 26px 0 0;
 }
 .trust-grid{
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
-  padding-bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 16px 30px;
+  padding-bottom: 22px;
 }
 .trust-item{
   display: flex;
   align-items: center;
   gap: 12px;
   font-size: 14.5px;
-  justify-content: center;
   text-align: left;
-  position: relative;
 }
 .trust-item strong{ font-weight: 800; }
-.trust-item:not(:first-child)::before{
-  content: "";
-  position: absolute; left: -8px; top: 50%; transform: translateY(-50%);
-  width: 1px; height: 30px; background: rgba(255,255,255,0.16);
-}
 .trust-ico{
   width: 36px; height: 36px; flex-shrink: 0;
   border-radius: 50%;
@@ -425,15 +420,9 @@ ul{ margin: 0; padding: 0; list-style: none; }
 .trust-marquee .sep{ color: var(--terracotta); padding: 0 16px; }
 @keyframes trustMarquee{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce){ .trust-marquee{ animation: none; } }
-@media (max-width: 900px){
-  .trust-grid{ grid-template-columns: repeat(2, 1fr); gap: 14px 12px; }
-  .trust-item::before{ display: none; }
-}
-@media (max-width: 560px){
+@media (max-width: 640px){
+  .trust-grid{ gap: 14px 22px; }
   .trust-partners-label{ display: none; }
-}
-@media (max-width: 480px){
-  .trust-item{ font-size: 13.5px; }
 }
 
 /* ============================================================
@@ -1567,14 +1556,19 @@ input[type="range"]::-moz-range-thumb{
 .privacy-modal #privacy-ok{ margin-top: 22px; }
 
 /* Hero — reworked composition + «под ключ» price pill */
-.hero-copy{ max-width: 520px; }
-/* shift the house to the right so the left text panel stays clear of it */
-.hero-slide{ object-position: 16% center; }
-/* near-opaque panel on the left holds the copy; the house stays visible on the right */
+.hero-copy{ max-width: 600px; }
+/* house stays centred and fully visible; text reads on a dark bottom band */
 .hero-scrim{
   background:
-    linear-gradient(90deg, rgba(15,21,16,0.95) 0%, rgba(15,21,16,0.92) 34%, rgba(15,21,16,0.58) 50%, rgba(15,21,16,0.12) 64%, rgba(15,21,16,0) 74%),
-    linear-gradient(180deg, rgba(15,21,16,0) 55%, rgba(15,21,16,0.38) 100%);
+    linear-gradient(180deg, rgba(15,21,16,0.05) 0%, rgba(15,21,16,0.12) 32%, rgba(15,21,16,0.52) 60%, rgba(15,21,16,0.92) 100%),
+    linear-gradient(90deg, rgba(15,21,16,0.42) 0%, rgba(15,21,16,0.12) 46%, rgba(15,21,16,0) 64%);
+}
+/* legible on light sky as well as dark roof — halo instead of darkening the photo */
+.hero-title{ text-shadow: 0 2px 4px rgba(0,0,0,0.5), 0 8px 34px rgba(0,0,0,0.55); }
+.hero-subtitle{ text-shadow: 0 1px 3px rgba(0,0,0,0.55); }
+@media (max-width: 640px){
+  .hero-scrim{ background:
+    linear-gradient(180deg, rgba(15,21,16,0.28) 0%, rgba(15,21,16,0.30) 30%, rgba(15,21,16,0.58) 58%, rgba(15,21,16,0.92) 100%); }
 }
 .hero-price{
   display: inline-flex; flex-direction: column; gap: 3px;
