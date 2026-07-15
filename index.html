@@ -365,25 +365,72 @@ ul{ margin: 0; padding: 0; list-style: none; }
 .trust-strip{
   background: var(--forest);
   color: #fff;
-  padding: 30px 0;
+  padding: 26px 0 0;
 }
 .trust-grid{
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  padding-bottom: 24px;
 }
 .trust-item{
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 15px;
+  font-size: 14.5px;
   justify-content: center;
   text-align: left;
+  position: relative;
 }
 .trust-item strong{ font-weight: 800; }
-.trust-icon{ font-size: 20px; }
+.trust-item:not(:first-child)::before{
+  content: "";
+  position: absolute; left: -8px; top: 50%; transform: translateY(-50%);
+  width: 1px; height: 30px; background: rgba(255,255,255,0.16);
+}
+.trust-ico{
+  width: 36px; height: 36px; flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.20);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+}
+.trust-ico svg{ width: 19px; height: 19px; }
+
+/* second level — materials & partners marquee */
+.trust-partners{
+  position: relative;
+  border-top: 1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.12);
+  padding: 12px 0;
+  overflow: hidden;
+}
+.trust-partners-label{
+  position: absolute; left: 0; top: 0; bottom: 0; z-index: 2;
+  display: flex; align-items: center;
+  padding-left: max(24px, calc((100% - 1200px) / 2));
+  padding-right: 22px;
+  font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--tan-light);
+  background: #256230;
+}
+.trust-partners-label::after{
+  content: ""; position: absolute; left: 100%; top: 0; bottom: 0;
+  width: 44px; background: linear-gradient(90deg, #256230, rgba(37,98,48,0));
+}
+.trust-marquee{ display: flex; width: max-content; animation: trustMarquee 42s linear infinite; }
+.trust-marquee-track{ display: flex; align-items: center; flex-shrink: 0; }
+.trust-marquee .pi{ font-size: 13.5px; color: rgba(255,255,255,0.85); white-space: nowrap; }
+.trust-marquee .sep{ color: var(--terracotta); padding: 0 16px; }
+@keyframes trustMarquee{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce){ .trust-marquee{ animation: none; } }
 @media (max-width: 900px){
-  .trust-grid{ grid-template-columns: repeat(2, 1fr); }
+  .trust-grid{ grid-template-columns: repeat(2, 1fr); gap: 14px 12px; }
+  .trust-item::before{ display: none; }
+}
+@media (max-width: 560px){
+  .trust-partners-label{ display: none; }
 }
 @media (max-width: 480px){
   .trust-item{ font-size: 13.5px; }
@@ -1518,6 +1565,38 @@ input[type="range"]::-moz-range-thumb{
 .privacy-body p{ font-size: 14px; line-height: 1.6; color: var(--muted); margin-bottom: 4px; }
 .privacy-note{ margin-top: 14px; font-style: italic; }
 .privacy-modal #privacy-ok{ margin-top: 22px; }
+
+/* Hero — reworked composition + «под ключ» price pill */
+.hero-copy{ max-width: 520px; }
+/* shift the house to the right so the left text panel stays clear of it */
+.hero-slide{ object-position: 16% center; }
+/* near-opaque panel on the left holds the copy; the house stays visible on the right */
+.hero-scrim{
+  background:
+    linear-gradient(90deg, rgba(15,21,16,0.95) 0%, rgba(15,21,16,0.92) 34%, rgba(15,21,16,0.58) 50%, rgba(15,21,16,0.12) 64%, rgba(15,21,16,0) 74%),
+    linear-gradient(180deg, rgba(15,21,16,0) 55%, rgba(15,21,16,0.38) 100%);
+}
+.hero-price{
+  display: inline-flex; flex-direction: column; gap: 3px;
+  align-self: flex-start;
+  margin-top: 28px;
+  padding: 15px 26px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.26);
+  border-radius: 18px;
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  box-shadow: 0 22px 55px -22px rgba(0,0,0,0.6);
+}
+.hero-price-label{ font-size: 12.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--tan-light); }
+.hero-price-value{ font-family: var(--font-display); font-weight: 800; font-size: clamp(30px, 4.4vw, 46px); line-height: 1.02; color: #fff; letter-spacing: -0.01em; white-space: nowrap; }
+.hero-price-cur{ color: #E58A45; }
+.hero-price-note{ font-size: 13px; color: rgba(255,255,255,0.82); }
+@media (max-width: 560px){
+  .hero-copy{ max-width: 100%; }
+  .hero-price{ width: 100%; }
+  .hero-price-value{ font-size: 34px; }
+}
 </style>
 </head>
 <body>
@@ -1583,9 +1662,15 @@ input[type="range"]::-moz-range-thumb{
   </div>
 
   <div class="container hero-content">
-    <p class="badge-pill hero-badge" data-reveal="up">от 3 320 000 ₽ · тёплый контур</p>
-    <h1 class="hero-title" data-reveal="up" data-delay="80">Свой дом в лесу —<br>готов за 45 дней</h1>
-    <p class="hero-subtitle" data-reveal="up" data-delay="160">Одна цена под ключ, зафиксированная в договоре. Без доплат и сюрпризов на стройке.</p>
+    <div class="hero-copy">
+    <h1 class="hero-title" data-reveal="up" data-delay="80">Дом под ключ<br>за 45 дней</h1>
+    <p class="hero-subtitle" data-reveal="up" data-delay="140">Одна цена под ключ, зафиксированная в договоре. Без доплат и сюрпризов на стройке.</p>
+
+    <div class="hero-price" data-reveal="up" data-delay="200">
+      <span class="hero-price-label">Цена под ключ</span>
+      <span class="hero-price-value">10&nbsp;221&nbsp;638&nbsp;<span class="hero-price-cur">₽</span></span>
+      <span class="hero-price-note">зафиксирована в договоре · без доплат</span>
+    </div>
 
     <div class="hero-cta-row" data-reveal="up" data-delay="240">
       <button type="button" class="btn btn-primary btn-pill btn-lg" data-lead data-title="Персональный расчёт" data-desc="Оставьте контакты — пришлём расчёт под ваш участок и ответим за 15 минут." data-cta="Получить расчёт">Рассчитать под ключ</button>
@@ -1594,7 +1679,8 @@ input[type="range"]::-moz-range-thumb{
         Позвонить
       </a>
     </div>
-    <p class="hero-trust-micro" data-reveal="up" data-delay="300">Цена на сайте = цена в договоре · ответим за 15 минут</p>
+    <p class="hero-trust-micro" data-reveal="up" data-delay="320">Цена на сайте = цена в договоре · ответим за 15 минут</p>
+    </div>
   </div>
 
   <button class="scroll-cue" data-scroll-target="#trust" aria-label="Прокрутить вниз">
@@ -1605,20 +1691,50 @@ input[type="range"]::-moz-range-thumb{
 <section class="trust-strip" id="trust">
   <div class="container trust-grid">
     <div class="trust-item" data-reveal="up">
-      <span class="trust-icon" aria-hidden="true">⏱</span>
+      <span class="trust-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg></span>
       <span>Готов за <strong>45 дней</strong></span>
     </div>
     <div class="trust-item" data-reveal="up" data-delay="60">
-      <span class="trust-icon" aria-hidden="true">🔒</span>
+      <span class="trust-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h5"/></svg></span>
       <span>Фикс-цена <strong>в договоре</strong></span>
     </div>
     <div class="trust-item" data-reveal="up" data-delay="120">
-      <span class="trust-icon" aria-hidden="true">🔑</span>
+      <span class="trust-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3.6"/><path d="m10.6 10.6 8 8M16 18l2-2M14 16l1.6-1.6"/></svg></span>
       <span>Полностью <strong>под ключ</strong></span>
     </div>
     <div class="trust-item" data-reveal="up" data-delay="180">
-      <span class="trust-icon" aria-hidden="true">🏡</span>
-      <span><strong>84 м²</strong>, одноэтажный</span>
+      <span class="trust-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.6-3 8.2-7 10-4-1.8-7-5.4-7-10V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+      <span><strong>10 лет</strong> гарантии</span>
+    </div>
+    <div class="trust-item" data-reveal="up" data-delay="240">
+      <span class="trust-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg></span>
+      <span><strong>84 м²</strong>, 2 спальни</span>
+    </div>
+  </div>
+
+  <div class="trust-partners" role="group" aria-label="Материалы и партнёры">
+    <span class="trust-partners-label" aria-hidden="true">Материалы и партнёры</span>
+    <div class="trust-marquee">
+      <div class="trust-marquee-track">
+        <span class="pi">Окна Rehau GRAZIO 70&nbsp;мм</span><span class="sep">•</span>
+        <span class="pi">Сайдинг Grand Line</span><span class="sep">•</span>
+        <span class="pi">Металлочерепица Grand Line</span><span class="sep">•</span>
+        <span class="pi">СИП-панели</span><span class="sep">•</span>
+        <span class="pi">Вентиляция Аэробокс А-410-8</span><span class="sep">•</span>
+        <span class="pi">Ипотека и семейная программа</span><span class="sep">•</span>
+        <span class="pi">Оплата по этапам</span><span class="sep">•</span>
+        <span class="pi">Гарантия 10 лет</span><span class="sep">•</span>
+      </div>
+      <div class="trust-marquee-track" aria-hidden="true">
+        <span class="pi">Окна Rehau GRAZIO 70&nbsp;мм</span><span class="sep">•</span>
+        <span class="pi">Сайдинг Grand Line</span><span class="sep">•</span>
+        <span class="pi">Металлочерепица Grand Line</span><span class="sep">•</span>
+        <span class="pi">СИП-панели</span><span class="sep">•</span>
+        <span class="pi">Вентиляция Аэробокс А-410-8</span><span class="sep">•</span>
+        <span class="pi">Ипотека и семейная программа</span><span class="sep">•</span>
+        <span class="pi">Оплата по этапам</span><span class="sep">•</span>
+        <span class="pi">Гарантия 10 лет</span><span class="sep">•</span>
+      </div>
     </div>
   </div>
 </section>
